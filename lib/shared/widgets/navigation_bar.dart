@@ -17,7 +17,7 @@ class _NavigationBarState extends State<NavigationBarCustom> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
         child: GNav(
-          selectedIndex: 1,
+          selectedIndex: 0,
           color: Theme.of(context).colorScheme.secondary,
           activeColor: Theme.of(context).colorScheme.primary,
           tabActiveBorder: Border(
@@ -28,9 +28,9 @@ class _NavigationBarState extends State<NavigationBarCustom> {
           ),
           padding: const EdgeInsets.all(16),
           tabs: const [
-            GButton(icon: Icons.timer, text: 'Reloj'),
             GButton(icon: Icons.home, text: 'Proyectos'),
-            GButton(icon: Icons.timeline, text: 'Reportes'),
+            GButton(icon: Icons.timer, text: 'Reloj'),
+            GButton(icon: Icons.data_saver_off_outlined, text: 'Reportes'),
           ],
           onTabChange: (index) {
             widget.pageController.animateToPage(

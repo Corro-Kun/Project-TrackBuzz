@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:trackbuzz/features/project/presentation/pages/project_information.dart';
 
 class ProjectList extends StatelessWidget {
   const ProjectList({super.key});
@@ -51,10 +52,10 @@ class ProjectList extends StatelessWidget {
               width: 250,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Theme.of(context).colorScheme.primary,
+                color: Colors.blueAccent,
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Colors.blueAccent,
                     blurRadius: 40,
                     spreadRadius: 0.0,
                   ),
@@ -92,7 +93,9 @@ class ProjectList extends StatelessWidget {
             ),
             Container(
               child: ElevatedButton(
-                onPressed: () => {},
+                onPressed:
+                    () =>
+                        Navigator.of(context).push(ProjectInformation.route()),
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all(
                     Theme.of(context).colorScheme.primary,
@@ -109,12 +112,29 @@ class ProjectList extends StatelessWidget {
             ),
             Container(
               margin: const EdgeInsets.only(bottom: 40),
-              height: 60,
+              height: 65,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
                   Container(
-                    margin: const EdgeInsets.all(5),
+                    margin: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.blueAccent,
+                          blurRadius: 5,
+                          spreadRadius: 0.0,
+                        ),
+                      ],
+                    ),
+                    clipBehavior: Clip.hardEdge,
+                    child: Image.network(
+                      'https://static.wikia.nocookie.net/rezero/images/e/ea/Rem_motivando_a_Subaru.gif/revision/latest?cb=20170809212028&path-prefix=es',
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(8),
                     decoration: const BoxDecoration(shape: BoxShape.circle),
                     clipBehavior: Clip.hardEdge,
                     child: Image.network(
@@ -122,7 +142,7 @@ class ProjectList extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.all(5),
+                    margin: const EdgeInsets.all(8),
                     decoration: const BoxDecoration(shape: BoxShape.circle),
                     clipBehavior: Clip.hardEdge,
                     child: Image.network(
@@ -130,7 +150,7 @@ class ProjectList extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.all(5),
+                    margin: const EdgeInsets.all(8),
                     decoration: const BoxDecoration(shape: BoxShape.circle),
                     clipBehavior: Clip.hardEdge,
                     child: Image.network(
@@ -138,15 +158,7 @@ class ProjectList extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.all(5),
-                    decoration: const BoxDecoration(shape: BoxShape.circle),
-                    clipBehavior: Clip.hardEdge,
-                    child: Image.network(
-                      'https://static.wikia.nocookie.net/rezero/images/e/ea/Rem_motivando_a_Subaru.gif/revision/latest?cb=20170809212028&path-prefix=es',
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(5),
+                    margin: const EdgeInsets.all(8),
                     decoration: const BoxDecoration(shape: BoxShape.circle),
                     clipBehavior: Clip.hardEdge,
                     child: Image.network(

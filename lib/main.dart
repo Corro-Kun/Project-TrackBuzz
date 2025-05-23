@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trackbuzz/features/project/presentation/pages/project_list.dart';
+import 'package:trackbuzz/features/track/presentation/time_tracking.dart';
 import 'package:trackbuzz/shared/widgets/navigation_bar.dart';
 import 'package:trackbuzz/utils/constants.dart';
 
@@ -16,7 +17,7 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  final PageController _pageController = PageController(initialPage: 1);
+  final PageController _pageController = PageController(initialPage: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class _MainAppState extends State<MainApp> {
         body: PageView(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),
-          children: [ProjectList()],
+          children: [ProjectList(), TimeTracking()],
         ),
         bottomNavigationBar: NavigationBarCustom(
           pageController: _pageController,
