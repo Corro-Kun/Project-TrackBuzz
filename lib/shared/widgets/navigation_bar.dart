@@ -29,7 +29,7 @@ class _NavigationBarState extends State<NavigationBarCustom> {
           padding: const EdgeInsets.all(16),
           tabs: const [
             GButton(icon: Icons.home, text: 'Proyectos'),
-            GButton(icon: Icons.timer, text: 'Reloj'),
+            GButton(icon: Icons.timer, text: 'Cronometro'),
             GButton(icon: Icons.data_saver_off_outlined, text: 'Reportes'),
           ],
           onTabChange: (index) {

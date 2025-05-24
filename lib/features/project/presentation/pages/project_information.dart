@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trackbuzz/features/project/presentation/widgets/app_bar_information.dart';
 
-class ProjectInformation extends StatelessWidget
-    implements PreferredSizeWidget {
+class ProjectInformation extends StatefulWidget {
   const ProjectInformation({super.key});
 
   static Route<void> route() {
@@ -12,30 +12,33 @@ class ProjectInformation extends StatelessWidget
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  State<ProjectInformation> createState() => _ProjectInformationState();
+}
+
+class _ProjectInformationState extends State<ProjectInformation>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Proyecto"),
-        elevation: 0.0,
-        actions: [
-          GestureDetector(
-            child: Container(
-              margin: const EdgeInsets.only(top: 10, bottom: 10),
-              alignment: Alignment.center,
-              width: 37,
-              child: Icon(CupertinoIcons.settings),
-            ),
-          ),
-        ],
-      ),
+      appBar: AppBarInformation(),
       body: Column(
         children: [
           Container(
             height: 300,
-            margin: const EdgeInsets.all(20),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -102,6 +105,271 @@ class ProjectInformation extends StatelessWidget
                   ),
                 ],
               ),
+            ),
+          ),
+          Container(
+            child: TabBar(
+              controller: _tabController,
+              dividerHeight: 0,
+              indicatorColor: Colors.blueAccent,
+              labelColor: Colors.blueAccent,
+              tabs: [Tab(text: 'General'), Tab(text: 'Historial')],
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                ListView(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.all(20),
+                      child: Text(
+                        'facturación:',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                    Container(
+                      height: 70,
+                      margin: EdgeInsets.only(
+                        right: 20,
+                        left: 20,
+                        top: 5,
+                        bottom: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.blueAccent,
+                      ),
+                      child: Center(
+                        child: Text(
+                          r'$43',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(20),
+                      child: Text('Dias:', style: TextStyle(fontSize: 14)),
+                    ),
+                    Container(
+                      height: 150,
+                      margin: EdgeInsets.only(
+                        right: 20,
+                        left: 20,
+                        top: 5,
+                        bottom: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: BoxBorder.all(
+                          color: Theme.of(context).colorScheme.secondary,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(20),
+                      child: Text('Tareas:', style: TextStyle(fontSize: 14)),
+                    ),
+                  ],
+                ),
+                ListView(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Jueves, 15 Mayo',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          Text(
+                            '1:14:59',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 70,
+                      margin: EdgeInsets.only(
+                        right: 20,
+                        left: 20,
+                        top: 5,
+                        bottom: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: BoxBorder.all(
+                          color: Theme.of(context).colorScheme.secondary,
+                          width: 1,
+                        ),
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  height: 20,
+                                  width: 20,
+                                  margin: const EdgeInsets.all(8),
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.blueAccent,
+                                  ),
+                                ),
+                                Text(
+                                  'nombre de la tarea',
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Text(
+                                '0:42:23',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 70,
+                      margin: EdgeInsets.only(
+                        right: 20,
+                        left: 20,
+                        top: 5,
+                        bottom: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: BoxBorder.all(
+                          color: Theme.of(context).colorScheme.secondary,
+                          width: 1,
+                        ),
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  height: 20,
+                                  width: 20,
+                                  margin: const EdgeInsets.all(8),
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.blueAccent,
+                                  ),
+                                ),
+                                Text(
+                                  'nombre de la tarea',
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Text(
+                                '0:24:23',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Miércoles, 14 Mayo',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          Text(
+                            '0:57:59',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 70,
+                      margin: EdgeInsets.only(
+                        right: 20,
+                        left: 20,
+                        top: 5,
+                        bottom: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: BoxBorder.all(
+                          color: Theme.of(context).colorScheme.secondary,
+                          width: 1,
+                        ),
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  height: 20,
+                                  width: 20,
+                                  margin: const EdgeInsets.all(8),
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.blueAccent,
+                                  ),
+                                ),
+                                Text(
+                                  'nombre de la tarea',
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Text(
+                                '0:57:59',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],

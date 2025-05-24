@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:trackbuzz/features/project/presentation/pages/project_information.dart';
+import 'package:trackbuzz/shared/widgets/app_bar_main.dart';
 
 class ProjectList extends StatelessWidget {
   const ProjectList({super.key});
@@ -9,12 +10,13 @@ class ProjectList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBarMain(title: 'Proyectos'),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              margin: const EdgeInsets.only(top: 40, left: 20, right: 20),
+              margin: const EdgeInsets.only(top: 5, left: 20, right: 20),
               child: TextField(
                 decoration: InputDecoration(
                   hintText: "Buscar",
@@ -102,7 +104,7 @@ class ProjectList extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Entrar',
+                  'Ver Información',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
                     fontSize: 14,
