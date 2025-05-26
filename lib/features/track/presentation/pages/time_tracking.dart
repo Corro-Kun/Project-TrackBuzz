@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trackbuzz/shared/widgets/app_bar_main.dart';
+import 'package:trackbuzz/shared/widgets/drawer_custom.dart';
 
 class TimeTracking extends StatelessWidget {
   const TimeTracking({super.key});
@@ -9,6 +10,7 @@ class TimeTracking extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarMain(title: 'Cronometro'),
+      drawer: DrawerCustom(),
       body: ListView(
         children: [
           Container(
@@ -34,7 +36,6 @@ class TimeTracking extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 10),
           Center(
             child: GestureDetector(
               child: Container(
@@ -51,7 +52,13 @@ class TimeTracking extends StatelessWidget {
           SizedBox(height: 20),
           Container(
             margin: EdgeInsets.all(20),
-            child: Text('Proyecto:', style: TextStyle(fontSize: 14)),
+            child: Row(
+              children: [
+                Icon(CupertinoIcons.app),
+                SizedBox(width: 5),
+                Text('Proyecto:', style: TextStyle(fontSize: 14)),
+              ],
+            ),
           ),
           Container(
             height: 70,
@@ -64,7 +71,13 @@ class TimeTracking extends StatelessWidget {
           SizedBox(height: 20),
           Container(
             margin: EdgeInsets.all(20),
-            child: Text('Tarea (opcional):', style: TextStyle(fontSize: 14)),
+            child: Row(
+              children: [
+                Icon(CupertinoIcons.rectangle_paperclip),
+                SizedBox(width: 5),
+                Text('Tarea (opcional):', style: TextStyle(fontSize: 14)),
+              ],
+            ),
           ),
           Container(
             height: 70,

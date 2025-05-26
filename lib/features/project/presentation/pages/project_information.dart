@@ -124,9 +124,12 @@ class _ProjectInformationState extends State<ProjectInformation>
                   children: [
                     Container(
                       margin: EdgeInsets.all(20),
-                      child: Text(
-                        'facturación:',
-                        style: TextStyle(fontSize: 14),
+                      child: Row(
+                        children: [
+                          Icon(CupertinoIcons.money_dollar_circle),
+                          SizedBox(width: 5),
+                          Text('facturación:', style: TextStyle(fontSize: 14)),
+                        ],
                       ),
                     ),
                     Container(
@@ -153,7 +156,13 @@ class _ProjectInformationState extends State<ProjectInformation>
                     ),
                     Container(
                       margin: EdgeInsets.all(20),
-                      child: Text('Dias:', style: TextStyle(fontSize: 14)),
+                      child: Row(
+                        children: [
+                          Icon(CupertinoIcons.calendar),
+                          SizedBox(width: 5),
+                          Text('Dias:', style: TextStyle(fontSize: 14)),
+                        ],
+                      ),
                     ),
                     Container(
                       height: 150,
@@ -173,7 +182,13 @@ class _ProjectInformationState extends State<ProjectInformation>
                     ),
                     Container(
                       margin: EdgeInsets.all(20),
-                      child: Text('Tareas:', style: TextStyle(fontSize: 14)),
+                      child: Row(
+                        children: [
+                          Icon(CupertinoIcons.rectangle_paperclip),
+                          SizedBox(width: 5),
+                          Text('Tareas:', style: TextStyle(fontSize: 14)),
+                        ],
+                      ),
                     ),
                   ],
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trackbuzz/features/project/presentation/pages/project_list.dart';
-import 'package:trackbuzz/features/track/presentation/time_tracking.dart';
+import 'package:trackbuzz/features/report/presentation/pages/project_report.dart';
+import 'package:trackbuzz/features/track/presentation/pages/time_tracking.dart';
 import 'package:trackbuzz/shared/widgets/navigation_bar.dart';
 import 'package:trackbuzz/utils/constants.dart';
 
@@ -29,7 +30,7 @@ class _MainAppState extends State<MainApp> {
         body: PageView(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),
-          children: [ProjectList(), TimeTracking()],
+          children: [ProjectList(), TimeTracking(), ProjectReport()],
         ),
         bottomNavigationBar: NavigationBarCustom(
           pageController: _pageController,

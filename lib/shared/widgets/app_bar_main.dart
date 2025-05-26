@@ -13,8 +13,10 @@ class AppBarMain extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(title),
       elevation: 0.0,
+      automaticallyImplyLeading: false,
       actions: [
         GestureDetector(
+          onTap: () => Scaffold.of(context).openDrawer(),
           child: Container(
             margin: const EdgeInsets.only(top: 10, bottom: 10),
             alignment: Alignment.center,

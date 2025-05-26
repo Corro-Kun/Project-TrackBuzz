@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:trackbuzz/features/project/presentation/pages/project_information.dart';
 import 'package:trackbuzz/shared/widgets/app_bar_main.dart';
+import 'package:trackbuzz/shared/widgets/drawer_custom.dart';
 
 class ProjectList extends StatelessWidget {
   const ProjectList({super.key});
@@ -11,6 +12,7 @@ class ProjectList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarMain(title: 'Proyectos'),
+      drawer: DrawerCustom(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
