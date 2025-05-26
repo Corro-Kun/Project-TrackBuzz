@@ -14,7 +14,13 @@ class ProjectReport extends StatelessWidget {
       body: ListView(
         children: [
           SizedBox(height: 10),
-          Center(child: Icon(Icons.data_exploration_outlined, size: 80)),
+          Center(
+            child: Icon(
+              Icons.data_exploration_outlined,
+              size: 80,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          ),
           SizedBox(height: 10),
         ],
       ),

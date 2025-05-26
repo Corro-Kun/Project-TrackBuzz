@@ -31,11 +31,17 @@ class ProjectList extends StatelessWidget {
                   contentPadding: const EdgeInsets.all(15),
                   prefixIcon: Padding(
                     padding: const EdgeInsets.all(12),
-                    child: Icon(Icons.search),
+                    child: Icon(
+                      Icons.search,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(width: 1),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 1,
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -49,17 +55,21 @@ class ProjectList extends StatelessWidget {
             ),
             Text(
               'Proyecto',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             ),
             Container(
               height: 200,
               width: 250,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Colors.blueAccent,
+                color: Theme.of(context).colorScheme.primary,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.blueAccent,
+                    color: Theme.of(context).colorScheme.primary,
                     blurRadius: 40,
                     spreadRadius: 0.0,
                   ),
@@ -126,7 +136,7 @@ class ProjectList extends StatelessWidget {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.blueAccent,
+                          color: Theme.of(context).colorScheme.primary,
                           blurRadius: 5,
                           spreadRadius: 0.0,
                         ),

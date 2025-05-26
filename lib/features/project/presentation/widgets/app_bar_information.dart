@@ -10,7 +10,10 @@ class AppBarInformation extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text("Proyecto"),
+      title: Text(
+        "Proyecto",
+        style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+      ),
       elevation: 0.0,
       actions: [
         GestureDetector(
@@ -18,7 +21,10 @@ class AppBarInformation extends StatelessWidget implements PreferredSizeWidget {
             margin: const EdgeInsets.only(top: 10, bottom: 10),
             alignment: Alignment.center,
             width: 37,
-            child: Icon(CupertinoIcons.hand_draw_fill),
+            child: Icon(
+              CupertinoIcons.hand_draw_fill,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
           ),
         ),
       ],

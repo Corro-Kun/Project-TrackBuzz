@@ -51,7 +51,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                       color: Theme.of(context).colorScheme.primary,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.blueAccent,
+                          color: Theme.of(context).colorScheme.primary,
                           blurRadius: 10,
                           spreadRadius: 0.0,
                         ),
@@ -111,8 +111,9 @@ class _ProjectInformationState extends State<ProjectInformation>
             child: TabBar(
               controller: _tabController,
               dividerHeight: 0,
-              indicatorColor: Colors.blueAccent,
-              labelColor: Colors.blueAccent,
+              indicatorColor: Theme.of(context).colorScheme.primary,
+              labelColor: Theme.of(context).colorScheme.primary,
+              unselectedLabelColor: Theme.of(context).colorScheme.secondary,
               tabs: [Tab(text: 'General'), Tab(text: 'Historial')],
             ),
           ),
@@ -126,9 +127,18 @@ class _ProjectInformationState extends State<ProjectInformation>
                       margin: EdgeInsets.all(20),
                       child: Row(
                         children: [
-                          Icon(CupertinoIcons.money_dollar_circle),
+                          Icon(
+                            CupertinoIcons.money_dollar_circle,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                           SizedBox(width: 5),
-                          Text('facturación:', style: TextStyle(fontSize: 14)),
+                          Text(
+                            'facturación:',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -142,7 +152,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.blueAccent,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       child: Center(
                         child: Text(
@@ -150,6 +160,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 25,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
                       ),
@@ -158,9 +169,18 @@ class _ProjectInformationState extends State<ProjectInformation>
                       margin: EdgeInsets.all(20),
                       child: Row(
                         children: [
-                          Icon(CupertinoIcons.calendar),
+                          Icon(
+                            CupertinoIcons.calendar,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                           SizedBox(width: 5),
-                          Text('Dias:', style: TextStyle(fontSize: 14)),
+                          Text(
+                            'Dias:',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -184,9 +204,18 @@ class _ProjectInformationState extends State<ProjectInformation>
                       margin: EdgeInsets.all(20),
                       child: Row(
                         children: [
-                          Icon(CupertinoIcons.rectangle_paperclip),
+                          Icon(
+                            CupertinoIcons.rectangle_paperclip,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                           SizedBox(width: 5),
-                          Text('Tareas:', style: TextStyle(fontSize: 14)),
+                          Text(
+                            'Tareas:',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -201,13 +230,16 @@ class _ProjectInformationState extends State<ProjectInformation>
                         children: [
                           Text(
                             'Jueves, 15 Mayo',
-                            style: TextStyle(fontSize: 14),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
                           ),
                           Text(
                             '1:14:59',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.blueAccent,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],
@@ -238,14 +270,19 @@ class _ProjectInformationState extends State<ProjectInformation>
                                   height: 20,
                                   width: 20,
                                   margin: const EdgeInsets.all(8),
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Colors.blueAccent,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                                 Text(
                                   'nombre de la tarea',
-                                  style: TextStyle(fontSize: 14),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
                                 ),
                               ],
                             ),
@@ -256,6 +293,8 @@ class _ProjectInformationState extends State<ProjectInformation>
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                               ),
                             ),
@@ -288,14 +327,19 @@ class _ProjectInformationState extends State<ProjectInformation>
                                   height: 20,
                                   width: 20,
                                   margin: const EdgeInsets.all(8),
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Colors.blueAccent,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                                 Text(
                                   'nombre de la tarea',
-                                  style: TextStyle(fontSize: 14),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
                                 ),
                               ],
                             ),
@@ -306,6 +350,8 @@ class _ProjectInformationState extends State<ProjectInformation>
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                               ),
                             ),
@@ -320,13 +366,16 @@ class _ProjectInformationState extends State<ProjectInformation>
                         children: [
                           Text(
                             'Miércoles, 14 Mayo',
-                            style: TextStyle(fontSize: 14),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
                           ),
                           Text(
                             '0:57:59',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.blueAccent,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],
@@ -357,14 +406,19 @@ class _ProjectInformationState extends State<ProjectInformation>
                                   height: 20,
                                   width: 20,
                                   margin: const EdgeInsets.all(8),
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Colors.blueAccent,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                                 Text(
                                   'nombre de la tarea',
-                                  style: TextStyle(fontSize: 14),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
                                 ),
                               ],
                             ),
@@ -375,6 +429,8 @@ class _ProjectInformationState extends State<ProjectInformation>
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                               ),
                             ),
@@ -391,7 +447,7 @@ class _ProjectInformationState extends State<ProjectInformation>
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => {},
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(
           CupertinoIcons.rectangle_stack_fill_badge_plus,
           color: Theme.of(context).colorScheme.secondary,

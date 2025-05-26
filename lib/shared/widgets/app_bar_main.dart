@@ -11,7 +11,10 @@ class AppBarMain extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title),
+      title: Text(
+        title,
+        style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+      ),
       elevation: 0.0,
       automaticallyImplyLeading: false,
       actions: [
@@ -21,7 +24,10 @@ class AppBarMain extends StatelessWidget implements PreferredSizeWidget {
             margin: const EdgeInsets.only(top: 10, bottom: 10),
             alignment: Alignment.center,
             width: 37,
-            child: Icon(CupertinoIcons.settings),
+            child: Icon(
+              CupertinoIcons.settings,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
           ),
         ),
       ],

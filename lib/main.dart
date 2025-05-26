@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trackbuzz/core/setting/theme_notifier.dart';
 import 'package:trackbuzz/features/project/presentation/pages/project_list.dart';
 import 'package:trackbuzz/features/report/presentation/pages/project_report.dart';
 import 'package:trackbuzz/features/track/presentation/pages/time_tracking.dart';
 import 'package:trackbuzz/shared/widgets/navigation_bar.dart';
 import 'package:trackbuzz/utils/constants.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MainApp());
+
+  final themeNotifier = ThemeNotifier();
+  await themeNotifier.initialize();
+
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => themeNotifier,
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatefulWidget {
@@ -22,10 +33,11 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Provider.of<ThemeNotifier>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'TrackBuzz',
-      theme: appThemeDark,
+      theme: theme.currentTheme,
       home: Scaffold(
         body: PageView(
           controller: _pageController,

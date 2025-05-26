@@ -30,7 +30,11 @@ class TimeTracking extends StatelessWidget {
                 child: Center(
                   child: Text(
                     '00:25:00',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 40,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 ),
               ),
@@ -45,7 +49,12 @@ class TimeTracking extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                child: Center(child: Icon(CupertinoIcons.pause_fill)),
+                child: Center(
+                  child: Icon(
+                    CupertinoIcons.pause_fill,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
               ),
             ),
           ),
@@ -54,9 +63,18 @@ class TimeTracking extends StatelessWidget {
             margin: EdgeInsets.all(20),
             child: Row(
               children: [
-                Icon(CupertinoIcons.app),
+                Icon(
+                  CupertinoIcons.app,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
                 SizedBox(width: 5),
-                Text('Proyecto:', style: TextStyle(fontSize: 14)),
+                Text(
+                  'Proyecto:',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
               ],
             ),
           ),
@@ -73,9 +91,18 @@ class TimeTracking extends StatelessWidget {
             margin: EdgeInsets.all(20),
             child: Row(
               children: [
-                Icon(CupertinoIcons.rectangle_paperclip),
+                Icon(
+                  CupertinoIcons.rectangle_paperclip,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
                 SizedBox(width: 5),
-                Text('Tarea (opcional):', style: TextStyle(fontSize: 14)),
+                Text(
+                  'Tarea (opcional):',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
               ],
             ),
           ),
