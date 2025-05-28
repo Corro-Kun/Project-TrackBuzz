@@ -3,6 +3,8 @@ class AppLocalizationsEs {
     'projects': 'Proyectos',
     'chronometer': 'Cronometro',
     'reports': 'Reportes',
+    'create_project': 'Crear Proyecto',
+    'title_input': 'Titulo:',
     'search': 'Buscar',
     'see_information': 'Ver Información',
     'settings': 'Ajustes',

@@ -37,6 +37,7 @@ class Searcher extends StatelessWidget {
           ),
         ),
       ),
+      style: TextStyle(color: Theme.of(context).colorScheme.secondary),
     );
   }
 }

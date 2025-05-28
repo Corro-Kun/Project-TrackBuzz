@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:trackbuzz/features/project/presentation/pages/create_project.dart';
 import 'package:trackbuzz/features/project/presentation/pages/project_information.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/searcher.dart';
 import 'package:trackbuzz/shared/widgets/app_bar_main.dart';
@@ -157,7 +158,7 @@ class ProjectList extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
+        onPressed: () => {Navigator.of(context).push(CreateProject.route())},
         child: Icon(
           Icons.my_library_add_rounded,
           color: Theme.of(context).colorScheme.secondary,

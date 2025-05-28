@@ -3,6 +3,8 @@ class AppLocalizationsEn {
     'projects': 'Projects',
     'chronometer': 'Chronometer',
     'reports': 'Reports',
+    'create_project': 'Create Project',
+    'title_input': 'Title:',
     'search': 'Search',
     'see_information': 'See Information',
     'settings': 'Settings',

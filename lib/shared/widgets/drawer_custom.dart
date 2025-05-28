@@ -73,9 +73,9 @@ class DrawerCustom extends StatelessWidget {
                   ),
                   DropdownMenuEntry(
                     value: 'en',
-                    label: 'Ingles',
+                    label: 'English',
                     labelWidget: Text(
-                      'Ingles',
+                      'English',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                       ),
