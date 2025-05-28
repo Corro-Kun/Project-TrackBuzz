@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:trackbuzz/core/setting/locale_notifier.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
 import 'package:trackbuzz/features/project/presentation/pages/project_list.dart';
 import 'package:trackbuzz/features/report/presentation/pages/project_report.dart';
 import 'package:trackbuzz/features/track/presentation/pages/time_tracking.dart';
 import 'package:trackbuzz/shared/widgets/navigation_bar.dart';
-import 'package:trackbuzz/utils/constants.dart';
+import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,9 +15,15 @@ void main() async {
   final themeNotifier = ThemeNotifier();
   await themeNotifier.initialize();
 
+  final locate = LocaleNotifier();
+  await locate.loadLocale();
+
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => themeNotifier,
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => themeNotifier),
+        ChangeNotifierProvider(create: (_) => locate),
+      ],
       child: const MainApp(),
     ),
   );
@@ -34,10 +42,19 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     final theme = Provider.of<ThemeNotifier>(context);
+    final locale = Provider.of<LocaleNotifier>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'TrackBuzz',
       theme: theme.currentTheme,
+      locale: locale.locale,
+      supportedLocales: const [Locale('en'), Locale('es')],
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       home: Scaffold(
         body: PageView(
           controller: _pageController,

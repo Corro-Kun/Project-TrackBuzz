@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class NavigationBarCustom extends StatefulWidget {
   const NavigationBarCustom({super.key, required this.pageController});
@@ -12,6 +13,7 @@ class NavigationBarCustom extends StatefulWidget {
 class _NavigationBarState extends State<NavigationBarCustom> {
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Container(
       color: Theme.of(context).colorScheme.surface,
       child: Padding(
@@ -27,10 +29,19 @@ class _NavigationBarState extends State<NavigationBarCustom> {
             left: BorderSide(color: Theme.of(context).colorScheme.primary),
           ),
           padding: const EdgeInsets.all(16),
-          tabs: const [
-            GButton(icon: Icons.home, text: 'Proyectos'),
-            GButton(icon: Icons.timer, text: 'Cronometro'),
-            GButton(icon: Icons.data_saver_off_outlined, text: 'Reportes'),
+          tabs: [
+            GButton(
+              icon: Icons.home,
+              text: loc?.translate('projects') ?? 'Projects',
+            ),
+            GButton(
+              icon: Icons.timer,
+              text: loc?.translate('chronometer') ?? 'Chronometer',
+            ),
+            GButton(
+              icon: Icons.data_saver_off_outlined,
+              text: loc?.translate('reports') ?? 'Reports',
+            ),
           ],
           onTabChange: (index) {
             widget.pageController.animateToPage(

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/app_bar_information.dart';
+import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class ProjectInformation extends StatefulWidget {
   const ProjectInformation({super.key});
@@ -33,6 +34,7 @@ class _ProjectInformationState extends State<ProjectInformation>
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBarInformation(),
       body: Column(
@@ -101,7 +103,11 @@ class _ProjectInformationState extends State<ProjectInformation>
                   SizedBox(height: 25),
                   Text(
                     '6:39:51',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 ],
               ),
@@ -114,7 +120,10 @@ class _ProjectInformationState extends State<ProjectInformation>
               indicatorColor: Theme.of(context).colorScheme.primary,
               labelColor: Theme.of(context).colorScheme.primary,
               unselectedLabelColor: Theme.of(context).colorScheme.secondary,
-              tabs: [Tab(text: 'General'), Tab(text: 'Historial')],
+              tabs: [
+                Tab(text: loc?.translate('general') ?? 'General'),
+                Tab(text: loc?.translate('record') ?? 'Record'),
+              ],
             ),
           ),
           Expanded(
@@ -133,7 +142,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                           ),
                           SizedBox(width: 5),
                           Text(
-                            'facturación:',
+                            loc?.translate('billing') ?? 'Billing:',
                             style: TextStyle(
                               fontSize: 14,
                               color: Theme.of(context).colorScheme.secondary,
@@ -175,7 +184,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                           ),
                           SizedBox(width: 5),
                           Text(
-                            'Dias:',
+                            loc?.translate('days') ?? 'Days:',
                             style: TextStyle(
                               fontSize: 14,
                               color: Theme.of(context).colorScheme.secondary,
@@ -210,7 +219,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                           ),
                           SizedBox(width: 5),
                           Text(
-                            'Tareas:',
+                            loc?.translate('tasks') ?? 'Tasks:',
                             style: TextStyle(
                               fontSize: 14,
                               color: Theme.of(context).colorScheme.secondary,

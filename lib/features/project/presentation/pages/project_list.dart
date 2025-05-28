@@ -2,16 +2,19 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:trackbuzz/features/project/presentation/pages/project_information.dart';
+import 'package:trackbuzz/features/project/presentation/widgets/searcher.dart';
 import 'package:trackbuzz/shared/widgets/app_bar_main.dart';
 import 'package:trackbuzz/shared/widgets/drawer_custom.dart';
+import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class ProjectList extends StatelessWidget {
   const ProjectList({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBarMain(title: 'Proyectos'),
+      appBar: AppBarMain(title: loc?.translate('projects') ?? 'Projects'),
       drawer: DrawerCustom(),
       body: Center(
         child: Column(
@@ -19,39 +22,7 @@ class ProjectList extends StatelessWidget {
           children: [
             Container(
               margin: const EdgeInsets.only(top: 5, left: 20, right: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Buscar",
-                  hintStyle: TextStyle(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.secondary.withOpacity(0.8),
-                    fontSize: 14,
-                  ),
-                  contentPadding: const EdgeInsets.all(15),
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Icon(
-                      Icons.search,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 1,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.secondary,
-                      width: 1,
-                    ),
-                  ),
-                ),
-              ),
+              child: Searcher(),
             ),
             Text(
               'Proyecto',
@@ -116,7 +87,7 @@ class ProjectList extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Ver Información',
+                  loc?.translate('see_information') ?? 'See Information',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
                     fontSize: 14,

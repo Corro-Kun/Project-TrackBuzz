@@ -2,14 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trackbuzz/shared/widgets/app_bar_main.dart';
 import 'package:trackbuzz/shared/widgets/drawer_custom.dart';
+import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class TimeTracking extends StatelessWidget {
   const TimeTracking({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBarMain(title: 'Cronometro'),
+      appBar: AppBarMain(title: loc?.translate('chronometer') ?? 'Chronometer'),
       drawer: DrawerCustom(),
       body: ListView(
         children: [
@@ -69,7 +71,7 @@ class TimeTracking extends StatelessWidget {
                 ),
                 SizedBox(width: 5),
                 Text(
-                  'Proyecto:',
+                  loc?.translate('project') ?? 'Project:',
                   style: TextStyle(
                     fontSize: 14,
                     color: Theme.of(context).colorScheme.secondary,
@@ -97,7 +99,7 @@ class TimeTracking extends StatelessWidget {
                 ),
                 SizedBox(width: 5),
                 Text(
-                  'Tarea (opcional):',
+                  loc?.translate('task_optional') ?? 'Task (optional):',
                   style: TextStyle(
                     fontSize: 14,
                     color: Theme.of(context).colorScheme.secondary,
@@ -116,7 +118,12 @@ class TimeTracking extends StatelessWidget {
                 color: Theme.of(context).colorScheme.secondary,
               ),
             ),
-            child: Center(child: Icon(CupertinoIcons.add)),
+            child: Center(
+              child: Icon(
+                CupertinoIcons.add,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
           ),
         ],
       ),

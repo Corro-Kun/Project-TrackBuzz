@@ -1,0 +1,24 @@
+class AppLocalizationsEn {
+  static const Map<String, String> values = {
+    'projects': 'Projects',
+    'chronometer': 'Chronometer',
+    'reports': 'Reports',
+    'search': 'Search',
+    'see_information': 'See Information',
+    'settings': 'Settings',
+    'language': 'Language',
+    'personalize': 'Personalize',
+    'main_color': 'Main Color',
+    'text_color': 'Text Color',
+    'background_color': 'Background Color',
+    'reset_color': 'Reset Color',
+    'import_data': 'Import Data',
+    'project': 'Project:',
+    'task_optional': 'Task (optional):',
+    'general': 'General',
+    'record': 'Record',
+    'billing': 'Billing:',
+    'days': 'Days:',
+    'tasks': 'Tasks:',
+  };
+}

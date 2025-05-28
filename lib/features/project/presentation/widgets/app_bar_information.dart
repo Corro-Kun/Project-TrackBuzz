@@ -15,6 +15,7 @@ class AppBarInformation extends StatelessWidget implements PreferredSizeWidget {
         style: TextStyle(color: Theme.of(context).colorScheme.secondary),
       ),
       elevation: 0.0,
+      foregroundColor: Theme.of(context).colorScheme.secondary,
       actions: [
         GestureDetector(
           child: Container(

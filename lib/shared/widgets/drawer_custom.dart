@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trackbuzz/core/setting/locale_notifier.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
 import 'package:trackbuzz/shared/widgets/change_color.dart';
+import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class DrawerCustom extends StatelessWidget {
   const DrawerCustom({super.key});
@@ -11,6 +13,7 @@ class DrawerCustom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Provider.of<ThemeNotifier>(context);
+    final loc = AppLocalizations.of(context);
     return Drawer(
       width: MediaQuery.of(context).size.width * 0.75,
       child: SafeArea(
@@ -27,7 +30,7 @@ class DrawerCustom extends StatelessWidget {
             SizedBox(height: 10),
             Center(
               child: Text(
-                'Ajustes',
+                loc?.translate('settings') ?? 'Settings',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
                   fontSize: 20,
@@ -45,7 +48,7 @@ class DrawerCustom extends StatelessWidget {
                   ),
                   SizedBox(width: 5),
                   Text(
-                    'Idioma',
+                    loc?.translate('language') ?? 'Language',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontSize: 14,
@@ -57,12 +60,54 @@ class DrawerCustom extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 20, left: 20),
               child: DropdownMenu<String>(
-                dropdownMenuEntries: const [
-                  DropdownMenuEntry(value: 'Español', label: 'Español'),
-                  DropdownMenuEntry(value: 'Ingles', label: 'Ingles'),
+                dropdownMenuEntries: [
+                  DropdownMenuEntry(
+                    value: 'es',
+                    label: 'Español',
+                    labelWidget: Text(
+                      'Español',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  ),
+                  DropdownMenuEntry(
+                    value: 'en',
+                    label: 'Ingles',
+                    labelWidget: Text(
+                      'Ingles',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  ),
                 ],
-                initialSelection: 'Español',
+                initialSelection: loc?.locale.languageCode,
                 width: MediaQuery.of(context).size.width * 0.65,
+                textStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                trailingIcon: Icon(
+                  Icons.arrow_downward_rounded,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                inputDecorationTheme: InputDecorationTheme(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.secondary,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                onSelected: (String? value) {
+                  if (value != null) {
+                    Provider.of<LocaleNotifier>(
+                      context,
+                      listen: false,
+                    ).setLocale(Locale(value));
+                  }
+                },
               ),
             ),
             Padding(
@@ -75,7 +120,7 @@ class DrawerCustom extends StatelessWidget {
                   ),
                   SizedBox(width: 5),
                   Text(
-                    'Personalizar',
+                    loc?.translate('personalize') ?? 'Personalize',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontSize: 14,
@@ -91,7 +136,7 @@ class DrawerCustom extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Color Principal',
+                    loc?.translate('main_color') ?? 'Main Color',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                     ),
@@ -144,7 +189,7 @@ class DrawerCustom extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Color Texto',
+                    loc?.translate('text_color') ?? 'Text Color',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                     ),
@@ -160,7 +205,8 @@ class DrawerCustom extends StatelessWidget {
                                   context,
                                 );
                                 return ChangeColor(
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   change: (String color) async {
                                     final prefs =
                                         await SharedPreferences.getInstance();
@@ -197,7 +243,7 @@ class DrawerCustom extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Color Fondo',
+                    loc?.translate('background_color') ?? 'Background Color',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                     ),
@@ -213,7 +259,7 @@ class DrawerCustom extends StatelessWidget {
                                   context,
                                 );
                                 return ChangeColor(
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: Theme.of(context).colorScheme.surface,
                                   change: (String color) async {
                                     final prefs =
                                         await SharedPreferences.getInstance();
@@ -263,7 +309,7 @@ class DrawerCustom extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'Restablecer Color',
+                      loc?.translate('reset_color') ?? 'Reset Color',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.secondary,
@@ -283,7 +329,7 @@ class DrawerCustom extends StatelessWidget {
                   ),
                   SizedBox(width: 5),
                   Text(
-                    'Importar Datos',
+                    loc?.translate('import_data') ?? 'Import Data',
                     style: TextStyle(
                       fontSize: 14,
                       color: Theme.of(context).colorScheme.secondary,
