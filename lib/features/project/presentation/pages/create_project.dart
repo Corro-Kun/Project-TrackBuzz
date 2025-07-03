@@ -1,12 +1,65 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:trackbuzz/features/project/data/datasource/project_datasource.dart';
+import 'package:trackbuzz/features/project/data/repositories/project_repository.dart';
+import 'package:trackbuzz/features/project/data/services/project_service.dart';
+import 'package:trackbuzz/features/project/domain/usecase/create_project_use_case.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
-class CreateProject extends StatelessWidget {
+class CreateProject extends StatefulWidget {
   const CreateProject({super.key});
 
   static Route<void> route() {
     return MaterialPageRoute(builder: (context) => CreateProject());
+  }
+
+  @override
+  State<CreateProject> createState() => _CreateProjectState();
+}
+
+class _CreateProjectState extends State<CreateProject> {
+  final ImagePicker _picker = ImagePicker();
+  String _imagePath = '';
+  final TextEditingController _titleController = TextEditingController();
+  bool loading = false;
+
+  DecorationImage image = const DecorationImage(
+    image: NetworkImage(
+      'https://static.wikia.nocookie.net/rezero/images/e/ea/Rem_motivando_a_Subaru.gif/revision/latest?cb=20170809212028&path-prefix=es',
+    ),
+    fit: BoxFit.cover,
+  );
+
+  _load(bool value) {
+    setState(() {
+      loading = value;
+    });
+  }
+
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile == null) {
+      return;
+    }
+    _changeImage(pickedFile.path);
+  }
+
+  _changeImage(String path) {
+    setState(() {
+      _imagePath = path;
+      image = DecorationImage(image: FileImage(File(path)), fit: BoxFit.cover);
+    });
+  }
+
+  Future<void> _create() async {
+    _load(true);
+    CreateProjectUseCase(
+      ProjectService(ProjectRepository(ProjectDatasource())),
+    ).execute(_titleController.text, _imagePath);
+    Navigator.pop(context);
   }
 
   @override
@@ -21,18 +74,22 @@ class CreateProject extends StatelessWidget {
         elevation: 0.0,
         foregroundColor: Theme.of(context).colorScheme.secondary,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        child: Icon(
-          CupertinoIcons.arrow_right,
-          color: Theme.of(context).colorScheme.secondary,
-        ),
-      ),
+      floatingActionButton:
+          loading == false
+              ? FloatingActionButton(
+                onPressed: () => _create(),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                child: Icon(
+                  CupertinoIcons.arrow_right,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              )
+              : null,
       body: Column(
         children: [
           SizedBox(height: 20),
           GestureDetector(
+            onTap: () => _pickImage(),
             child: Container(
               height: 200,
               width: 250,
@@ -42,12 +99,7 @@ class CreateProject extends StatelessWidget {
                   width: 1,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                image: DecorationImage(
-                  image: NetworkImage(
-                    'https://static.wikia.nocookie.net/rezero/images/e/ea/Rem_motivando_a_Subaru.gif/revision/latest?cb=20170809212028&path-prefix=es',
-                  ),
-                  fit: BoxFit.cover,
-                ),
+                image: image,
               ),
               clipBehavior: Clip.hardEdge,
             ),
@@ -71,6 +123,7 @@ class CreateProject extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 20, left: 20),
             child: TextField(
+              controller: _titleController,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(15),
                 enabledBorder: OutlineInputBorder(

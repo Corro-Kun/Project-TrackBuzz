@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/core/setting/locale_notifier.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
 import 'package:trackbuzz/features/project/presentation/pages/project_list.dart';
@@ -17,6 +18,8 @@ void main() async {
 
   final locate = LocaleNotifier();
   await locate.loadLocale();
+
+  await init();
 
   runApp(
     MultiProvider(
