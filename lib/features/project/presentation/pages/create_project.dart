@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/features/project/data/datasource/project_datasource.dart';
 import 'package:trackbuzz/features/project/data/repositories/project_repository.dart';
 import 'package:trackbuzz/features/project/data/services/project_service.dart';
@@ -56,9 +57,7 @@ class _CreateProjectState extends State<CreateProject> {
 
   Future<void> _create() async {
     _load(true);
-    CreateProjectUseCase(
-      ProjectService(ProjectRepository(ProjectDatasource())),
-    ).execute(_titleController.text, _imagePath);
+    CreateProjectUseCase(sl()).execute(_titleController.text, _imagePath);
     Navigator.pop(context);
   }
 
