@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class ChangeColor extends StatelessWidget {
   final Color color;
@@ -14,8 +15,11 @@ class ChangeColor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return AlertDialog(
-      title: Center(child: Text('Elige tu Color')),
+      title: Center(
+        child: Text(loc?.translate('choose_color') ?? 'Choose a Color'),
+      ),
       content: SingleChildScrollView(
         child: Column(
           children: [
@@ -48,7 +52,27 @@ class ChangeColor extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'Guardar',
+                    loc?.translate('save') ?? 'Save',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 15),
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width * 1,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Text(
+                    loc?.translate('cancel') ?? 'Cancel',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),

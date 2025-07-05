@@ -34,10 +34,18 @@ class ProjectList extends StatelessWidget {
             children: [
               Container(
                 margin: const EdgeInsets.only(top: 5, left: 20, right: 20),
-                child: Searcher(
-                  onChange: (value) {
-                    context.read<ListProjectBloc>().add(
-                      FilterProjects(filter: value),
+                child: BlocBuilder<ListProjectBloc, ListProjectState>(
+                  builder: (context, state) {
+                    return Searcher(
+                      onChange: (value) {
+                        if (value.toString().isNotEmpty) {
+                          context.read<ListProjectBloc>().add(
+                            FilterProjects(filter: value),
+                          );
+                        } else {
+                          context.read<ListProjectBloc>().add(GetListProject());
+                        }
+                      },
                     );
                   },
                 ),
@@ -46,10 +54,11 @@ class ProjectList extends StatelessWidget {
                 builder: (context, state) {
                   if (state is ListProjectLoading) {
                     return PreLoader();
-                  } else if (state is ListProjectLoaded &&
-                      state.index != null) {
+                  } else if (state is ListProjectLoaded) {
                     return Text(
-                      state.projects[state.index].title,
+                      state.projects.isNotEmpty
+                          ? state.projects[state.index].title
+                          : 'No hay Proyectos',
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
@@ -66,31 +75,46 @@ class ProjectList extends StatelessWidget {
                   if (state is ListProjectLoading) {
                     return PreLoader();
                   } else if (state is ListProjectLoaded) {
-                    return MainCard(img: state.projects[state.index].image);
+                    return state.projects.isNotEmpty
+                        ? MainCard(img: state.projects[state.index].image)
+                        : const SizedBox(height: 200);
                   } else {
                     return const SizedBox.shrink();
                   }
                 },
               ),
-              Container(
-                child: ElevatedButton(
-                  onPressed:
-                      () => Navigator.of(
-                        context,
-                      ).push(ProjectInformation.route()),
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(
-                      Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  child: Text(
-                    loc?.translate('see_information') ?? 'See Information',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
+              BlocBuilder<ListProjectBloc, ListProjectState>(
+                builder: (context, state) {
+                  if (state is ListProjectLoading) {
+                    return PreLoader();
+                  } else if (state is ListProjectLoaded) {
+                    return state.projects.isNotEmpty
+                        ? Container(
+                          child: ElevatedButton(
+                            onPressed:
+                                () => Navigator.of(
+                                  context,
+                                ).push(ProjectInformation.route()),
+                            style: ButtonStyle(
+                              backgroundColor: WidgetStateProperty.all(
+                                Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                            child: Text(
+                              loc?.translate('see_information') ??
+                                  'See Information',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        )
+                        : const SizedBox.shrink();
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
               ),
               BlocBuilder<ListProjectBloc, ListProjectState>(
                 builder: (context, state) {

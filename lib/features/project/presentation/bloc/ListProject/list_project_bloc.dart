@@ -54,7 +54,7 @@ class ListProjectBloc extends Bloc<ListProjectEvent, ListProjectState> {
                 ),
               )
               .toList();
-      emit(ListProjectLoaded(projects: list, index: currentState.index));
+      emit(ListProjectLoaded(projects: list, index: 0));
     } catch (e) {
       emit(ListProjectError(message: e.toString()));
     }
