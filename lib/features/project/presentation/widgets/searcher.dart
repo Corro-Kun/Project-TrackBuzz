@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class Searcher extends StatelessWidget {
-  const Searcher({super.key});
+  final Function onChange;
+  const Searcher({super.key, required this.onChange});
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,9 @@ class Searcher extends StatelessWidget {
           ),
         ),
       ),
+      onChanged: (value) {
+        onChange(value);
+      },
       style: TextStyle(color: Theme.of(context).colorScheme.secondary),
     );
   }

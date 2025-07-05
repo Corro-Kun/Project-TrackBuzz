@@ -9,6 +9,8 @@ class ListProjectBloc extends Bloc<ListProjectEvent, ListProjectState> {
   ListProjectBloc({required this.getListProject})
     : super(ListProjectInitial()) {
     on<GetListProject>(_onGetListProject);
+    on<SelectProject>(_onSelectProject);
+    on<FilterProjects>(_onFilterProjects);
   }
 
   Future<void> _onGetListProject(
@@ -18,7 +20,41 @@ class ListProjectBloc extends Bloc<ListProjectEvent, ListProjectState> {
     emit(ListProjectLoading());
     try {
       final projects = await getListProject.execute();
-      emit(ListProjectLoaded(projects: projects));
+      emit(ListProjectLoaded(projects: projects, index: 0));
+    } catch (e) {
+      emit(ListProjectError(message: e.toString()));
+    }
+  }
+
+  Future<void> _onSelectProject(
+    SelectProject event,
+    Emitter<ListProjectState> emit,
+  ) async {
+    final currentState = state as ListProjectLoaded;
+    try {
+      emit(
+        ListProjectLoaded(projects: currentState.projects, index: event.index),
+      );
+    } catch (e) {
+      emit(ListProjectError(message: e.toString()));
+    }
+  }
+
+  Future<void> _onFilterProjects(
+    FilterProjects event,
+    Emitter<ListProjectState> emit,
+  ) async {
+    final currentState = state as ListProjectLoaded;
+    try {
+      final list =
+          currentState.projects
+              .where(
+                (element) => element.title.toLowerCase().contains(
+                  event.filter.toLowerCase(),
+                ),
+              )
+              .toList();
+      emit(ListProjectLoaded(projects: list, index: currentState.index));
     } catch (e) {
       emit(ListProjectError(message: e.toString()));
     }

@@ -8,8 +8,9 @@ class ListProjectLoading extends ListProjectState {}
 
 class ListProjectLoaded extends ListProjectState {
   final List<ProjectModel> projects;
+  final int index;
 
-  ListProjectLoaded({required this.projects});
+  ListProjectLoaded({required this.projects, required this.index});
 }
 
 class ListProjectError extends ListProjectState {
