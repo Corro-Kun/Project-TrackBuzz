@@ -4,10 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:trackbuzz/core/di/injection_container.dart';
-import 'package:trackbuzz/features/project/data/datasource/project_datasource.dart';
-import 'package:trackbuzz/features/project/data/repositories/project_repository.dart';
-import 'package:trackbuzz/features/project/data/services/project_service.dart';
 import 'package:trackbuzz/features/project/domain/usecase/create_project_use_case.dart';
+import 'package:trackbuzz/shared/functions/save_image.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class CreateProject extends StatefulWidget {
@@ -57,8 +55,10 @@ class _CreateProjectState extends State<CreateProject> {
 
   Future<void> _create() async {
     _load(true);
-    CreateProjectUseCase(sl()).execute(_titleController.text, _imagePath);
-    Navigator.pop(context);
+    CreateProjectUseCase(
+      sl(),
+    ).execute(_titleController.text, await saveImage(_imagePath));
+    Navigator.pop(context, true);
   }
 
   @override

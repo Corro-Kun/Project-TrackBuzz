@@ -8,6 +8,14 @@ class ProjectDatasource {
     return await db.query('project');
   }
 
+  Future<Map<String, dynamic>> getProject(int id) async {
+    final db = await DataBase().OpenDB();
+
+    final data = await db.query('project', where: 'id = ?', whereArgs: [id]);
+
+    return data[0];
+  }
+
   Future<dynamic> CreateProject(String title, String path) async {
     final db = await DataBase().OpenDB();
 

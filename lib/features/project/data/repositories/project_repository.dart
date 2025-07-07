@@ -16,6 +16,13 @@ class ProjectRepository extends ProjectRepositoryAbstract {
   }
 
   @override
+  Future<ProjectModel> getProject(int id) async {
+    final data = await datasource.getProject(id);
+
+    return ProjectModel.fromJson(data);
+  }
+
+  @override
   Future<dynamic> createProject(String title, String path) async {
     return await datasource.CreateProject(title, path);
   }

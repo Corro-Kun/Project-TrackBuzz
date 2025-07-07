@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -29,9 +28,9 @@ class ProjectList extends StatelessWidget {
         appBar: AppBarMain(title: loc?.translate('projects') ?? 'Projects'),
         drawer: DrawerCustom(),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: ListView(
             children: [
+              const SizedBox(height: 15),
               Container(
                 margin: const EdgeInsets.only(top: 5, left: 20, right: 20),
                 child: BlocBuilder<ListProjectBloc, ListProjectState>(
@@ -50,19 +49,22 @@ class ProjectList extends StatelessWidget {
                   },
                 ),
               ),
+              const SizedBox(height: 40),
               BlocBuilder<ListProjectBloc, ListProjectState>(
                 builder: (context, state) {
                   if (state is ListProjectLoading) {
                     return PreLoader();
                   } else if (state is ListProjectLoaded) {
-                    return Text(
-                      state.projects.isNotEmpty
-                          ? state.projects[state.index].title
-                          : 'No hay Proyectos',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.secondary,
+                    return Center(
+                      child: Text(
+                        state.projects.isNotEmpty
+                            ? state.projects[state.index].title
+                            : 'No hay Proyectos',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                       ),
                     );
                   } else {
@@ -70,31 +72,39 @@ class ProjectList extends StatelessWidget {
                   }
                 },
               ),
+              const SizedBox(height: 50),
               BlocBuilder<ListProjectBloc, ListProjectState>(
                 builder: (context, state) {
                   if (state is ListProjectLoading) {
                     return PreLoader();
                   } else if (state is ListProjectLoaded) {
                     return state.projects.isNotEmpty
-                        ? MainCard(img: state.projects[state.index].image)
+                        ? Center(
+                          child: MainCard(
+                            img: state.projects[state.index].image,
+                          ),
+                        )
                         : const SizedBox(height: 200);
                   } else {
                     return const SizedBox.shrink();
                   }
                 },
               ),
+              const SizedBox(height: 50),
               BlocBuilder<ListProjectBloc, ListProjectState>(
                 builder: (context, state) {
                   if (state is ListProjectLoading) {
                     return PreLoader();
                   } else if (state is ListProjectLoaded) {
                     return state.projects.isNotEmpty
-                        ? Container(
+                        ? Center(
                           child: ElevatedButton(
                             onPressed:
-                                () => Navigator.of(
-                                  context,
-                                ).push(ProjectInformation.route()),
+                                () => Navigator.of(context).push(
+                                  ProjectInformation.route(
+                                    state.projects[state.index].id,
+                                  ),
+                                ),
                             style: ButtonStyle(
                               backgroundColor: WidgetStateProperty.all(
                                 Theme.of(context).colorScheme.primary,
@@ -116,6 +126,7 @@ class ProjectList extends StatelessWidget {
                   }
                 },
               ),
+              const SizedBox(height: 30),
               BlocBuilder<ListProjectBloc, ListProjectState>(
                 builder: (context, state) {
                   if (state is ListProjectLoading) {
@@ -148,12 +159,23 @@ class ProjectList extends StatelessWidget {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => {Navigator.of(context).push(CreateProject.route())},
-          child: Icon(
-            Icons.my_library_add_rounded,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
+        floatingActionButton: BlocBuilder<ListProjectBloc, ListProjectState>(
+          builder: (context, state) {
+            return FloatingActionButton(
+              onPressed: () async {
+                final result = await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const CreateProject()),
+                );
+                if (result == true) {
+                  context.read<ListProjectBloc>().add(GetListProject());
+                }
+              },
+              child: Icon(
+                Icons.my_library_add_rounded,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            );
+          },
         ),
       ),
     );
