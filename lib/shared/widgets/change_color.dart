@@ -18,7 +18,10 @@ class ChangeColor extends StatelessWidget {
     final loc = AppLocalizations.of(context);
     return AlertDialog(
       title: Center(
-        child: Text(loc?.translate('choose_color') ?? 'Choose a Color'),
+        child: Text(
+          loc?.translate('choose_color') ?? 'Choose a Color',
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+        ),
       ),
       content: SingleChildScrollView(
         child: Column(
@@ -53,7 +56,10 @@ class ChangeColor extends StatelessWidget {
                 child: Center(
                   child: Text(
                     loc?.translate('save') ?? 'Save',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 ),
               ),
@@ -73,7 +79,10 @@ class ChangeColor extends StatelessWidget {
                 child: Center(
                   child: Text(
                     loc?.translate('cancel') ?? 'Cancel',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 ),
               ),

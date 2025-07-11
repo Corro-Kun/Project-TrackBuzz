@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
+import 'package:trackbuzz/features/project/presentation/widgets/AlerDialogText.dart';
+import 'package:trackbuzz/shared/widgets/adjustments_announced.dart';
+import 'package:trackbuzz/shared/widgets/switch_custom.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class DrawerSetting extends StatelessWidget {
@@ -44,161 +47,110 @@ class DrawerSetting extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    CupertinoIcons.money_dollar,
-                    color: Theme.of(context).colorScheme.secondary,
+                  AdjustmentsAnnounced(
+                    icon: CupertinoIcons.money_dollar,
+                    text: loc?.translate('bill') ?? 'Bill',
                   ),
-                  SizedBox(width: 5),
-                  Text(
-                    loc?.translate('bill') ?? 'Bill',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 14,
-                    ),
-                  ),
+                  SwitchCustom(),
                 ],
               ),
             ),
             Padding(
+              padding: const EdgeInsets.all(20),
+              child: AdjustmentsAnnounced(
+                icon: CupertinoIcons.money_dollar_circle,
+                text: loc?.translate('value_per_hour') ?? 'Value per Hour',
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.only(right: 20, left: 20),
-              child: DropdownMenu<String>(
-                dropdownMenuEntries: [
-                  DropdownMenuEntry(
-                    value: '0',
-                    label: loc?.translate('no') ?? 'No',
-                    labelWidget: Text(
-                      loc?.translate('no') ?? 'No',
+              child: GestureDetector(
+                onTap:
+                    () => showDialog(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return Alerdialogtext(
+                              title:
+                                  loc?.translate('update_value') ??
+                                  'Update Value',
+                              controller: _valueController,
+                            );
+                          },
+                        );
+                      },
+                    ),
+                child: Container(
+                  height: 52,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: BoxBorder.all(
+                      color: Theme.of(context).colorScheme.secondary,
+                      width: 1,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      _valueController.text,
                       style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: AdjustmentsAnnounced(
+                icon: CupertinoIcons.doc_append,
+                text: loc?.translate('currency') ?? 'Currency',
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 20, left: 20),
+              child: GestureDetector(
+                onTap:
+                    () => showDialog(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return Alerdialogtext(
+                              title:
+                                  loc?.translate('change_currency') ??
+                                  'Change Currency',
+                              controller: _currencyController,
+                            );
+                          },
+                        );
+                      },
+                    ),
+                child: Container(
+                  height: 52,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: BoxBorder.all(
+                      color: Theme.of(context).colorScheme.secondary,
+                      width: 1,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      _currencyController.text,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   ),
-                  DropdownMenuEntry(
-                    value: '1',
-                    label: loc?.translate('yes') ?? 'Yes',
-                    labelWidget: Text(
-                      loc?.translate('yes') ?? 'Yes',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-                  ),
-                ],
-                initialSelection: '0',
-                width: MediaQuery.of(context).size.width * 0.65,
-                textStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                trailingIcon: Icon(
-                  Icons.arrow_downward_rounded,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                inputDecorationTheme: InputDecorationTheme(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.secondary,
-                      width: 1,
-                    ),
-                  ),
-                ),
-                onSelected: (String? value) {
-                  if (value != null) {}
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.money_dollar_circle,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  SizedBox(width: 5),
-                  Text(
-                    loc?.translate('value_per_hour') ?? 'Value per Hour',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 20, left: 20),
-              child: TextField(
-                controller: _valueController,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.all(15),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.secondary,
-                      width: 1,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.secondary,
-                      width: 1,
-                    ),
-                  ),
-                ),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.doc_append,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  SizedBox(width: 5),
-                  Text(
-                    loc?.translate('currency') ?? 'Currency',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 20, left: 20),
-              child: TextField(
-                controller: _currencyController,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.all(15),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.secondary,
-                      width: 1,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.secondary,
-                      width: 1,
-                    ),
-                  ),
-                ),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
             ),
@@ -237,7 +189,12 @@ class DrawerSetting extends StatelessWidget {
                         color: Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Center(child: Icon(CupertinoIcons.settings)),
+                      child: Center(
+                        child: Icon(
+                          CupertinoIcons.settings,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(width: 20),
@@ -249,7 +206,12 @@ class DrawerSetting extends StatelessWidget {
                         color: Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Center(child: Icon(CupertinoIcons.trash)),
+                      child: Center(
+                        child: Icon(
+                          CupertinoIcons.trash,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
                     ),
                   ),
                 ],

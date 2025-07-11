@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trackbuzz/core/setting/locale_notifier.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
+import 'package:trackbuzz/shared/widgets/adjustments_announced.dart';
 import 'package:trackbuzz/shared/widgets/change_color.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
@@ -40,21 +41,9 @@ class DrawerCustom extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.book,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  SizedBox(width: 5),
-                  Text(
-                    loc?.translate('language') ?? 'Language',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
+              child: AdjustmentsAnnounced(
+                icon: CupertinoIcons.book,
+                text: loc?.translate('language') ?? 'Language',
               ),
             ),
             Padding(
@@ -112,21 +101,9 @@ class DrawerCustom extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.circle_bottomthird_split,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  SizedBox(width: 5),
-                  Text(
-                    loc?.translate('personalize') ?? 'Personalize',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
+              child: AdjustmentsAnnounced(
+                icon: CupertinoIcons.circle_bottomthird_split,
+                text: loc?.translate('personalize') ?? 'Personalize',
               ),
             ),
             Padding(
@@ -321,21 +298,9 @@ class DrawerCustom extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.folder,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  SizedBox(width: 5),
-                  Text(
-                    loc?.translate('import_data') ?? 'Import Data',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                ],
+              child: AdjustmentsAnnounced(
+                icon: CupertinoIcons.folder,
+                text: loc?.translate('import_data') ?? 'Import Data',
               ),
             ),
             Padding(
