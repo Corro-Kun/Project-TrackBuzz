@@ -13,6 +13,7 @@ import 'package:trackbuzz/features/project/domain/usecase/get_project_use_case.d
 import 'package:trackbuzz/features/project/domain/usecase/get_setting_project_use_case.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/ListProject/list_project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
+import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -20,6 +21,7 @@ Future<void> init() async {
   // Bloc
   sl.registerFactory(() => ListProjectBloc(getListProject: sl()));
   sl.registerFactory(() => ProjectBloc(getProjectUseCase: sl()));
+  sl.registerFactory(() => SettingProjectBloc(getSettingProjectUseCase: sl()));
 
   // User cases
   sl.registerLazySingleton(() => GetListProjectUserCase(sl()));
