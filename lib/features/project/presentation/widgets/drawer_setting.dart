@@ -71,7 +71,24 @@ class DrawerSetting extends StatelessWidget {
                         icon: CupertinoIcons.money_dollar,
                         text: loc?.translate('bill') ?? 'Bill',
                       ),
-                      SwitchCustom(),
+                      BlocBuilder<SettingProjectBloc, SettingProjectState>(
+                        builder: (contextBloc, state) {
+                          if (state is SettingProjectLoading) {
+                            return PreLoader();
+                          } else if (state is SettingProjectLoaded) {
+                            return SwitchCustom(
+                              light: state.setting.bill == 1 ? true : false,
+                              onChanged: (value) {
+                                contextBloc.read<SettingProjectBloc>().add(
+                                  ChangeBill(bill: value ? 1 : 0),
+                                );
+                              },
+                            );
+                          } else {
+                            return SizedBox.shrink();
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -91,50 +108,67 @@ class DrawerSetting extends StatelessWidget {
                       } else if (state is SettingProjectLoaded) {
                         return GestureDetector(
                           onTap:
-                              () => showDialog(
-                                context: contextBloc,
-                                builder: (context) {
-                                  return StatefulBuilder(
-                                    builder: (context, setState) {
-                                      return Alerdialogtext(
-                                        title:
-                                            loc?.translate('update_value') ??
-                                            'Update Value',
-                                        controller: _valueController,
-                                        keyboardType:
-                                            TextInputType.numberWithOptions(
-                                              decimal: true,
-                                            ),
-                                        save: () {
-                                          if (double.tryParse(
-                                                    _valueController.text,
-                                                  ) !=
-                                                  null &&
-                                              _valueController
-                                                  .text
-                                                  .isNotEmpty) {
-                                            contextBloc
-                                                .read<SettingProjectBloc>()
-                                                .add(
-                                                  ChangePrice(
-                                                    price: double.parse(
-                                                      _valueController.text,
+                              () =>
+                                  state.setting.bill == 1
+                                      ? showDialog(
+                                        context: contextBloc,
+                                        builder: (context) {
+                                          return StatefulBuilder(
+                                            builder: (context, setState) {
+                                              return Alerdialogtext(
+                                                title:
+                                                    loc?.translate(
+                                                      'update_value',
+                                                    ) ??
+                                                    'Update Value',
+                                                controller: _valueController,
+                                                keyboardType:
+                                                    TextInputType.numberWithOptions(
+                                                      decimal: true,
                                                     ),
-                                                  ),
-                                                );
-                                          }
+                                                save: () {
+                                                  if (double.tryParse(
+                                                            _valueController
+                                                                .text,
+                                                          ) !=
+                                                          null &&
+                                                      _valueController
+                                                          .text
+                                                          .isNotEmpty) {
+                                                    contextBloc
+                                                        .read<
+                                                          SettingProjectBloc
+                                                        >()
+                                                        .add(
+                                                          ChangePrice(
+                                                            price: double.parse(
+                                                              _valueController
+                                                                  .text,
+                                                            ),
+                                                          ),
+                                                        );
+                                                  }
+                                                },
+                                              );
+                                            },
+                                          );
                                         },
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
+                                      )
+                                      : null,
                           child: Container(
                             height: 52,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               border: BoxBorder.all(
-                                color: Theme.of(context).colorScheme.secondary,
+                                color:
+                                    state.setting.bill == 1
+                                        ? Theme.of(
+                                          context,
+                                        ).colorScheme.secondary
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .secondary
+                                            .withOpacity(0.5),
                                 width: 1,
                               ),
                             ),
@@ -144,7 +178,14 @@ class DrawerSetting extends StatelessWidget {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color:
-                                      Theme.of(context).colorScheme.secondary,
+                                      state.setting.bill == 1
+                                          ? Theme.of(
+                                            context,
+                                          ).colorScheme.secondary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .secondary
+                                              .withOpacity(0.5),
                                 ),
                               ),
                             ),
@@ -172,41 +213,57 @@ class DrawerSetting extends StatelessWidget {
                       } else if (state is SettingProjectLoaded) {
                         return GestureDetector(
                           onTap:
-                              () => showDialog(
-                                context: contextBloc,
-                                builder: (context) {
-                                  return StatefulBuilder(
-                                    builder: (context, setState) {
-                                      return Alerdialogtext(
-                                        title:
-                                            loc?.translate('change_currency') ??
-                                            'Change Currency',
-                                        controller: _currencyController,
-                                        save: () {
-                                          if (_currencyController.text !=
-                                              state.setting.coin) {
-                                            contextBloc
-                                                .read<SettingProjectBloc>()
-                                                .add(
-                                                  ChangeCoin(
-                                                    coin:
-                                                        _currencyController
-                                                            .text,
-                                                  ),
-                                                );
-                                          }
+                              () =>
+                                  state.setting.bill == 1
+                                      ? showDialog(
+                                        context: contextBloc,
+                                        builder: (context) {
+                                          return StatefulBuilder(
+                                            builder: (context, setState) {
+                                              return Alerdialogtext(
+                                                title:
+                                                    loc?.translate(
+                                                      'change_currency',
+                                                    ) ??
+                                                    'Change Currency',
+                                                controller: _currencyController,
+                                                save: () {
+                                                  if (_currencyController
+                                                          .text !=
+                                                      state.setting.coin) {
+                                                    contextBloc
+                                                        .read<
+                                                          SettingProjectBloc
+                                                        >()
+                                                        .add(
+                                                          ChangeCoin(
+                                                            coin:
+                                                                _currencyController
+                                                                    .text,
+                                                          ),
+                                                        );
+                                                  }
+                                                },
+                                              );
+                                            },
+                                          );
                                         },
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
+                                      )
+                                      : null,
                           child: Container(
                             height: 52,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               border: BoxBorder.all(
-                                color: Theme.of(context).colorScheme.secondary,
+                                color:
+                                    state.setting.bill == 1
+                                        ? Theme.of(
+                                          context,
+                                        ).colorScheme.secondary
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .secondary
+                                            .withOpacity(0.5),
                                 width: 1,
                               ),
                             ),
@@ -216,7 +273,14 @@ class DrawerSetting extends StatelessWidget {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color:
-                                      Theme.of(context).colorScheme.secondary,
+                                      state.setting.bill == 1
+                                          ? Theme.of(
+                                            context,
+                                          ).colorScheme.secondary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .secondary
+                                              .withOpacity(0.5),
                                 ),
                               ),
                             ),

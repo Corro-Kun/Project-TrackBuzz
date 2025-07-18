@@ -11,6 +11,7 @@ class SettingProjectBloc
   SettingProjectBloc({required this.getSettingProjectUseCase})
     : super(SettingProjectInitial()) {
     on<GetSetting>(_onGetSetting);
+    on<ChangeBill>(_onChangeBill);
     on<ChangePrice>(_onChangePrice);
     on<ChangeCoin>(_onChangeCoin);
   }
@@ -23,6 +24,25 @@ class SettingProjectBloc
     try {
       final setting = await getSettingProjectUseCase.execute(event.id);
       emit(SettingProjectLoaded(setting: setting, update: false));
+    } catch (e) {
+      emit(SettingProjectError(message: e.toString()));
+    }
+  }
+
+  void _onChangeBill(
+    ChangeBill event,
+    Emitter<SettingProjectState> emit,
+  ) async {
+    final currentState = state as SettingProjectLoaded;
+    try {
+      final newData = SettingModel(
+        id: currentState.setting.id,
+        bill: event.bill,
+        price: currentState.setting.price,
+        coin: currentState.setting.coin,
+        idProject: currentState.setting.idProject,
+      );
+      emit(SettingProjectLoaded(setting: newData, update: true));
     } catch (e) {
       emit(SettingProjectError(message: e.toString()));
     }
@@ -61,6 +81,19 @@ class SettingProjectBloc
         idProject: currentState.setting.idProject,
       );
       emit(SettingProjectLoaded(setting: newData, update: true));
+    } catch (e) {
+      emit(SettingProjectError(message: e.toString()));
+    }
+  }
+
+  Future<void> _onUpdateSetting(
+    UpdateSetting event,
+    Emitter<SettingProjectState> emit,
+  ) async {
+    final currentState = state as SettingProjectLoaded;
+    try {
+      await getSettingProjectUseCase.execute(1);
+      emit(SettingProjectLoaded(setting: currentState.setting, update: false));
     } catch (e) {
       emit(SettingProjectError(message: e.toString()));
     }

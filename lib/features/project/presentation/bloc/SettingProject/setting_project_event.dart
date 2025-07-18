@@ -6,6 +6,12 @@ class GetSetting extends SettingProjectEvent {
   GetSetting({required this.id});
 }
 
+class ChangeBill extends SettingProjectEvent {
+  final int bill;
+
+  ChangeBill({required this.bill});
+}
+
 class ChangePrice extends SettingProjectEvent {
   final double price;
 
@@ -17,3 +23,5 @@ class ChangeCoin extends SettingProjectEvent {
 
   ChangeCoin({required this.coin});
 }
+
+class UpdateSetting extends SettingProjectEvent {}

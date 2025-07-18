@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class SwitchCustom extends StatefulWidget {
-  const SwitchCustom({super.key});
+  final bool light;
+  final Function(bool value) onChanged;
+  const SwitchCustom({super.key, required this.light, required this.onChanged});
 
   @override
   State<SwitchCustom> createState() => _SwitchCustomState();
@@ -26,16 +28,14 @@ class _SwitchCustomState extends State<SwitchCustom> {
           WidgetState.disabled: Theme.of(context).colorScheme.secondary,
         });
     return Switch(
-      value: light,
+      value: widget.light,
       overlayColor: overlayColor,
       trackColor: trackColor,
       thumbColor: WidgetStatePropertyAll<Color>(
         Theme.of(context).colorScheme.secondary,
       ),
       onChanged: (bool value) {
-        setState(() {
-          light = value;
-        });
+        widget.onChanged(value);
       },
     );
   }
