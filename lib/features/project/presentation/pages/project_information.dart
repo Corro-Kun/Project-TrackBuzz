@@ -7,6 +7,8 @@ import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_event.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_state.dart';
+import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_bloc.dart';
+import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_event.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/app_bar_information.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/picture_project.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/drawer_setting.dart';
@@ -50,6 +52,11 @@ class _ProjectInformationState extends State<ProjectInformation>
           create:
               (context) => sl<ProjectBloc>()..add(GetProject(id: widget.id)),
         ),
+        BlocProvider<SettingProjectBloc>(
+          create:
+              (context) =>
+                  sl<SettingProjectBloc>()..add(GetSetting(id: widget.id)),
+        ),
       ],
       child: Scaffold(
         appBar: PreferredSize(
@@ -64,7 +71,7 @@ class _ProjectInformationState extends State<ProjectInformation>
             },
           ),
         ),
-        drawer: DrawerSetting(),
+        drawer: DrawerSettingBloc(),
         body: Column(
           children: [
             Container(
@@ -453,6 +460,17 @@ class _ProjectInformationState extends State<ProjectInformation>
           ),
         ),
       ),
+    );
+  }
+}
+
+class DrawerSettingBloc extends StatelessWidget {
+  const DrawerSettingBloc({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DrawerSetting(
+      settingProjectBloc: context.read<SettingProjectBloc>(),
     );
   }
 }

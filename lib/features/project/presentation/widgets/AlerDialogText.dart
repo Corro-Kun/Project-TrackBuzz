@@ -5,11 +5,15 @@ import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 class Alerdialogtext extends StatelessWidget {
   final String title;
   final TextEditingController controller;
+  final Function() save;
+  final TextInputType? keyboardType;
 
   const Alerdialogtext({
     super.key,
     required this.title,
     required this.controller,
+    required this.save,
+    this.keyboardType,
   });
 
   @override
@@ -25,6 +29,7 @@ class Alerdialogtext extends StatelessWidget {
             children: [
               TextField(
                 controller: controller,
+                keyboardType: keyboardType ?? TextInputType.text,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(15),
                   enabledBorder: OutlineInputBorder(
@@ -50,6 +55,7 @@ class Alerdialogtext extends StatelessWidget {
               SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
+                  save();
                   Navigator.pop(context);
                 },
                 child: Container(

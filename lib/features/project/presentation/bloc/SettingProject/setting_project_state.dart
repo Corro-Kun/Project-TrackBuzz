@@ -8,8 +8,9 @@ class SettingProjectLoading extends SettingProjectState {}
 
 class SettingProjectLoaded extends SettingProjectState {
   final SettingModel setting;
+  final bool update;
 
-  SettingProjectLoaded({required this.setting});
+  SettingProjectLoaded({required this.setting, required this.update});
 }
 
 class SettingProjectError extends SettingProjectState {
