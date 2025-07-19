@@ -13,4 +13,9 @@ class SettingRepository extends SettingRepositoryAbstract {
 
     return SettingModel.fromJson(data);
   }
+
+  @override
+  Future<dynamic> updateSetting(SettingModel setting) async {
+    await datasource.updateSetting(setting.toJson());
+  }
 }

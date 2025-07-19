@@ -302,6 +302,11 @@ class DrawerSetting extends StatelessWidget {
                           ? Padding(
                             padding: const EdgeInsets.only(right: 20, left: 20),
                             child: GestureDetector(
+                              onTap: () {
+                                context.read<SettingProjectBloc>().add(
+                                  UpdateSetting(),
+                                );
+                              },
                               child: Container(
                                 height: 50,
                                 decoration: BoxDecoration(

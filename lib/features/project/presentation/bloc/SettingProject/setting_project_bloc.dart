@@ -1,19 +1,24 @@
 import 'package:bloc/bloc.dart';
 import 'package:trackbuzz/features/project/data/models/setting_model.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_setting_project_use_case.dart';
+import 'package:trackbuzz/features/project/domain/usecase/update_setting_use_case.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_event.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_state.dart';
 
 class SettingProjectBloc
     extends Bloc<SettingProjectEvent, SettingProjectState> {
   final GetSettingProjectUseCase getSettingProjectUseCase;
+  final UpdateSettingUseCase updateSettingUseCase;
 
-  SettingProjectBloc({required this.getSettingProjectUseCase})
-    : super(SettingProjectInitial()) {
+  SettingProjectBloc({
+    required this.getSettingProjectUseCase,
+    required this.updateSettingUseCase,
+  }) : super(SettingProjectInitial()) {
     on<GetSetting>(_onGetSetting);
     on<ChangeBill>(_onChangeBill);
     on<ChangePrice>(_onChangePrice);
     on<ChangeCoin>(_onChangeCoin);
+    on<UpdateSetting>(_onUpdateSetting);
   }
 
   Future<void> _onGetSetting(
@@ -92,7 +97,7 @@ class SettingProjectBloc
   ) async {
     final currentState = state as SettingProjectLoaded;
     try {
-      await getSettingProjectUseCase.execute(1);
+      await updateSettingUseCase.execute(currentState.setting);
       emit(SettingProjectLoaded(setting: currentState.setting, update: false));
     } catch (e) {
       emit(SettingProjectError(message: e.toString()));

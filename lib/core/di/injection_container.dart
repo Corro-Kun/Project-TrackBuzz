@@ -11,6 +11,7 @@ import 'package:trackbuzz/features/project/domain/usecase/create_project_use_cas
 import 'package:trackbuzz/features/project/domain/usecase/get_list_project_user_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_setting_project_use_case.dart';
+import 'package:trackbuzz/features/project/domain/usecase/update_setting_use_case.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/ListProject/list_project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_bloc.dart';
@@ -21,13 +22,19 @@ Future<void> init() async {
   // Bloc
   sl.registerFactory(() => ListProjectBloc(getListProject: sl()));
   sl.registerFactory(() => ProjectBloc(getProjectUseCase: sl()));
-  sl.registerFactory(() => SettingProjectBloc(getSettingProjectUseCase: sl()));
+  sl.registerFactory(
+    () => SettingProjectBloc(
+      getSettingProjectUseCase: sl(),
+      updateSettingUseCase: sl(),
+    ),
+  );
 
   // User cases
   sl.registerLazySingleton(() => GetListProjectUserCase(sl()));
   sl.registerLazySingleton(() => CreateProjectUseCase(sl()));
   sl.registerLazySingleton(() => GetProjectUseCase(sl()));
   sl.registerLazySingleton(() => GetSettingProjectUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateSettingUseCase(sl()));
 
   // Services
   sl.registerLazySingleton(() => ProjectService(sl()));

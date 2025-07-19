@@ -12,4 +12,14 @@ class SettingDatasource {
 
     return data[0];
   }
+
+  Future<dynamic> updateSetting(Map<String, dynamic> value) async {
+    final db = await DataBase().OpenDB();
+    await db.update(
+      'project_settings',
+      {'bill': value['bill'], 'price': value['price'], 'coin': value['coin']},
+      where: 'id = ?',
+      whereArgs: [value['id']],
+    );
+  }
 }
