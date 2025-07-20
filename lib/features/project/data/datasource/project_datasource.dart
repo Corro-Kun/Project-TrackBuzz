@@ -28,4 +28,15 @@ class ProjectDatasource {
       'id_project': id,
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
+
+  Future<dynamic> updateProject(int id, String title, String path) async {
+    final db = await DataBase().OpenDB();
+
+    await db.update(
+      'project',
+      {'title': title, 'path': path},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 }

@@ -33,5 +33,6 @@ class AppLocalizationsEs {
     'billing': 'Facturación:',
     'days': 'Dias:',
     'tasks': 'Tareas:',
+    'update_project': 'Actualizar Proyecto',
   };
 }

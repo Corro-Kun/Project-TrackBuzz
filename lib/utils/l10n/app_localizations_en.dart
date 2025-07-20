@@ -33,5 +33,6 @@ class AppLocalizationsEn {
     'billing': 'Billing:',
     'days': 'Days:',
     'tasks': 'Tasks:',
+    'update_project': 'Update Project',
   };
 }

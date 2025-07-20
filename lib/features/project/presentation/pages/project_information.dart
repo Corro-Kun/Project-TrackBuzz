@@ -9,6 +9,7 @@ import 'package:trackbuzz/features/project/presentation/bloc/Project/project_eve
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_state.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_event.dart';
+import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_state.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/app_bar_information.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/picture_project.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/drawer_setting.dart';
@@ -121,106 +122,7 @@ class _ProjectInformationState extends State<ProjectInformation>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  ListView(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(20),
-                        child: Row(
-                          children: [
-                            Icon(
-                              CupertinoIcons.money_dollar_circle,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            SizedBox(width: 5),
-                            Text(
-                              loc?.translate('billing') ?? 'Billing:',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 70,
-                        margin: EdgeInsets.only(
-                          right: 20,
-                          left: 20,
-                          top: 5,
-                          bottom: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        child: Center(
-                          child: Text(
-                            r'$43',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(20),
-                        child: Row(
-                          children: [
-                            Icon(
-                              CupertinoIcons.calendar,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            SizedBox(width: 5),
-                            Text(
-                              loc?.translate('days') ?? 'Days:',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 150,
-                        margin: EdgeInsets.only(
-                          right: 20,
-                          left: 20,
-                          top: 5,
-                          bottom: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: BoxBorder.all(
-                            color: Theme.of(context).colorScheme.secondary,
-                            width: 1,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(20),
-                        child: Row(
-                          children: [
-                            Icon(
-                              CupertinoIcons.rectangle_paperclip,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            SizedBox(width: 5),
-                            Text(
-                              loc?.translate('tasks') ?? 'Tasks:',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  listViewGeneral(context, loc),
                   ListView(
                     children: [
                       Container(
@@ -462,6 +364,119 @@ class _ProjectInformationState extends State<ProjectInformation>
       ),
     );
   }
+
+  ListView listViewGeneral(BuildContext context, AppLocalizations? loc) {
+    return ListView(
+      children: [
+        BlocBuilder<SettingProjectBloc, SettingProjectState>(
+          builder: (contextBloc, state) {
+            if (state is SettingProjectLoading) {
+              return PreLoader();
+            } else if (state is SettingProjectLoaded) {
+              final List<Widget> list = [
+                Container(
+                  margin: EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Icon(
+                        CupertinoIcons.money_dollar_circle,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        loc?.translate('billing') ?? 'Billing:',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 70,
+                  margin: EdgeInsets.only(
+                    right: 20,
+                    left: 20,
+                    top: 5,
+                    bottom: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  child: Center(
+                    child: Text(
+                      r'$43',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  ),
+                ),
+              ];
+              return state.setting.bill == 1
+                  ? Column(children: list)
+                  : SizedBox.shrink();
+            } else {
+              return SizedBox.shrink();
+            }
+          },
+        ),
+        Container(
+          margin: EdgeInsets.all(20),
+          child: Row(
+            children: [
+              Icon(
+                CupertinoIcons.calendar,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              SizedBox(width: 5),
+              Text(
+                loc?.translate('days') ?? 'Days:',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: 150,
+          margin: EdgeInsets.only(right: 20, left: 20, top: 5, bottom: 5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: BoxBorder.all(
+              color: Theme.of(context).colorScheme.secondary,
+              width: 1,
+            ),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.all(20),
+          child: Row(
+            children: [
+              Icon(
+                CupertinoIcons.rectangle_paperclip,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              SizedBox(width: 5),
+              Text(
+                loc?.translate('tasks') ?? 'Tasks:',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class DrawerSettingBloc extends StatelessWidget {
@@ -471,6 +486,7 @@ class DrawerSettingBloc extends StatelessWidget {
   Widget build(BuildContext context) {
     return DrawerSetting(
       settingProjectBloc: context.read<SettingProjectBloc>(),
+      projectBloc: context.read<ProjectBloc>(),
     );
   }
 }

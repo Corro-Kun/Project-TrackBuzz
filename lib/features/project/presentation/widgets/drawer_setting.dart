@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
+import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_event.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_state.dart';
+import 'package:trackbuzz/features/project/presentation/pages/project_update.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/AlerDialogText.dart';
 import 'package:trackbuzz/shared/widgets/adjustments_announced.dart';
 import 'package:trackbuzz/shared/widgets/pre_loader.dart';
@@ -21,8 +23,13 @@ class DrawerSetting extends StatelessWidget {
   );
 
   final SettingProjectBloc settingProjectBloc;
+  final ProjectBloc projectBloc;
 
-  DrawerSetting({super.key, required this.settingProjectBloc});
+  DrawerSetting({
+    super.key,
+    required this.settingProjectBloc,
+    required this.projectBloc,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -340,6 +347,13 @@ class DrawerSetting extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => ProjectUpdate(bloc: projectBloc),
+                            ),
+                          );
+                        },
                         child: Container(
                           height: 50,
                           width: 50,
