@@ -72,7 +72,7 @@ class _ProjectInformationState extends State<ProjectInformation>
             },
           ),
         ),
-        drawer: DrawerSettingBloc(),
+        drawer: DrawerSettingBloc(id: widget.id),
         body: Column(
           children: [
             Container(
@@ -480,13 +480,14 @@ class _ProjectInformationState extends State<ProjectInformation>
 }
 
 class DrawerSettingBloc extends StatelessWidget {
-  const DrawerSettingBloc({super.key});
+  final int id;
+  const DrawerSettingBloc({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {
     return DrawerSetting(
       settingProjectBloc: context.read<SettingProjectBloc>(),
-      projectBloc: context.read<ProjectBloc>(),
+      idProject: id,
     );
   }
 }

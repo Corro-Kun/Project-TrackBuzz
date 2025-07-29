@@ -34,7 +34,7 @@ class ProjectDatasource {
 
     await db.update(
       'project',
-      {'title': title, 'path': path},
+      {'title': title, 'image': path},
       where: 'id = ?',
       whereArgs: [id],
     );

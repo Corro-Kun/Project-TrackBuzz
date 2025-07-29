@@ -23,12 +23,12 @@ class DrawerSetting extends StatelessWidget {
   );
 
   final SettingProjectBloc settingProjectBloc;
-  final ProjectBloc projectBloc;
+  final int idProject;
 
   DrawerSetting({
     super.key,
     required this.settingProjectBloc,
-    required this.projectBloc,
+    required this.idProject,
   });
 
   @override
@@ -350,7 +350,7 @@ class DrawerSetting extends StatelessWidget {
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => ProjectUpdate(bloc: projectBloc),
+                              builder: (_) => ProjectUpdate(id: idProject),
                             ),
                           );
                         },

@@ -4,17 +4,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
+import 'package:trackbuzz/features/project/presentation/bloc/Project/project_event.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_state.dart';
+import 'package:trackbuzz/shared/functions/save_image.dart';
 import 'package:trackbuzz/shared/widgets/pre_loader.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class ProjectUpdate extends StatefulWidget {
-  final ProjectBloc bloc;
-  const ProjectUpdate({super.key, required this.bloc});
+  final int id;
+  const ProjectUpdate({super.key, required this.id});
 
-  static Route<void> route(ProjectBloc bloc) {
-    return MaterialPageRoute(builder: (context) => ProjectUpdate(bloc: bloc));
+  static Route<void> route(int id) {
+    return MaterialPageRoute(builder: (context) => ProjectUpdate(id: id));
   }
 
   @override
@@ -23,8 +26,8 @@ class ProjectUpdate extends StatefulWidget {
 
 class _ProjectUpdateState extends State<ProjectUpdate> {
   final ImagePicker _picker = ImagePicker();
-  String _imagePath = '';
   final TextEditingController _titleController = TextEditingController();
+  late ProjectBloc _projectBloc;
   bool loading = false;
 
   DecorationImage image = const DecorationImage(
@@ -34,29 +37,35 @@ class _ProjectUpdateState extends State<ProjectUpdate> {
     fit: BoxFit.cover,
   );
 
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile == null) {
-      return;
-    }
-    _changeImage(pickedFile.path);
-  }
-
-  _changeImage(String path) {
+  _load(bool value) {
     setState(() {
-      _imagePath = path;
-      image = DecorationImage(image: FileImage(File(path)), fit: BoxFit.cover);
+      loading = value;
     });
   }
 
-  Future<void> _update() async {}
+  Future<void> _update() async {
+    _load(true);
+    _projectBloc.add(
+      UpdateProject(
+        title: _titleController.text,
+        img: await saveImage(image.image.toString().split('"')[1]),
+      ),
+    );
+    Navigator.pop(context, true);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _projectBloc = sl<ProjectBloc>();
+  }
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
 
-    return BlocProvider.value(
-      value: widget.bloc,
+    return BlocProvider(
+      create: (context) => _projectBloc..add(GetProject(id: widget.id)),
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -80,18 +89,28 @@ class _ProjectUpdateState extends State<ProjectUpdate> {
         body: Column(
           children: [
             SizedBox(height: 20),
-            GestureDetector(
-              onTap: () => _pickImage(),
-              child: BlocBuilder<ProjectBloc, ProjectState>(
-                builder: (contextBloc, state) {
-                  if (state is ProjectLoading) {
-                    return PreLoader();
-                  } else if (state is ProjectLoaded) {
-                    image = DecorationImage(
-                      image: FileImage(File(state.project.image)),
-                      fit: BoxFit.cover,
-                    );
-                    return Container(
+            BlocBuilder<ProjectBloc, ProjectState>(
+              builder: (contextBloc, state) {
+                if (state is ProjectLoading) {
+                  return PreLoader();
+                } else if (state is ProjectLoaded) {
+                  image = DecorationImage(
+                    image: FileImage(File(state.project.image)),
+                    fit: BoxFit.cover,
+                  );
+                  return GestureDetector(
+                    onTap: () async {
+                      final pickedFile = await _picker.pickImage(
+                        source: ImageSource.gallery,
+                      );
+                      if (pickedFile == null) {
+                        return;
+                      }
+                      contextBloc.read<ProjectBloc>().add(
+                        UpdateImage(path: pickedFile.path),
+                      );
+                    },
+                    child: Container(
                       height: 200,
                       width: 250,
                       decoration: BoxDecoration(
@@ -103,12 +122,12 @@ class _ProjectUpdateState extends State<ProjectUpdate> {
                         image: image,
                       ),
                       clipBehavior: Clip.hardEdge,
-                    );
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-              ),
+                    ),
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
             ),
             Container(
               padding: const EdgeInsets.only(
