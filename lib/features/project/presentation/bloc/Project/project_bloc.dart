@@ -16,6 +16,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     on<GetProject>(_onGetProject);
     on<UpdateImage>(_onUpdateImage);
     on<UpdateProject>(_onUpdateProject);
+    on<UpdateBool>(_onUpdateBool);
   }
 
   Future<void> _onGetProject(
@@ -25,7 +26,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     emit(ProjectLoading());
     try {
       final project = await getProjectUseCase.execute(event.id);
-      emit(ProjectLoaded(project: project));
+      emit(ProjectLoaded(project: project, update: false));
     } catch (e) {
       emit(ProjectError(message: e.toString()));
     }
@@ -45,6 +46,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
             image: event.path,
             state: currentState.project.state,
           ),
+          update: false,
         ),
       );
     } catch (e) {
@@ -66,6 +68,18 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
           state: currentState.project.state,
         ),
       );
+    } catch (e) {
+      emit(ProjectError(message: e.toString()));
+    }
+  }
+
+  Future<void> _onUpdateBool(
+    UpdateBool event,
+    Emitter<ProjectState> emit,
+  ) async {
+    try {
+      final project = await getProjectUseCase.execute(event.id);
+      emit(ProjectLoaded(project: project, update: event.update));
     } catch (e) {
       emit(ProjectError(message: e.toString()));
     }

@@ -99,12 +99,21 @@ class ProjectList extends StatelessWidget {
                     return state.projects.isNotEmpty
                         ? Center(
                           child: ElevatedButton(
-                            onPressed:
-                                () => Navigator.of(context).push(
-                                  ProjectInformation.route(
-                                    state.projects[state.index].id,
-                                  ),
+                            onPressed: () async {
+                              final result = await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder:
+                                      (_) => ProjectInformation(
+                                        id: state.projects[state.index].id,
+                                      ),
                                 ),
+                              );
+                              if (result == true) {
+                                context.read<ListProjectBloc>().add(
+                                  GetListProject(),
+                                );
+                              }
+                            },
                             style: ButtonStyle(
                               backgroundColor: WidgetStateProperty.all(
                                 Theme.of(context).colorScheme.primary,

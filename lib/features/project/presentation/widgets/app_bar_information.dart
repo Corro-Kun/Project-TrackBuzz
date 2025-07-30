@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 
 class AppBarInformation extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  const AppBarInformation({super.key, required this.title});
+  final bool update;
+  const AppBarInformation({
+    super.key,
+    required this.title,
+    required this.update,
+  });
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -17,7 +22,7 @@ class AppBarInformation extends StatelessWidget implements PreferredSizeWidget {
       ),
       elevation: 0.0,
       leading: GestureDetector(
-        onTap: () => Navigator.pop(context),
+        onTap: () => Navigator.pop(context, update),
         child: Container(
           margin: const EdgeInsets.only(top: 10, bottom: 10),
           alignment: Alignment.center,

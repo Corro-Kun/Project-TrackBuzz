@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
+import 'package:trackbuzz/features/project/presentation/bloc/Project/project_event.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_event.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_state.dart';
@@ -23,11 +24,13 @@ class DrawerSetting extends StatelessWidget {
   );
 
   final SettingProjectBloc settingProjectBloc;
+  final ProjectBloc projectBloc;
   final int idProject;
 
   DrawerSetting({
     super.key,
     required this.settingProjectBloc,
+    required this.projectBloc,
     required this.idProject,
   });
 
@@ -347,12 +350,17 @@ class DrawerSetting extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(
+                        onTap: () async {
+                          final result = await Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (_) => ProjectUpdate(id: idProject),
                             ),
                           );
+                          if (result == true) {
+                            projectBloc.add(
+                              UpdateBool(id: idProject, update: true),
+                            );
+                          }
                         },
                         child: Container(
                           height: 50,

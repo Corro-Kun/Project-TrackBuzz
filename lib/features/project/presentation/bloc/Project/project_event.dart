@@ -18,3 +18,10 @@ class UpdateProject extends ProjectEvent {
 
   UpdateProject({required this.title, required this.img});
 }
+
+class UpdateBool extends ProjectEvent {
+  final int id;
+  final bool update;
+
+  UpdateBool({required this.id, required this.update});
+}

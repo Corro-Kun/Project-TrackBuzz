@@ -65,10 +65,12 @@ class _ProjectInformationState extends State<ProjectInformation>
           child: BlocBuilder<ProjectBloc, ProjectState>(
             builder: (context, state) {
               String title = '...';
+              bool update = false;
               if (state is ProjectLoaded) {
                 title = state.project.title;
+                update = state.update;
               }
-              return AppBarInformation(title: title);
+              return AppBarInformation(title: title, update: update);
             },
           ),
         ),
@@ -487,6 +489,7 @@ class DrawerSettingBloc extends StatelessWidget {
   Widget build(BuildContext context) {
     return DrawerSetting(
       settingProjectBloc: context.read<SettingProjectBloc>(),
+      projectBloc: context.read<ProjectBloc>(),
       idProject: id,
     );
   }
