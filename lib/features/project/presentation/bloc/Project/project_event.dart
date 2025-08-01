@@ -12,6 +12,12 @@ class UpdateImage extends ProjectEvent {
   UpdateImage({required this.path});
 }
 
+class UpdateTextProject extends ProjectEvent {
+  final String title;
+
+  UpdateTextProject({required this.title});
+}
+
 class UpdateProject extends ProjectEvent {
   final String title;
   final String img;

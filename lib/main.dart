@@ -9,6 +9,7 @@ import 'package:trackbuzz/features/report/presentation/pages/project_report.dart
 import 'package:trackbuzz/features/track/presentation/pages/time_tracking.dart';
 import 'package:trackbuzz/shared/widgets/navigation_bar.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
+import 'package:workmanager/workmanager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +22,8 @@ void main() async {
 
   await init();
 
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+
   runApp(
     MultiProvider(
       providers: [
@@ -30,6 +33,12 @@ void main() async {
       child: const MainApp(),
     ),
   );
+}
+
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) {
+    return Future.value(true);
+  });
 }
 
 class MainApp extends StatefulWidget {

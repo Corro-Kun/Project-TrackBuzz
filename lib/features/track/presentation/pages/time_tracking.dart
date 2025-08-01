@@ -3,12 +3,62 @@ import 'package:flutter/material.dart';
 import 'package:trackbuzz/shared/widgets/app_bar_main.dart';
 import 'package:trackbuzz/shared/widgets/drawer_custom.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
+import 'package:workmanager/workmanager.dart';
 
-class TimeTracking extends StatelessWidget {
+class TimeTracking extends StatefulWidget {
   const TimeTracking({super.key});
 
   @override
+  State<TimeTracking> createState() => _TimeTrackingState();
+}
+
+class _TimeTrackingState extends State<TimeTracking>
+    with WidgetsBindingObserver {
+  int _seconds = 0;
+  bool _isRunning = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addObserver(this);
+    _startBackgroundTask();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
+
+  void _startCounter() {
+    setState(() {
+      _isRunning = !_isRunning;
+    });
+  }
+
+  void _startBackgroundTask() {
+    Workmanager().registerPeriodicTask(
+      "counter",
+      "counter",
+      frequency: Duration(minutes: 15),
+      initialDelay: Duration(seconds: 10),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_isRunning) {
+      Future.delayed(Duration(seconds: 1), () {
+        setState(() {
+          _seconds++;
+        });
+      });
+    }
+
+    final hours = (_seconds ~/ 3600).toString().padLeft(2, '0');
+    final minutes = ((_seconds % 3600) ~/ 60).toString().padLeft(2, '0');
+    final seconds = (_seconds % 60).toString().padLeft(2, '0');
+
     final loc = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBarMain(title: loc?.translate('chronometer') ?? 'Chronometer'),
@@ -31,7 +81,7 @@ class TimeTracking extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    '00:25:00',
+                    '$hours:$minutes:$seconds',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 40,
@@ -44,6 +94,9 @@ class TimeTracking extends StatelessWidget {
           ),
           Center(
             child: GestureDetector(
+              onTap: () {
+                _startCounter();
+              },
               child: Container(
                 height: 50,
                 width: 50,
@@ -53,7 +106,9 @@ class TimeTracking extends StatelessWidget {
                 ),
                 child: Center(
                   child: Icon(
-                    CupertinoIcons.pause_fill,
+                    _isRunning
+                        ? CupertinoIcons.pause_fill
+                        : CupertinoIcons.play_fill,
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),

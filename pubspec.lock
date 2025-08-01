@@ -618,6 +618,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  workmanager:
+    dependency: "direct main"
+    description:
+      name: workmanager
+      sha256: c48b107b6b6241247c8e8bc7fd26f8a8c36a10bfee06fcbba31e85a23916ac67
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.0"
+  workmanager_android:
+    dependency: transitive
+    description:
+      name: workmanager_android
+      sha256: "9149b9166ca94dba7f4173459861e76d70f93361eca473df02e28c25f1a6dff9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.0"
+  workmanager_apple:
+    dependency: transitive
+    description:
+      name: workmanager_apple
+      sha256: ced3c289dd6a75f45b10f5a05f210e0139fa639d553238a96734ceb3e54f8044
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.0"
+  workmanager_platform_interface:
+    dependency: transitive
+    description:
+      name: workmanager_platform_interface
+      sha256: "0f02538a002448fabe6d866477f12d41ea56ca2bdc975dbdd88127dd655368c0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.0"
   xdg_directories:
     dependency: transitive
     description:
@@ -628,4 +660,4 @@ packages:
     version: "1.1.0"
 sdks:
   dart: ">=3.8.0 <4.0.0"
-  flutter: ">=3.27.0"
+  flutter: ">=3.32.0"

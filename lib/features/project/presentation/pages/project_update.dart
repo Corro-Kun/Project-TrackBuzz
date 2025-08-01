@@ -155,6 +155,11 @@ class _ProjectUpdateState extends State<ProjectUpdate> {
                     _titleController.text = state.project.title;
                     return TextField(
                       controller: _titleController,
+                      onChanged: (value) {
+                        contextBloc.read<ProjectBloc>().add(
+                          UpdateTextProject(title: value),
+                        );
+                      },
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(15),
                         enabledBorder: OutlineInputBorder(
