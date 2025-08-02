@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/core/setting/locale_notifier.dart';
@@ -8,8 +10,8 @@ import 'package:trackbuzz/features/project/presentation/pages/project_list.dart'
 import 'package:trackbuzz/features/report/presentation/pages/project_report.dart';
 import 'package:trackbuzz/features/track/presentation/pages/time_tracking.dart';
 import 'package:trackbuzz/shared/widgets/navigation_bar.dart';
+import 'package:trackbuzz/utils/constants.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
-import 'package:workmanager/workmanager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +24,14 @@ void main() async {
 
   await init();
 
-  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  await Permission.notification.request();
 
   runApp(
     MultiProvider(
@@ -33,12 +42,6 @@ void main() async {
       child: const MainApp(),
     ),
   );
-}
-
-void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) {
-    return Future.value(true);
-  });
 }
 
 class MainApp extends StatefulWidget {

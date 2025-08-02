@@ -1,9 +1,14 @@
+import 'dart:isolate';
+import 'dart:ui';
+
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:trackbuzz/shared/widgets/app_bar_main.dart';
 import 'package:trackbuzz/shared/widgets/drawer_custom.dart';
+import 'package:trackbuzz/utils/constants.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
-import 'package:workmanager/workmanager.dart';
 
 class TimeTracking extends StatefulWidget {
   const TimeTracking({super.key});
@@ -12,41 +17,93 @@ class TimeTracking extends StatefulWidget {
   State<TimeTracking> createState() => _TimeTrackingState();
 }
 
-class _TimeTrackingState extends State<TimeTracking>
-    with WidgetsBindingObserver {
+class _TimeTrackingState extends State<TimeTracking> {
   int _seconds = 0;
   bool _isRunning = false;
+  final ReceivePort _port = ReceivePort();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
-    _startBackgroundTask();
+    _initAlarm();
+    _setupIsolate();
   }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
-    super.dispose();
+  void _setupIsolate() {
+    IsolateNameServer.registerPortWithName(_port.sendPort, 'counter');
+    _port.listen((dynamic data) {
+      _updateCounterFromBackground();
+    });
+  }
+
+  Future<void> _initAlarm() async {
+    await AndroidAlarmManager.initialize();
+    await AndroidAlarmManager.periodic(
+      const Duration(seconds: 1),
+      0,
+      callbackmanger,
+      exact: true,
+      wakeup: true,
+      rescheduleOnReboot: true,
+    );
+  }
+
+  Future<void> _updateCounterFromBackground() async {
+    print('hola');
+    if (_isRunning) {
+      setState(() {
+        _seconds++;
+      });
+      await _updateNotification();
+    }
+  }
+
+  Future<void> _updateNotification() async {
+    final hours = (_seconds ~/ 3600).toString().padLeft(2, '0');
+    final minutes = ((_seconds % 3600) ~/ 60).toString().padLeft(2, '0');
+    final seconds = (_seconds % 60).toString().padLeft(2, '0');
+
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+          'counter',
+          'text',
+          channelDescription: 'proceso',
+          importance: Importance.low,
+          priority: Priority.low,
+          ongoing: true,
+          showWhen: false,
+        );
+
+    final NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidNotificationDetails,
+    );
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'test perron',
+      'tiempo: $hours:$minutes:$seconds',
+      platformChannelSpecifics,
+    );
   }
 
   void _startCounter() {
     setState(() {
-      _isRunning = !_isRunning;
+      _isRunning = true;
     });
+    _updateNotification();
+    uiSendPort = IsolateNameServer.lookupPortByName('counter');
   }
 
-  void _startBackgroundTask() {
-    Workmanager().registerPeriodicTask(
-      "counter",
-      "counter",
-      frequency: Duration(minutes: 15),
-      initialDelay: Duration(seconds: 10),
-    );
+  @override
+  void dispose() {
+    _port.close();
+    IsolateNameServer.removePortNameMapping('counter');
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    /*
     if (_isRunning) {
       Future.delayed(Duration(seconds: 1), () {
         setState(() {
@@ -54,6 +111,7 @@ class _TimeTrackingState extends State<TimeTracking>
         });
       });
     }
+    */
 
     final hours = (_seconds ~/ 3600).toString().padLeft(2, '0');
     final minutes = ((_seconds % 3600) ~/ 60).toString().padLeft(2, '0');
