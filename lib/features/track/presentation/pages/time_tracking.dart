@@ -10,6 +10,12 @@ import 'package:trackbuzz/shared/widgets/drawer_custom.dart';
 import 'package:trackbuzz/utils/constants.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
+@pragma('vm:entry-point')
+void callback() {
+  final DateTime now = DateTime.now();
+  IsolateNameServer.lookupPortByName('counter')?.send(now.toIso8601String());
+}
+
 class TimeTracking extends StatefulWidget {
   const TimeTracking({super.key});
 
@@ -30,26 +36,34 @@ class _TimeTrackingState extends State<TimeTracking> {
   }
 
   void _setupIsolate() {
-    IsolateNameServer.registerPortWithName(_port.sendPort, 'counter');
-    _port.listen((dynamic data) {
-      _updateCounterFromBackground();
-    });
+    try {
+      IsolateNameServer.registerPortWithName(_port.sendPort, 'counter');
+      _port.listen((dynamic data) {
+        debugPrint('test');
+        _updateCounterFromBackground();
+      });
+    } catch (e) {
+      debugPrint('error: $e');
+    }
   }
 
   Future<void> _initAlarm() async {
-    await AndroidAlarmManager.initialize();
-    await AndroidAlarmManager.periodic(
-      const Duration(seconds: 1),
-      0,
-      callbackmanger,
-      exact: true,
-      wakeup: true,
-      rescheduleOnReboot: true,
-    );
+    try {
+      await AndroidAlarmManager.initialize();
+      await AndroidAlarmManager.periodic(
+        const Duration(seconds: 1),
+        0,
+        callback,
+        exact: true,
+        wakeup: true,
+        rescheduleOnReboot: true,
+      );
+    } catch (e) {
+      debugPrint('error');
+    }
   }
 
   Future<void> _updateCounterFromBackground() async {
-    print('hola');
     if (_isRunning) {
       setState(() {
         _seconds++;
@@ -80,7 +94,7 @@ class _TimeTrackingState extends State<TimeTracking> {
 
     await flutterLocalNotificationsPlugin.show(
       0,
-      'test perron',
+      'test',
       'tiempo: $hours:$minutes:$seconds',
       platformChannelSpecifics,
     );
@@ -91,7 +105,6 @@ class _TimeTrackingState extends State<TimeTracking> {
       _isRunning = true;
     });
     _updateNotification();
-    uiSendPort = IsolateNameServer.lookupPortByName('counter');
   }
 
   @override

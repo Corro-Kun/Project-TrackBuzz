@@ -8,12 +8,6 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 SendPort? uiSendPort;
 
-@pragma('vm:entry-point')
-void callbackmanger() {
-  final DateTime now = DateTime.now();
-  uiSendPort?.send(now.toIso8601String());
-}
-
 ThemeData appThemeDark = ThemeData(
   colorScheme: const ColorScheme.dark(
     surface: Color(0xFF0D0D0D),
