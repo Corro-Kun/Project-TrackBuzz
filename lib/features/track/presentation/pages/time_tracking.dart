@@ -13,7 +13,12 @@ import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 @pragma('vm:entry-point')
 void callback() {
   final DateTime now = DateTime.now();
-  IsolateNameServer.lookupPortByName('counter')?.send(now.toIso8601String());
+  final SendPort? sendPort = IsolateNameServer.lookupPortByName('counter');
+  if (sendPort != null) {
+    sendPort.send(now.toIso8601String());
+  } else {
+    debugPrint('Error: No se encontró el puerto "counter"');
+  }
 }
 
 class TimeTracking extends StatefulWidget {

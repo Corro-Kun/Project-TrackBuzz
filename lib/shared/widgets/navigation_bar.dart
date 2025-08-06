@@ -16,6 +16,7 @@ class _NavigationBarState extends State<NavigationBarCustom> {
     final loc = AppLocalizations.of(context);
     return Container(
       color: Theme.of(context).colorScheme.surface,
+      margin: const EdgeInsets.only(bottom: 20),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
         child: GNav(
