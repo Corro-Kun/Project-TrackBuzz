@@ -1,25 +1,11 @@
-import 'dart:isolate';
-import 'dart:ui';
+import 'dart:async';
 
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:trackbuzz/features/track/presentation/widgets/clock_custom.dart';
 import 'package:trackbuzz/shared/widgets/app_bar_main.dart';
 import 'package:trackbuzz/shared/widgets/drawer_custom.dart';
-import 'package:trackbuzz/utils/constants.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
-
-@pragma('vm:entry-point')
-void callback() {
-  final DateTime now = DateTime.now();
-  final SendPort? sendPort = IsolateNameServer.lookupPortByName('counter');
-  if (sendPort != null) {
-    sendPort.send(now.toIso8601String());
-  } else {
-    debugPrint('Error: No se encontró el puerto "counter"');
-  }
-}
 
 class TimeTracking extends StatefulWidget {
   const TimeTracking({super.key});
@@ -31,50 +17,39 @@ class TimeTracking extends StatefulWidget {
 class _TimeTrackingState extends State<TimeTracking> {
   int _seconds = 0;
   bool _isRunning = false;
-  final ReceivePort _port = ReceivePort();
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    _initAlarm();
-    _setupIsolate();
+    //_startBackgroundService();
   }
 
-  void _setupIsolate() {
-    try {
-      IsolateNameServer.registerPortWithName(_port.sendPort, 'counter');
-      _port.listen((dynamic data) {
-        debugPrint('test');
-        _updateCounterFromBackground();
-      });
-    } catch (e) {
-      debugPrint('error: $e');
-    }
+  /*
+  Future<void> _startBackgroundService() async {
+    await FlutterBackgroundService().configure(
+      androidConfiguration: AndroidConfiguration(
+        onStart: (service) {
+          _onBackgroundServiceStart();
+        },
+        autoStart: true,
+        isForegroundMode: true,
+      ),
+      iosConfiguration: IosConfiguration(),
+    );
   }
 
-  Future<void> _initAlarm() async {
-    try {
-      await AndroidAlarmManager.initialize();
-      await AndroidAlarmManager.periodic(
-        const Duration(seconds: 1),
-        0,
-        callback,
-        exact: true,
-        wakeup: true,
-        rescheduleOnReboot: true,
-      );
-    } catch (e) {
-      debugPrint('error');
-    }
-  }
-
-  Future<void> _updateCounterFromBackground() async {
-    if (_isRunning) {
-      setState(() {
-        _seconds++;
-      });
-      await _updateNotification();
-    }
+  @pragma('vm:entry-point')
+  void _onBackgroundServiceStart() {
+    final service = FlutterBackgroundService();
+    int seconds = 0;
+    Timer.periodic(Duration(seconds: 1), (timer) async {
+      seconds++;
+      if (seconds % 60 == 0) {
+        _updateNotification();
+      }
+      service.invoke('update', {'seconds': seconds});
+    });
   }
 
   Future<void> _updateNotification() async {
@@ -104,18 +79,22 @@ class _TimeTrackingState extends State<TimeTracking> {
       platformChannelSpecifics,
     );
   }
-
+  */
   void _startCounter() {
-    setState(() {
-      _isRunning = true;
+    setState(() => _isRunning = true);
+    _timer = Timer.periodic(Duration(seconds: 1), (_) {
+      setState(() => _seconds++);
     });
-    _updateNotification();
+  }
+
+  void _stopCounter() {
+    _timer?.cancel();
+    setState(() => _isRunning = false);
   }
 
   @override
   void dispose() {
-    _port.close();
-    IsolateNameServer.removePortNameMapping('counter');
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -141,37 +120,15 @@ class _TimeTrackingState extends State<TimeTracking> {
       drawer: DrawerCustom(),
       body: ListView(
         children: [
-          Container(
-            height: 300,
-            margin: EdgeInsets.all(20),
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            child: Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).colorScheme.surface,
-                ),
-                child: Center(
-                  child: Text(
-                    '$hours:$minutes:$seconds',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          ClockCustom(hours: hours, minutes: minutes, seconds: seconds),
           Center(
             child: GestureDetector(
               onTap: () {
-                _startCounter();
+                if (!_isRunning) {
+                  _startCounter();
+                } else {
+                  _stopCounter();
+                }
               },
               child: Container(
                 height: 50,
@@ -211,12 +168,24 @@ class _TimeTrackingState extends State<TimeTracking> {
               ],
             ),
           ),
-          Container(
-            height: 70,
-            margin: EdgeInsets.only(right: 20, left: 20, top: 5, bottom: 5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).colorScheme.primary,
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              height: 70,
+              margin: EdgeInsets.only(right: 20, left: 20, top: 5, bottom: 5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: BoxBorder.all(
+                  width: 1,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+              child: Center(
+                child: Icon(
+                  CupertinoIcons.add,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
             ),
           ),
           SizedBox(height: 20),
