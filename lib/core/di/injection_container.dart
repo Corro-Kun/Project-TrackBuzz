@@ -16,6 +16,8 @@ import 'package:trackbuzz/features/project/domain/usecase/update_setting_use_cas
 import 'package:trackbuzz/features/project/presentation/bloc/ListProject/list_project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_bloc.dart';
+import 'package:trackbuzz/features/track/domain/usecase/get_list_project_chronometer_use_case.dart';
+import 'package:trackbuzz/features/track/presentation/bloc/Project/project_chronometer_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -31,6 +33,9 @@ Future<void> init() async {
       updateSettingUseCase: sl(),
     ),
   );
+  sl.registerFactory(
+    () => ProjectChronometerBloc(getListProjectChronometerUseCase: sl()),
+  );
 
   // User cases
   sl.registerLazySingleton(() => GetListProjectUserCase(sl()));
@@ -39,6 +44,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetSettingProjectUseCase(sl()));
   sl.registerLazySingleton(() => UpdateSettingUseCase(sl()));
   sl.registerLazySingleton(() => UpdateProjectUseCase(sl()));
+  sl.registerLazySingleton(() => GetListProjectChronometerUseCase(sl()));
 
   // Services
   sl.registerLazySingleton(() => ProjectService(sl()));

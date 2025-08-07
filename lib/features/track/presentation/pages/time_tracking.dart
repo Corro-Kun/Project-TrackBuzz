@@ -2,9 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:trackbuzz/core/di/injection_container.dart';
+import 'package:trackbuzz/features/track/presentation/bloc/Project/project_chronometer_bloc.dart';
+import 'package:trackbuzz/features/track/presentation/bloc/Project/project_chronometer_event.dart';
 import 'package:trackbuzz/features/track/presentation/widgets/clock_custom.dart';
+import 'package:trackbuzz/features/track/presentation/widgets/title_chronometer.dart';
 import 'package:trackbuzz/shared/widgets/app_bar_main.dart';
 import 'package:trackbuzz/shared/widgets/drawer_custom.dart';
+import 'package:trackbuzz/utils/constants.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class TimeTracking extends StatefulWidget {
@@ -52,6 +59,7 @@ class _TimeTrackingState extends State<TimeTracking> {
     });
   }
 
+  */
   Future<void> _updateNotification() async {
     final hours = (_seconds ~/ 3600).toString().padLeft(2, '0');
     final minutes = ((_seconds % 3600) ~/ 60).toString().padLeft(2, '0');
@@ -79,10 +87,11 @@ class _TimeTrackingState extends State<TimeTracking> {
       platformChannelSpecifics,
     );
   }
-  */
+
   void _startCounter() {
     setState(() => _isRunning = true);
     _timer = Timer.periodic(Duration(seconds: 1), (_) {
+      //_updateNotification();
       setState(() => _seconds++);
     });
   }
@@ -115,62 +124,78 @@ class _TimeTrackingState extends State<TimeTracking> {
     final seconds = (_seconds % 60).toString().padLeft(2, '0');
 
     final loc = AppLocalizations.of(context);
-    return Scaffold(
-      appBar: AppBarMain(title: loc?.translate('chronometer') ?? 'Chronometer'),
-      drawer: DrawerCustom(),
-      body: ListView(
-        children: [
-          ClockCustom(hours: hours, minutes: minutes, seconds: seconds),
-          Center(
-            child: GestureDetector(
-              onTap: () {
-                if (!_isRunning) {
-                  _startCounter();
-                } else {
-                  _stopCounter();
-                }
-              },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ProjectChronometerBloc>(
+          create: (context) => sl<ProjectChronometerBloc>()..add(GetProjects()),
+        ),
+      ],
+      child: Scaffold(
+        appBar: AppBarMain(
+          title: loc?.translate('chronometer') ?? 'Chronometer',
+        ),
+        drawer: DrawerCustom(),
+        body: ListView(
+          children: [
+            ClockCustom(hours: hours, minutes: minutes, seconds: seconds),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  if (!_isRunning) {
+                    _startCounter();
+                  } else {
+                    _stopCounter();
+                  }
+                },
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      _isRunning
+                          ? CupertinoIcons.pause_fill
+                          : CupertinoIcons.play_fill,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            TitleChronometer(
+              icon: CupertinoIcons.app,
+              title: loc?.translate('project') ?? 'Project:',
+            ),
+            GestureDetector(
+              onTap: () {},
               child: Container(
-                height: 50,
-                width: 50,
+                height: 70,
+                margin: EdgeInsets.only(right: 20, left: 20, top: 5, bottom: 5),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Theme.of(context).colorScheme.primary,
+                  border: BoxBorder.all(
+                    width: 1,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
                 ),
                 child: Center(
                   child: Icon(
-                    _isRunning
-                        ? CupertinoIcons.pause_fill
-                        : CupertinoIcons.play_fill,
+                    CupertinoIcons.add,
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 20),
-          Container(
-            margin: EdgeInsets.all(20),
-            child: Row(
-              children: [
-                Icon(
-                  CupertinoIcons.app,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                SizedBox(width: 5),
-                Text(
-                  loc?.translate('project') ?? 'Project:',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                ),
-              ],
+            SizedBox(height: 20),
+            TitleChronometer(
+              icon: CupertinoIcons.rectangle_paperclip,
+              title: loc?.translate('task_optional') ?? 'Task (optional):',
             ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
+            Container(
               height: 70,
               margin: EdgeInsets.only(right: 20, left: 20, top: 5, bottom: 5),
               decoration: BoxDecoration(
@@ -187,45 +212,8 @@ class _TimeTrackingState extends State<TimeTracking> {
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 20),
-          Container(
-            margin: EdgeInsets.all(20),
-            child: Row(
-              children: [
-                Icon(
-                  CupertinoIcons.rectangle_paperclip,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                SizedBox(width: 5),
-                Text(
-                  loc?.translate('task_optional') ?? 'Task (optional):',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 70,
-            margin: EdgeInsets.only(right: 20, left: 20, top: 5, bottom: 5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: BoxBorder.all(
-                width: 1,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
-            child: Center(
-              child: Icon(
-                CupertinoIcons.add,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
