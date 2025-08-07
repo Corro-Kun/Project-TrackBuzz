@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,13 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/features/track/presentation/bloc/Project/project_chronometer_bloc.dart';
 import 'package:trackbuzz/features/track/presentation/bloc/Project/project_chronometer_event.dart';
+import 'package:trackbuzz/features/track/presentation/bloc/Project/project_chronometer_state.dart';
+import 'package:trackbuzz/features/track/presentation/widgets/card_project_chronometer.dart';
 import 'package:trackbuzz/features/track/presentation/widgets/clock_custom.dart';
 import 'package:trackbuzz/features/track/presentation/widgets/title_chronometer.dart';
 import 'package:trackbuzz/shared/widgets/app_bar_main.dart';
 import 'package:trackbuzz/shared/widgets/drawer_custom.dart';
+import 'package:trackbuzz/shared/widgets/pre_loader.dart';
 import 'package:trackbuzz/utils/constants.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
@@ -170,25 +174,169 @@ class _TimeTrackingState extends State<TimeTracking> {
               icon: CupertinoIcons.app,
               title: loc?.translate('project') ?? 'Project:',
             ),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                height: 70,
-                margin: EdgeInsets.only(right: 20, left: 20, top: 5, bottom: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: BoxBorder.all(
-                    width: 1,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                ),
-                child: Center(
-                  child: Icon(
-                    CupertinoIcons.add,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                ),
-              ),
+            BlocBuilder<ProjectChronometerBloc, ProjectChronometerState>(
+              builder: (context, state) {
+                if (state is ProjectChronometerLoading) {
+                  return PreLoader();
+                } else if (state is ProjectChronometerLoaded) {
+                  if (state.index == null) {
+                    return GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (contextDialog) {
+                            return StatefulBuilder(
+                              builder: (contextDialog, setState) {
+                                return AlertDialog(
+                                  title: Center(
+                                    child: Text(
+                                      loc?.translate('projects') ?? 'Projects',
+                                      style: TextStyle(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.secondary,
+                                      ),
+                                    ),
+                                  ),
+                                  content: Container(
+                                    width: double.maxFinite,
+                                    height: 300,
+                                    child: ListView(
+                                      children: List.generate(
+                                        state.projects.length,
+                                        (i) {
+                                          return CardProjectChronometer(
+                                            title: state.projects[i].title,
+                                            img: state.projects[i].image,
+                                            function: () => {
+                                              context
+                                                  .read<
+                                                    ProjectChronometerBloc
+                                                  >()
+                                                  .add(
+                                                    SelectProject(
+                                                      id: state.projects[i].id,
+                                                    ),
+                                                  ),
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        height: 70,
+                        margin: EdgeInsets.only(
+                          right: 20,
+                          left: 20,
+                          top: 5,
+                          bottom: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: BoxBorder.all(
+                            width: 1,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                        child: Center(
+                          child: Icon(
+                            CupertinoIcons.add,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return Container(
+                      height: 70,
+                      margin: EdgeInsets.only(
+                        right: 20,
+                        left: 20,
+                        top: 5,
+                        bottom: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: BoxBorder.all(
+                          width: 1,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(width: 10),
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                    image:
+                                        !state.projects[state.index ?? 0].image
+                                            .contains('https:')
+                                        ? FileImage(
+                                            File(
+                                              state
+                                                  .projects[state.index ?? 0]
+                                                  .image,
+                                            ),
+                                          )
+                                        : NetworkImage(
+                                            state
+                                                .projects[state.index ?? 0]
+                                                .image,
+                                          ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                state.projects[state.index ?? 0].title,
+                                style: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.secondary,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  context.read<ProjectChronometerBloc>().add(
+                                    DeleteSelectProject(),
+                                  );
+                                },
+                                child: Icon(
+                                  CupertinoIcons.trash,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
             ),
             SizedBox(height: 20),
             TitleChronometer(
@@ -208,7 +356,7 @@ class _TimeTrackingState extends State<TimeTracking> {
               child: Center(
                 child: Icon(
                   CupertinoIcons.add,
-                  color: Theme.of(context).colorScheme.secondary,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),

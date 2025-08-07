@@ -7,3 +7,5 @@ class SelectProject extends ProjectChronometerEvent {
 
   SelectProject({required this.id});
 }
+
+class DeleteSelectProject extends ProjectChronometerEvent {}

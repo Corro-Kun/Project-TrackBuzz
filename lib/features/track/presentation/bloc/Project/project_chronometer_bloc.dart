@@ -11,6 +11,7 @@ class ProjectChronometerBloc
     : super(ProjectChronometerInitial()) {
     on<GetProjects>(_onGetProjects);
     on<SelectProject>(_onSelectProject);
+    on<DeleteSelectProject>(_onDeleteSelectProject);
   }
 
   Future<void> _onGetProjects(
@@ -33,7 +34,7 @@ class ProjectChronometerBloc
     final currentState = state as ProjectChronometerLoaded;
     try {
       int? index;
-      for (var i = 0; i < currentState.projects.length - 1; i++) {
+      for (var i = 0; i < currentState.projects.length; i++) {
         if (currentState.projects[i].id == event.id) {
           index = i;
           break;
@@ -41,6 +42,20 @@ class ProjectChronometerBloc
       }
       emit(
         ProjectChronometerLoaded(projects: currentState.projects, index: index),
+      );
+    } catch (e) {
+      emit(ProjectChronometerError(message: e.toString()));
+    }
+  }
+
+  void _onDeleteSelectProject(
+    DeleteSelectProject event,
+    Emitter<ProjectChronometerState> emit,
+  ) async {
+    final currentState = state as ProjectChronometerLoaded;
+    try {
+      emit(
+        ProjectChronometerLoaded(projects: currentState.projects, index: null),
       );
     } catch (e) {
       emit(ProjectChronometerError(message: e.toString()));

@@ -29,7 +29,6 @@ class ChangeColor extends StatelessWidget {
             ColorPicker(
               pickerColor: color,
               onColorChanged: (Color _color) {
-                print(_color.toHexString());
                 change(_color.toHexString());
               },
               pickerAreaHeightPercent: 0.9,

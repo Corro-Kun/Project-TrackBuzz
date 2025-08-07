@@ -16,6 +16,7 @@ import 'package:trackbuzz/features/project/domain/usecase/update_setting_use_cas
 import 'package:trackbuzz/features/project/presentation/bloc/ListProject/list_project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_bloc.dart';
+import 'package:trackbuzz/features/track/data/services/project_chronometer_service.dart';
 import 'package:trackbuzz/features/track/domain/usecase/get_list_project_chronometer_use_case.dart';
 import 'package:trackbuzz/features/track/presentation/bloc/Project/project_chronometer_bloc.dart';
 
@@ -49,6 +50,7 @@ Future<void> init() async {
   // Services
   sl.registerLazySingleton(() => ProjectService(sl()));
   sl.registerLazySingleton(() => SettingService(sl()));
+  sl.registerLazySingleton(() => ProjectChronometerService(sl()));
 
   // Repository
   sl.registerLazySingleton<ProjectRepositoryAbstract>(
