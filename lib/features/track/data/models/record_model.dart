@@ -1,9 +1,9 @@
 class RecordModel {
   int id;
   String start;
-  String finish;
+  String? finish;
   int active;
-  int idTask;
+  int? idTask;
   int idProject;
 
   RecordModel({

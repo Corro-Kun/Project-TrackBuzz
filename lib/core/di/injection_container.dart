@@ -26,6 +26,7 @@ import 'package:trackbuzz/features/track/domain/usecase/get_list_project_chronom
 import 'package:trackbuzz/features/track/domain/usecase/start_record_chronometer_use_case.dart';
 import 'package:trackbuzz/features/track/domain/usecase/stop_record_chronometer_use_case.dart';
 import 'package:trackbuzz/features/track/presentation/bloc/Project/project_chronometer_bloc.dart';
+import 'package:trackbuzz/features/track/presentation/bloc/chronometer/chronometer_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -43,6 +44,13 @@ Future<void> init() async {
   );
   sl.registerFactory(
     () => ProjectChronometerBloc(getListProjectChronometerUseCase: sl()),
+  );
+  sl.registerFactory(
+    () => ChronometerBloc(
+      getCurrentRecordUseCase: sl(),
+      startRecordChronometerUseCase: sl(),
+      stopRecordChronometerUseCase: sl(),
+    ),
   );
 
   // User cases

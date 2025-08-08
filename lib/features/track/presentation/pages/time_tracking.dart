@@ -9,6 +9,10 @@ import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/features/track/presentation/bloc/Project/project_chronometer_bloc.dart';
 import 'package:trackbuzz/features/track/presentation/bloc/Project/project_chronometer_event.dart';
 import 'package:trackbuzz/features/track/presentation/bloc/Project/project_chronometer_state.dart';
+import 'package:trackbuzz/features/track/presentation/bloc/chronometer/chronometer_bloc.dart';
+import 'package:trackbuzz/features/track/presentation/bloc/chronometer/chronometer_event.dart';
+import 'package:trackbuzz/features/track/presentation/bloc/chronometer/chronometer_state.dart';
+import 'package:trackbuzz/features/track/presentation/widgets/button_pause_play.dart';
 import 'package:trackbuzz/features/track/presentation/widgets/card_project_chronometer.dart';
 import 'package:trackbuzz/features/track/presentation/widgets/clock_custom.dart';
 import 'package:trackbuzz/features/track/presentation/widgets/title_chronometer.dart';
@@ -29,10 +33,13 @@ class _TimeTrackingState extends State<TimeTracking> {
   int _seconds = 0;
   bool _isRunning = false;
   Timer? _timer;
+  late ChronometerBloc _chronometerBloc;
+  bool _hasCalculated = false;
 
   @override
   void initState() {
     super.initState();
+    _chronometerBloc = sl<ChronometerBloc>();
     //_startBackgroundService();
   }
 
@@ -92,17 +99,29 @@ class _TimeTrackingState extends State<TimeTracking> {
     );
   }
 
-  void _startCounter() {
+  void _startCounter(int id) {
     setState(() => _isRunning = true);
+    _initTimer();
+    _chronometerBloc.add(
+      StartRecord(start: DateTime.now().toIso8601String(), id: id),
+    );
+  }
+
+  void _initTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (_) {
-      //_updateNotification();
       setState(() => _seconds++);
     });
   }
 
-  void _stopCounter() {
+  void _stopCounter(int id) {
     _timer?.cancel();
-    setState(() => _isRunning = false);
+    setState(() {
+      _isRunning = false;
+      _seconds = 0;
+    });
+    _chronometerBloc.add(
+      StopRecord(id: id, finish: DateTime.now().toIso8601String()),
+    );
   }
 
   @override
@@ -133,6 +152,7 @@ class _TimeTrackingState extends State<TimeTracking> {
         BlocProvider<ProjectChronometerBloc>(
           create: (context) => sl<ProjectChronometerBloc>()..add(GetProjects()),
         ),
+        BlocProvider(create: (context) => _chronometerBloc..add(GetCurrent())),
       ],
       child: Scaffold(
         appBar: AppBarMain(
@@ -142,32 +162,71 @@ class _TimeTrackingState extends State<TimeTracking> {
         body: ListView(
           children: [
             ClockCustom(hours: hours, minutes: minutes, seconds: seconds),
-            Center(
-              child: GestureDetector(
-                onTap: () {
-                  if (!_isRunning) {
-                    _startCounter();
-                  } else {
-                    _stopCounter();
-                  }
-                },
-                child: Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  child: Center(
-                    child: Icon(
-                      _isRunning
-                          ? CupertinoIcons.pause_fill
-                          : CupertinoIcons.play_fill,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                ),
-              ),
+            BlocBuilder<ChronometerBloc, ChronometerState>(
+              builder: (context, chronometerState) {
+                if (chronometerState is ChronometerLoading) {
+                  return PreLoader();
+                } else if (chronometerState is ChronometerLoaded) {
+                  return BlocBuilder<
+                    ProjectChronometerBloc,
+                    ProjectChronometerState
+                  >(
+                    builder: (context, state) {
+                      if (chronometerState.record != null && !_hasCalculated) {
+                        context.read<ProjectChronometerBloc>().add(
+                          SelectProject(
+                            id: chronometerState.record?.idProject ?? 0,
+                          ),
+                        );
+                        final lastSaved = DateTime.parse(
+                          chronometerState.record?.start ?? '',
+                        );
+                        final now = DateTime.now();
+
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (mounted) {
+                            setState(() {
+                              _seconds = now.difference(lastSaved).inSeconds;
+                              _isRunning = true;
+                            });
+                            _initTimer();
+                          }
+                        });
+                      }
+                      _hasCalculated = true;
+                      if (state is ProjectChronometerLoading) {
+                        return PreLoader();
+                      } else if (state is ProjectChronometerLoaded) {
+                        return Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              if (state.index != null) {
+                                if (!_isRunning) {
+                                  _startCounter(
+                                    state.projects[state.index ?? 0].id,
+                                  );
+                                } else {
+                                  _stopCounter(
+                                    chronometerState.record?.id ?? 0,
+                                  );
+                                }
+                              }
+                            },
+                            child: ButtonPausePlay(
+                              running: _isRunning,
+                              state: state.index != null,
+                            ),
+                          ),
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
             ),
             SizedBox(height: 20),
             TitleChronometer(
@@ -315,17 +374,21 @@ class _TimeTrackingState extends State<TimeTracking> {
                           ),
                           Row(
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  context.read<ProjectChronometerBloc>().add(
-                                    DeleteSelectProject(),
-                                  );
-                                },
-                                child: Icon(
-                                  CupertinoIcons.trash,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
+                              !_isRunning
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        context
+                                            .read<ProjectChronometerBloc>()
+                                            .add(DeleteSelectProject());
+                                      },
+                                      child: Icon(
+                                        CupertinoIcons.trash,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                      ),
+                                    )
+                                  : const SizedBox.shrink(),
                               SizedBox(width: 10),
                             ],
                           ),
