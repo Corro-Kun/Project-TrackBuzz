@@ -16,8 +16,15 @@ import 'package:trackbuzz/features/project/domain/usecase/update_setting_use_cas
 import 'package:trackbuzz/features/project/presentation/bloc/ListProject/list_project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_bloc.dart';
+import 'package:trackbuzz/features/track/data/datasource/chronometer_datasource.dart';
+import 'package:trackbuzz/features/track/data/repositories/chronometer_repository.dart';
+import 'package:trackbuzz/features/track/data/services/chronometer_service.dart';
 import 'package:trackbuzz/features/track/data/services/project_chronometer_service.dart';
+import 'package:trackbuzz/features/track/domain/repositories/chronometer_repositories_abstract.dart';
+import 'package:trackbuzz/features/track/domain/usecase/get_current_record_use_case.dart';
 import 'package:trackbuzz/features/track/domain/usecase/get_list_project_chronometer_use_case.dart';
+import 'package:trackbuzz/features/track/domain/usecase/start_record_chronometer_use_case.dart';
+import 'package:trackbuzz/features/track/domain/usecase/stop_record_chronometer_use_case.dart';
 import 'package:trackbuzz/features/track/presentation/bloc/Project/project_chronometer_bloc.dart';
 
 final sl = GetIt.instance;
@@ -46,11 +53,15 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateSettingUseCase(sl()));
   sl.registerLazySingleton(() => UpdateProjectUseCase(sl()));
   sl.registerLazySingleton(() => GetListProjectChronometerUseCase(sl()));
+  sl.registerLazySingleton(() => GetCurrentRecordUseCase(sl()));
+  sl.registerLazySingleton(() => StartRecordChronometerUseCase(sl()));
+  sl.registerLazySingleton(() => StopRecordChronometerUseCase(sl()));
 
   // Services
   sl.registerLazySingleton(() => ProjectService(sl()));
   sl.registerLazySingleton(() => SettingService(sl()));
   sl.registerLazySingleton(() => ProjectChronometerService(sl()));
+  sl.registerLazySingleton(() => ChronometerService(sl()));
 
   // Repository
   sl.registerLazySingleton<ProjectRepositoryAbstract>(
@@ -59,8 +70,12 @@ Future<void> init() async {
   sl.registerLazySingleton<SettingRepositoryAbstract>(
     () => SettingRepository(sl()),
   );
+  sl.registerLazySingleton<ChronometerRepositoriesAbstract>(
+    () => ChronometerRepository(sl()),
+  );
 
   // Datasource
   sl.registerLazySingleton(() => ProjectDatasource());
   sl.registerLazySingleton(() => SettingDatasource());
+  sl.registerLazySingleton(() => ChronometerDatasource());
 }

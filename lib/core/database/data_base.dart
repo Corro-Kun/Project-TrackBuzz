@@ -15,7 +15,7 @@ class DataBase {
           'CREATE TABLE task(id INTEGER PRIMARY KEY, name TEXT, state INTEGER DEFAULT 0, id_project INTEGER, FOREIGN KEY(id_project) REFERENCES project(id))',
         );
         db.execute(
-          'CREATE TABLE record(id INTEGER PRIMARY KEY, start TEXT, finish TEXT, total TEXT, id_task INTEGER DEFAULT NULL, id_project INTEGER, FOREIGN KEY(id_task) REFERENCES task(id), FOREIGN KEY(id_project) REFERENCES project(id))',
+          'CREATE TABLE record(id INTEGER PRIMARY KEY, start TEXT, finish TEXT DEFAULT NULL, active INTEGER DEFAULT 1, id_task INTEGER DEFAULT NULL, id_project INTEGER, FOREIGN KEY(id_task) REFERENCES task(id), FOREIGN KEY(id_project) REFERENCES project(id))',
         );
         db.insert('project', {
           'title': 'do nothing',
