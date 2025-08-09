@@ -6,8 +6,9 @@ class RecordDatasource {
 
     final data = await db.query(
       'record',
-      where: 'id_project = ?',
-      whereArgs: [id],
+      where: 'id_project = ? AND active = ?',
+      whereArgs: [id, 0],
+      orderBy: 'start DESC',
     );
 
     return data;

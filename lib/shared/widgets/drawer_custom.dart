@@ -119,30 +119,27 @@ class DrawerCustom extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap:
-                        () => showDialog(
-                          context: context,
-                          builder: (context) {
-                            return StatefulBuilder(
-                              builder: (context, setState) {
-                                final theme = Provider.of<ThemeNotifier>(
-                                  context,
-                                );
-                                return ChangeColor(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  change: (String color) async {
-                                    final prefs =
-                                        await SharedPreferences.getInstance();
-                                    await prefs.setString('primary', color);
-                                  },
-                                  save: () async {
-                                    await theme.initialize();
-                                  },
-                                );
+                    onTap: () => showDialog(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            final theme = Provider.of<ThemeNotifier>(context);
+                            return ChangeColor(
+                              color: Theme.of(context).colorScheme.primary,
+                              change: (String color) async {
+                                final prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.setString('primary', color);
+                              },
+                              save: () async {
+                                await theme.initialize();
                               },
                             );
                           },
-                        ),
+                        );
+                      },
+                    ),
                     child: Container(
                       height: 30,
                       width: 30,
@@ -172,31 +169,27 @@ class DrawerCustom extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap:
-                        () => showDialog(
-                          context: context,
-                          builder: (context) {
-                            return StatefulBuilder(
-                              builder: (context, setState) {
-                                final theme = Provider.of<ThemeNotifier>(
-                                  context,
-                                );
-                                return ChangeColor(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                  change: (String color) async {
-                                    final prefs =
-                                        await SharedPreferences.getInstance();
-                                    await prefs.setString('secondary', color);
-                                  },
-                                  save: () async {
-                                    await theme.initialize();
-                                  },
-                                );
+                    onTap: () => showDialog(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            final theme = Provider.of<ThemeNotifier>(context);
+                            return ChangeColor(
+                              color: Theme.of(context).colorScheme.secondary,
+                              change: (String color) async {
+                                final prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.setString('secondary', color);
+                              },
+                              save: () async {
+                                await theme.initialize();
                               },
                             );
                           },
-                        ),
+                        );
+                      },
+                    ),
                     child: Container(
                       height: 30,
                       width: 30,
@@ -226,30 +219,27 @@ class DrawerCustom extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap:
-                        () => showDialog(
-                          context: context,
-                          builder: (context) {
-                            return StatefulBuilder(
-                              builder: (context, setState) {
-                                final theme = Provider.of<ThemeNotifier>(
-                                  context,
-                                );
-                                return ChangeColor(
-                                  color: Theme.of(context).colorScheme.surface,
-                                  change: (String color) async {
-                                    final prefs =
-                                        await SharedPreferences.getInstance();
-                                    await prefs.setString('surface', color);
-                                  },
-                                  save: () async {
-                                    await theme.initialize();
-                                  },
-                                );
+                    onTap: () => showDialog(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            final theme = Provider.of<ThemeNotifier>(context);
+                            return ChangeColor(
+                              color: Theme.of(context).colorScheme.surface,
+                              change: (String color) async {
+                                final prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.setString('surface', color);
+                              },
+                              save: () async {
+                                await theme.initialize();
                               },
                             );
                           },
-                        ),
+                        );
+                      },
+                    ),
                     child: Container(
                       height: 30,
                       width: 30,

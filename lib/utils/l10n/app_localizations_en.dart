@@ -34,5 +34,16 @@ class AppLocalizationsEn {
     'days': 'Days:',
     'tasks': 'Tasks:',
     'update_project': 'Update Project',
+    'no_activity': 'No activity on',
+    'activity': 'activity',
+    'activities': 'activities',
+    //days
+    'mon': 'Mon',
+    'tue': 'Tue',
+    'wed': 'Wed',
+    'thu': 'Thu',
+    'fri': 'Fri',
+    'sat': 'Sat',
+    'sun': 'Sun',
   };
 }
