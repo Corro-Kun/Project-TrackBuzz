@@ -1,0 +1,23 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trackbuzz/features/project/domain/usecase/get_record_of_project_use_case.dart';
+import 'package:trackbuzz/features/project/presentation/bloc/Record/record_event.dart';
+import 'package:trackbuzz/features/project/presentation/bloc/Record/record_state.dart';
+
+class RecordBloc extends Bloc<RecordEvent, RecordState> {
+  final GetRecordOfProjectUseCase getRecordOfProjectUseCase;
+
+  RecordBloc({required this.getRecordOfProjectUseCase})
+    : super(RecordInitial()) {
+    on<GetRecord>(_onGetRecord);
+  }
+
+  Future<void> _onGetRecord(GetRecord event, Emitter<RecordState> emit) async {
+    emit(RecordLoading());
+    try {
+      final records = await getRecordOfProjectUseCase.execute(event.id);
+      emit(RecordLoaded(records: records));
+    } catch (e) {
+      emit(RecordError(message: e.toString()));
+    }
+  }
+}

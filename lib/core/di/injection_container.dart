@@ -1,20 +1,26 @@
 import 'package:get_it/get_it.dart';
 import 'package:trackbuzz/features/project/data/datasource/project_datasource.dart';
+import 'package:trackbuzz/features/project/data/datasource/record_datasource.dart';
 import 'package:trackbuzz/features/project/data/datasource/setting_datasource.dart';
 import 'package:trackbuzz/features/project/data/repositories/project_repository.dart';
+import 'package:trackbuzz/features/project/data/repositories/record_repository.dart';
 import 'package:trackbuzz/features/project/data/repositories/setting_repository.dart';
 import 'package:trackbuzz/features/project/data/services/project_service.dart';
+import 'package:trackbuzz/features/project/data/services/record_service.dart';
 import 'package:trackbuzz/features/project/data/services/setting_service.dart';
 import 'package:trackbuzz/features/project/domain/repositories/project_repository_abstract.dart';
+import 'package:trackbuzz/features/project/domain/repositories/record_repository_abstract.dart';
 import 'package:trackbuzz/features/project/domain/repositories/setting_repository_abstract.dart';
 import 'package:trackbuzz/features/project/domain/usecase/create_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_list_project_user_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_project_use_case.dart';
+import 'package:trackbuzz/features/project/domain/usecase/get_record_of_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_setting_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/update_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/update_setting_use_case.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/ListProject/list_project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
+import 'package:trackbuzz/features/project/presentation/bloc/Record/record_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_bloc.dart';
 import 'package:trackbuzz/features/track/data/datasource/chronometer_datasource.dart';
 import 'package:trackbuzz/features/track/data/repositories/chronometer_repository.dart';
@@ -52,6 +58,7 @@ Future<void> init() async {
       stopRecordChronometerUseCase: sl(),
     ),
   );
+  sl.registerFactory(() => RecordBloc(getRecordOfProjectUseCase: sl()));
 
   // User cases
   sl.registerLazySingleton(() => GetListProjectUserCase(sl()));
@@ -64,12 +71,14 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetCurrentRecordUseCase(sl()));
   sl.registerLazySingleton(() => StartRecordChronometerUseCase(sl()));
   sl.registerLazySingleton(() => StopRecordChronometerUseCase(sl()));
+  sl.registerLazySingleton(() => GetRecordOfProjectUseCase(sl()));
 
   // Services
   sl.registerLazySingleton(() => ProjectService(sl()));
   sl.registerLazySingleton(() => SettingService(sl()));
   sl.registerLazySingleton(() => ProjectChronometerService(sl()));
   sl.registerLazySingleton(() => ChronometerService(sl()));
+  sl.registerLazySingleton(() => RecordService(sl()));
 
   // Repository
   sl.registerLazySingleton<ProjectRepositoryAbstract>(
@@ -81,9 +90,13 @@ Future<void> init() async {
   sl.registerLazySingleton<ChronometerRepositoriesAbstract>(
     () => ChronometerRepository(sl()),
   );
+  sl.registerLazySingleton<RecordRepositoryAbstract>(
+    () => RecordRepository(sl()),
+  );
 
   // Datasource
   sl.registerLazySingleton(() => ProjectDatasource());
   sl.registerLazySingleton(() => SettingDatasource());
   sl.registerLazySingleton(() => ChronometerDatasource());
+  sl.registerLazySingleton(() => RecordDatasource());
 }
