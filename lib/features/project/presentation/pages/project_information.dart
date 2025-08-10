@@ -16,6 +16,7 @@ import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/sett
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_state.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/activity.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/app_bar_information.dart';
+import 'package:trackbuzz/features/project/presentation/widgets/billing.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/date_widget.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/picture_project.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/drawer_setting.dart';
@@ -269,58 +270,66 @@ class _ProjectInformationState extends State<ProjectInformation>
   ListView listViewGeneral(BuildContext context, AppLocalizations? loc) {
     return ListView(
       children: [
-        BlocBuilder<SettingProjectBloc, SettingProjectState>(
-          builder: (contextBloc, state) {
-            if (state is SettingProjectLoading) {
+        BlocBuilder<RecordBloc, RecordState>(
+          builder: (context, stateRecord) {
+            if (stateRecord is RecordLoading) {
               return PreLoader();
-            } else if (state is SettingProjectLoaded) {
-              final List<Widget> list = [
-                Container(
-                  margin: EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Icon(
-                        CupertinoIcons.money_dollar_circle,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        loc?.translate('billing') ?? 'Billing:',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context).colorScheme.secondary,
+            } else if (stateRecord is RecordLoaded) {
+              return BlocBuilder<SettingProjectBloc, SettingProjectState>(
+                builder: (contextBloc, state) {
+                  if (state is SettingProjectLoading) {
+                    return PreLoader();
+                  } else if (state is SettingProjectLoaded) {
+                    if (state.setting.bill == 1) {
+                      int seconds = 0;
+                      for (var i = 0; i < stateRecord.records.length; i++) {
+                        seconds +=
+                            DateTime.parse(stateRecord.records[i].finish ?? '')
+                                .difference(
+                                  DateTime.parse(stateRecord.records[i].start),
+                                )
+                                .inSeconds;
+                      }
+                      final total = (seconds / 3600) * state.setting.price;
+                      final formatTotal = NumberFormat.decimalPattern(
+                        loc?.locale.languageCode == 'en' ? 'en_US' : 'es_ES',
+                      ).format(total.toInt());
+
+                      final List<Widget> list = [
+                        Container(
+                          margin: EdgeInsets.all(20),
+                          child: Row(
+                            children: [
+                              Icon(
+                                CupertinoIcons.money_dollar_circle,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                loc?.translate('billing') ?? 'Billing:',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.secondary,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 70,
-                  margin: EdgeInsets.only(
-                    right: 20,
-                    left: 20,
-                    top: 5,
-                    bottom: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  child: Center(
-                    child: Text(
-                      r'$43',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-                  ),
-                ),
-              ];
-              return state.setting.bill == 1
-                  ? Column(children: list)
-                  : SizedBox.shrink();
+                        Billing(
+                          value: r'$ ' + '$formatTotal ${state.setting.coin}',
+                        ),
+                      ];
+                      return Column(children: list);
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+              );
             } else {
               return SizedBox.shrink();
             }
