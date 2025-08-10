@@ -22,6 +22,11 @@ import 'package:trackbuzz/features/project/presentation/bloc/ListProject/list_pr
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Record/record_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_bloc.dart';
+import 'package:trackbuzz/features/report/data/datasource/report_datasource.dart';
+import 'package:trackbuzz/features/report/data/repositories/report_repositories.dart';
+import 'package:trackbuzz/features/report/data/services/report_services.dart';
+import 'package:trackbuzz/features/report/domain/repositories/report_repositories_abstract.dart';
+import 'package:trackbuzz/features/report/domain/usecase/get_report_use_case.dart';
 import 'package:trackbuzz/features/track/data/datasource/chronometer_datasource.dart';
 import 'package:trackbuzz/features/track/data/repositories/chronometer_repository.dart';
 import 'package:trackbuzz/features/track/data/services/chronometer_service.dart';
@@ -72,6 +77,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => StartRecordChronometerUseCase(sl()));
   sl.registerLazySingleton(() => StopRecordChronometerUseCase(sl()));
   sl.registerLazySingleton(() => GetRecordOfProjectUseCase(sl()));
+  sl.registerLazySingleton(() => GetReportUseCase(sl()));
 
   // Services
   sl.registerLazySingleton(() => ProjectService(sl()));
@@ -79,6 +85,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ProjectChronometerService(sl()));
   sl.registerLazySingleton(() => ChronometerService(sl()));
   sl.registerLazySingleton(() => RecordService(sl()));
+  sl.registerLazySingleton(() => ReportServices(sl()));
 
   // Repository
   sl.registerLazySingleton<ProjectRepositoryAbstract>(
@@ -93,10 +100,14 @@ Future<void> init() async {
   sl.registerLazySingleton<RecordRepositoryAbstract>(
     () => RecordRepository(sl()),
   );
+  sl.registerLazySingleton<ReportRepositoriesAbstract>(
+    () => ReportRepositories(sl()),
+  );
 
   // Datasource
   sl.registerLazySingleton(() => ProjectDatasource());
   sl.registerLazySingleton(() => SettingDatasource());
   sl.registerLazySingleton(() => ChronometerDatasource());
   sl.registerLazySingleton(() => RecordDatasource());
+  sl.registerLazySingleton(() => ReportDatasource());
 }
