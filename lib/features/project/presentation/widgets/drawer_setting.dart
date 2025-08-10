@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
@@ -117,85 +118,74 @@ class DrawerSetting extends StatelessWidget {
                         return PreLoader();
                       } else if (state is SettingProjectLoaded) {
                         return GestureDetector(
-                          onTap:
-                              () =>
-                                  state.setting.bill == 1
-                                      ? showDialog(
-                                        context: contextBloc,
-                                        builder: (context) {
-                                          return StatefulBuilder(
-                                            builder: (context, setState) {
-                                              return Alerdialogtext(
-                                                title:
-                                                    loc?.translate(
-                                                      'update_value',
-                                                    ) ??
-                                                    'Update Value',
-                                                controller: _valueController,
-                                                keyboardType:
-                                                    TextInputType.numberWithOptions(
-                                                      decimal: true,
+                          onTap: () => state.setting.bill == 1
+                              ? showDialog(
+                                  context: contextBloc,
+                                  builder: (context) {
+                                    return StatefulBuilder(
+                                      builder: (context, setState) {
+                                        return Alerdialogtext(
+                                          title:
+                                              loc?.translate('update_value') ??
+                                              'Update Value',
+                                          controller: _valueController,
+                                          keyboardType:
+                                              TextInputType.numberWithOptions(
+                                                decimal: true,
+                                              ),
+                                          save: () {
+                                            if (double.tryParse(
+                                                      _valueController.text,
+                                                    ) !=
+                                                    null &&
+                                                _valueController
+                                                    .text
+                                                    .isNotEmpty) {
+                                              contextBloc
+                                                  .read<SettingProjectBloc>()
+                                                  .add(
+                                                    ChangePrice(
+                                                      price: double.parse(
+                                                        _valueController.text,
+                                                      ),
                                                     ),
-                                                save: () {
-                                                  if (double.tryParse(
-                                                            _valueController
-                                                                .text,
-                                                          ) !=
-                                                          null &&
-                                                      _valueController
-                                                          .text
-                                                          .isNotEmpty) {
-                                                    contextBloc
-                                                        .read<
-                                                          SettingProjectBloc
-                                                        >()
-                                                        .add(
-                                                          ChangePrice(
-                                                            price: double.parse(
-                                                              _valueController
-                                                                  .text,
-                                                            ),
-                                                          ),
-                                                        );
-                                                  }
-                                                },
-                                              );
-                                            },
-                                          );
-                                        },
-                                      )
-                                      : null,
+                                                  );
+                                            }
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                )
+                              : null,
                           child: Container(
                             height: 52,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               border: BoxBorder.all(
-                                color:
-                                    state.setting.bill == 1
-                                        ? Theme.of(
-                                          context,
-                                        ).colorScheme.secondary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .secondary
-                                            .withOpacity(0.5),
+                                color: state.setting.bill == 1
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : Theme.of(
+                                        context,
+                                      ).colorScheme.secondary.withOpacity(0.5),
                                 width: 1,
                               ),
                             ),
                             child: Center(
                               child: Text(
-                                state.setting.price.toString(),
+                                NumberFormat.decimalPattern(
+                                      loc?.locale.languageCode == 'en'
+                                          ? 'en_US'
+                                          : 'es_ES',
+                                    )
+                                    .format(state.setting.price.toInt())
+                                    .toString(),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color:
-                                      state.setting.bill == 1
-                                          ? Theme.of(
-                                            context,
-                                          ).colorScheme.secondary
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .secondary
-                                              .withOpacity(0.5),
+                                  color: state.setting.bill == 1
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Theme.of(context).colorScheme.secondary
+                                            .withOpacity(0.5),
                                 ),
                               ),
                             ),
@@ -222,58 +212,48 @@ class DrawerSetting extends StatelessWidget {
                         return PreLoader();
                       } else if (state is SettingProjectLoaded) {
                         return GestureDetector(
-                          onTap:
-                              () =>
-                                  state.setting.bill == 1
-                                      ? showDialog(
-                                        context: contextBloc,
-                                        builder: (context) {
-                                          return StatefulBuilder(
-                                            builder: (context, setState) {
-                                              return Alerdialogtext(
-                                                title:
-                                                    loc?.translate(
-                                                      'change_currency',
-                                                    ) ??
-                                                    'Change Currency',
-                                                controller: _currencyController,
-                                                save: () {
-                                                  if (_currencyController
-                                                          .text !=
-                                                      state.setting.coin) {
-                                                    contextBloc
-                                                        .read<
-                                                          SettingProjectBloc
-                                                        >()
-                                                        .add(
-                                                          ChangeCoin(
-                                                            coin:
-                                                                _currencyController
-                                                                    .text,
-                                                          ),
-                                                        );
-                                                  }
-                                                },
-                                              );
-                                            },
-                                          );
-                                        },
-                                      )
-                                      : null,
+                          onTap: () => state.setting.bill == 1
+                              ? showDialog(
+                                  context: contextBloc,
+                                  builder: (context) {
+                                    return StatefulBuilder(
+                                      builder: (context, setState) {
+                                        return Alerdialogtext(
+                                          title:
+                                              loc?.translate(
+                                                'change_currency',
+                                              ) ??
+                                              'Change Currency',
+                                          controller: _currencyController,
+                                          save: () {
+                                            if (_currencyController.text !=
+                                                state.setting.coin) {
+                                              contextBloc
+                                                  .read<SettingProjectBloc>()
+                                                  .add(
+                                                    ChangeCoin(
+                                                      coin: _currencyController
+                                                          .text,
+                                                    ),
+                                                  );
+                                            }
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                )
+                              : null,
                           child: Container(
                             height: 52,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               border: BoxBorder.all(
-                                color:
-                                    state.setting.bill == 1
-                                        ? Theme.of(
-                                          context,
-                                        ).colorScheme.secondary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .secondary
-                                            .withOpacity(0.5),
+                                color: state.setting.bill == 1
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : Theme.of(
+                                        context,
+                                      ).colorScheme.secondary.withOpacity(0.5),
                                 width: 1,
                               ),
                             ),
@@ -282,15 +262,10 @@ class DrawerSetting extends StatelessWidget {
                                 state.setting.coin,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color:
-                                      state.setting.bill == 1
-                                          ? Theme.of(
-                                            context,
-                                          ).colorScheme.secondary
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .secondary
-                                              .withOpacity(0.5),
+                                  color: state.setting.bill == 1
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Theme.of(context).colorScheme.secondary
+                                            .withOpacity(0.5),
                                 ),
                               ),
                             ),
@@ -310,34 +285,38 @@ class DrawerSetting extends StatelessWidget {
                     } else if (state is SettingProjectLoaded) {
                       return state.update
                           ? Padding(
-                            padding: const EdgeInsets.only(right: 20, left: 20),
-                            child: GestureDetector(
-                              onTap: () {
-                                context.read<SettingProjectBloc>().add(
-                                  UpdateSetting(),
-                                );
-                              },
-                              child: Container(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    loc?.translate('save') ?? 'Save',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color:
-                                          Theme.of(
-                                            context,
-                                          ).colorScheme.secondary,
+                              padding: const EdgeInsets.only(
+                                right: 20,
+                                left: 20,
+                              ),
+                              child: GestureDetector(
+                                onTap: () {
+                                  context.read<SettingProjectBloc>().add(
+                                    UpdateSetting(),
+                                  );
+                                },
+                                child: Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      loc?.translate('save') ?? 'Save',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.secondary,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          )
+                            )
                           : SizedBox.shrink();
                     } else {
                       return SizedBox.shrink();

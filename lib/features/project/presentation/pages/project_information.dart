@@ -22,6 +22,7 @@ import 'package:trackbuzz/features/project/presentation/widgets/picture_project.
 import 'package:trackbuzz/features/project/presentation/widgets/drawer_setting.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/time_widget.dart';
 import 'package:trackbuzz/shared/functions/time_format_record.dart';
+import 'package:trackbuzz/shared/widgets/adjustments_announced.dart';
 import 'package:trackbuzz/shared/widgets/pre_loader.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
@@ -88,8 +89,8 @@ class _ProjectInformationState extends State<ProjectInformation>
         drawer: DrawerSettingBloc(id: widget.id),
         body: Column(
           children: [
-            Container(
-              height: 300,
+            SizedBox(
+              height: 280,
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -111,19 +112,8 @@ class _ProjectInformationState extends State<ProjectInformation>
                         if (state is RecordLoading) {
                           return PreLoader();
                         } else if (state is RecordLoaded) {
-                          int seconds = 0;
-                          for (var i = 0; i < state.records.length; i++) {
-                            final finishSaved = DateTime.parse(
-                              state.records[i].finish ?? '',
-                            );
-                            seconds += finishSaved
-                                .difference(
-                                  DateTime.parse(state.records[i].start),
-                                )
-                                .inSeconds;
-                          }
                           return Text(
-                            timeFormatRecord(seconds),
+                            timeFormatRecord(state.seconds),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 25,
@@ -139,18 +129,16 @@ class _ProjectInformationState extends State<ProjectInformation>
                 ),
               ),
             ),
-            Container(
-              child: TabBar(
-                controller: _tabController,
-                dividerHeight: 0,
-                indicatorColor: Theme.of(context).colorScheme.primary,
-                labelColor: Theme.of(context).colorScheme.primary,
-                unselectedLabelColor: Theme.of(context).colorScheme.secondary,
-                tabs: [
-                  Tab(text: loc?.translate('general') ?? 'General'),
-                  Tab(text: loc?.translate('record') ?? 'Record'),
-                ],
-              ),
+            TabBar(
+              controller: _tabController,
+              dividerHeight: 0,
+              indicatorColor: Theme.of(context).colorScheme.primary,
+              labelColor: Theme.of(context).colorScheme.primary,
+              unselectedLabelColor: Theme.of(context).colorScheme.secondary,
+              tabs: [
+                Tab(text: loc?.translate('general') ?? 'General'),
+                Tab(text: loc?.translate('record') ?? 'Record'),
+              ],
             ),
             Expanded(
               child: TabBarView(
@@ -281,16 +269,8 @@ class _ProjectInformationState extends State<ProjectInformation>
                     return PreLoader();
                   } else if (state is SettingProjectLoaded) {
                     if (state.setting.bill == 1) {
-                      int seconds = 0;
-                      for (var i = 0; i < stateRecord.records.length; i++) {
-                        seconds +=
-                            DateTime.parse(stateRecord.records[i].finish ?? '')
-                                .difference(
-                                  DateTime.parse(stateRecord.records[i].start),
-                                )
-                                .inSeconds;
-                      }
-                      final total = (seconds / 3600) * state.setting.price;
+                      final total =
+                          (stateRecord.seconds / 3600) * state.setting.price;
                       final formatTotal = NumberFormat.decimalPattern(
                         loc?.locale.languageCode == 'en' ? 'en_US' : 'es_ES',
                       ).format(total.toInt());
@@ -298,23 +278,9 @@ class _ProjectInformationState extends State<ProjectInformation>
                       final List<Widget> list = [
                         Container(
                           margin: EdgeInsets.all(20),
-                          child: Row(
-                            children: [
-                              Icon(
-                                CupertinoIcons.money_dollar_circle,
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                loc?.translate('billing') ?? 'Billing:',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.secondary,
-                                ),
-                              ),
-                            ],
+                          child: AdjustmentsAnnounced(
+                            icon: CupertinoIcons.money_dollar_circle,
+                            text: loc?.translate('billing') ?? 'Billing:',
                           ),
                         ),
                         Billing(
@@ -337,21 +303,9 @@ class _ProjectInformationState extends State<ProjectInformation>
         ),
         Container(
           margin: EdgeInsets.all(20),
-          child: Row(
-            children: [
-              Icon(
-                CupertinoIcons.calendar,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-              SizedBox(width: 5),
-              Text(
-                loc?.translate('days') ?? 'Days:',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              ),
-            ],
+          child: AdjustmentsAnnounced(
+            icon: CupertinoIcons.calendar,
+            text: loc?.translate('days') ?? 'Days:',
           ),
         ),
         BlocBuilder<RecordBloc, RecordState>(
@@ -375,21 +329,9 @@ class _ProjectInformationState extends State<ProjectInformation>
         ),
         Container(
           margin: EdgeInsets.all(20),
-          child: Row(
-            children: [
-              Icon(
-                CupertinoIcons.rectangle_paperclip,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-              SizedBox(width: 5),
-              Text(
-                loc?.translate('tasks') ?? 'Tasks:',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              ),
-            ],
+          child: AdjustmentsAnnounced(
+            icon: CupertinoIcons.rectangle_paperclip,
+            text: loc?.translate('tasks') ?? 'Tasks:',
           ),
         ),
       ],
