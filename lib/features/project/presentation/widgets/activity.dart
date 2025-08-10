@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:trackbuzz/features/track/data/models/record_model.dart';
+import 'package:trackbuzz/shared/functions/time_format_record.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class Activity extends StatelessWidget {
-  final List<String> dateStrings;
+  final List<RecordModel> dateList;
 
-  const Activity({super.key, required this.dateStrings});
+  const Activity({super.key, required this.dateList});
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
 
     final activityMap = <DateTime, int>{};
-    for (var dateStr in dateStrings) {
-      final date = DateTime.parse(dateStr);
+    final timeMap = <DateTime, int>{};
+    for (var i = 0; i < dateList.length; i++) {
+      final date = DateTime.parse(dateList[i].start);
       final normalizedDate = DateTime(date.year, date.month, date.day);
       activityMap[normalizedDate] = (activityMap[normalizedDate] ?? 0) + 1;
+      timeMap[normalizedDate] =
+          (timeMap[normalizedDate] ?? 0) +
+          DateTime.parse(dateList[i].finish ?? '').difference(date).inSeconds;
     }
 
     final now = DateTime.now();
@@ -27,8 +33,6 @@ class Activity extends StatelessWidget {
       weeks.add(currentDate);
       currentDate = currentDate.add(const Duration(days: 7));
     }
-
-    final currentWeekday = now.weekday % 7;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -44,8 +48,6 @@ class Activity extends StatelessWidget {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: List.generate(7, (index) {
-                if (index > currentWeekday) return const SizedBox.shrink();
-
                 final weekday = [
                   loc?.translate('mon') ?? 'Mon',
                   loc?.translate('tue') ?? 'Tue',
@@ -55,6 +57,7 @@ class Activity extends StatelessWidget {
                   loc?.translate('sat') ?? 'Sat',
                   loc?.translate('sun') ?? 'Sun',
                 ][index];
+
                 return Container(
                   height: 16,
                   width: 32,
@@ -78,25 +81,26 @@ class Activity extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: List.generate(7, (rowIndex) {
-                  if (rowIndex > currentWeekday) return const SizedBox.shrink();
-
                   return Row(
                     mainAxisSize: MainAxisSize.min,
                     children: visibleWeeks.map((weekStart) {
                       final dayDate = weekStart.add(Duration(days: rowIndex));
-                      if (dayDate.isAfter(now)) return const SizedBox.shrink();
+
+                      if (dayDate.isAfter(now)) {
+                        return const SizedBox.shrink();
+                      }
 
                       final activityCount = activityMap[dayDate] ?? 0;
-                      final color = _getColorForActivity(
-                        activityCount,
-                        context,
-                      );
+                      final timeCount = timeMap[dayDate] ?? 0;
+                      final color = _getColorForActivity(timeCount, context);
 
                       return Tooltip(
                         message: activityCount > 0
                             ? '${DateFormat('MMM d, y', loc?.locale.languageCode == 'en' ? 'en_US' : 'es_ES').format(dayDate)}\n'
+                                  '${timeFormatRecord(timeCount)}\n'
                                   '$activityCount ${activityCount == 1 ? loc?.translate('activity') ?? 'activity' : loc?.translate('activities') ?? 'activities'}'
                             : '${loc?.translate('no_activity') ?? 'No activity on'} ${DateFormat('MMM d, y', loc?.locale.languageCode == 'en' ? 'en_US' : 'es_ES').format(dayDate)}',
+                        textAlign: TextAlign.center,
                         child: Container(
                           width: 16,
                           height: 16,
@@ -124,8 +128,14 @@ DateTime _getPreviousMonday(DateTime date) {
 }
 
 Color _getColorForActivity(int count, context) {
+  // nothing
   if (count == 0) return Theme.of(context).colorScheme.primary.withOpacity(0.1);
-  if (count <= 2) return Theme.of(context).colorScheme.primary.withOpacity(0.3);
-  if (count <= 5) return Theme.of(context).colorScheme.primary.withOpacity(0.5);
-  return Theme.of(context).colorScheme.primary.withOpacity(1);
+  // 10 minutes
+  if (count <= 600)
+    return Theme.of(context).colorScheme.primary.withOpacity(0.5);
+  // 30 minutes
+  if (count <= 1800)
+    return Theme.of(context).colorScheme.primary.withOpacity(0.8);
+
+  return Theme.of(context).colorScheme.primary;
 }

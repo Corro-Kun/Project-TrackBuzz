@@ -350,9 +350,6 @@ class _ProjectInformationState extends State<ProjectInformation>
             if (state is RecordLoading) {
               return PreLoader();
             } else if (state is RecordLoaded) {
-              List<String> date = List.generate(state.records.length, (i) {
-                return state.records[i].start;
-              });
               return Padding(
                 padding: EdgeInsets.only(
                   right: 20,
@@ -360,7 +357,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                   top: 5,
                   bottom: 5,
                 ),
-                child: Activity(dateStrings: date),
+                child: Activity(dateList: state.records),
               );
             } else {
               return SizedBox.shrink();
