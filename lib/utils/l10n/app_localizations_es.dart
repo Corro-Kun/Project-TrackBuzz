@@ -45,5 +45,9 @@ class AppLocalizationsEs {
     'fri': 'Vie',
     'sat': 'Sáb',
     'sun': 'Dom',
+    //reports
+    'total': 'Total:',
+    'activity_report': 'Actividad:',
+    'percentage_report': 'Porcentaje:',
   };
 }

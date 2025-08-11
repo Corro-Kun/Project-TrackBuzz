@@ -27,6 +27,7 @@ import 'package:trackbuzz/features/report/data/repositories/report_repositories.
 import 'package:trackbuzz/features/report/data/services/report_services.dart';
 import 'package:trackbuzz/features/report/domain/repositories/report_repositories_abstract.dart';
 import 'package:trackbuzz/features/report/domain/usecase/get_report_use_case.dart';
+import 'package:trackbuzz/features/report/presentation/bloc/report/report_bloc.dart';
 import 'package:trackbuzz/features/track/data/datasource/chronometer_datasource.dart';
 import 'package:trackbuzz/features/track/data/repositories/chronometer_repository.dart';
 import 'package:trackbuzz/features/track/data/services/chronometer_service.dart';
@@ -64,6 +65,7 @@ Future<void> init() async {
     ),
   );
   sl.registerFactory(() => RecordBloc(getRecordOfProjectUseCase: sl()));
+  sl.registerFactory(() => ReportBloc(getReportUseCase: sl()));
 
   // User cases
   sl.registerLazySingleton(() => GetListProjectUserCase(sl()));

@@ -14,7 +14,7 @@ import 'package:trackbuzz/features/project/presentation/bloc/Record/record_state
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_event.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_state.dart';
-import 'package:trackbuzz/features/project/presentation/widgets/activity.dart';
+import 'package:trackbuzz/shared/widgets/activity.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/app_bar_information.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/billing.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/date_widget.dart';
