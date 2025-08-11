@@ -42,6 +42,18 @@ class AppBarInformation extends StatelessWidget implements PreferredSizeWidget {
             alignment: Alignment.center,
             width: 37,
             child: Icon(
+              CupertinoIcons.rectangle_stack_fill,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () => Scaffold.of(context).openDrawer(),
+          child: Container(
+            margin: const EdgeInsets.only(top: 10, bottom: 10),
+            alignment: Alignment.center,
+            width: 37,
+            child: Icon(
               CupertinoIcons.hand_draw_fill,
               color: Theme.of(context).colorScheme.secondary,
             ),

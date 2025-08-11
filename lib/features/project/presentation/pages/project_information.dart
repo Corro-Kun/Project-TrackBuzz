@@ -153,7 +153,6 @@ class _ProjectInformationState extends State<ProjectInformation>
                         List<String> totals = [];
                         int secondsTemp = 0;
                         String currentTemp = '';
-
                         for (var i = 0; i < state.records.length; i++) {
                           final startSaved = DateTime.parse(
                             state.records[i].start,
@@ -172,7 +171,9 @@ class _ProjectInformationState extends State<ProjectInformation>
                             totals.add(timeFormatRecord(secondsTemp));
                             currentTemp = date;
                             secondsTemp = 0;
-                          } else if (state.records.length - 1 == i) {
+                          }
+
+                          if (state.records.length - 1 == i) {
                             secondsTemp += finishSaved
                                 .difference(startSaved)
                                 .inSeconds;
@@ -242,14 +243,6 @@ class _ProjectInformationState extends State<ProjectInformation>
               ),
             ),
           ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => {},
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          child: Icon(
-            CupertinoIcons.rectangle_stack_fill_badge_plus,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
         ),
       ),
     );
