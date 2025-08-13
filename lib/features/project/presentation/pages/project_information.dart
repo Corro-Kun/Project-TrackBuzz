@@ -77,12 +77,19 @@ class _ProjectInformationState extends State<ProjectInformation>
           child: BlocBuilder<ProjectBloc, ProjectState>(
             builder: (context, state) {
               String title = '...';
+              String img = '';
               bool update = false;
               if (state is ProjectLoaded) {
                 title = state.project.title;
+                img = state.project.image;
                 update = state.update;
               }
-              return AppBarInformation(title: title, update: update);
+              return AppBarInformation(
+                title: title,
+                img: img,
+                update: update,
+                id: widget.id,
+              );
             },
           ),
         ),

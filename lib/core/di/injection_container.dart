@@ -28,6 +28,10 @@ import 'package:trackbuzz/features/report/data/services/report_services.dart';
 import 'package:trackbuzz/features/report/domain/repositories/report_repositories_abstract.dart';
 import 'package:trackbuzz/features/report/domain/usecase/get_report_use_case.dart';
 import 'package:trackbuzz/features/report/presentation/bloc/report/report_bloc.dart';
+import 'package:trackbuzz/features/task/data/datasource/task_datasource.dart';
+import 'package:trackbuzz/features/task/data/repositories/task_repository.dart';
+import 'package:trackbuzz/features/task/data/services/task_service.dart';
+import 'package:trackbuzz/features/task/domain/repositories/task_repository_abstract.dart';
 import 'package:trackbuzz/features/track/data/datasource/chronometer_datasource.dart';
 import 'package:trackbuzz/features/track/data/repositories/chronometer_repository.dart';
 import 'package:trackbuzz/features/track/data/services/chronometer_service.dart';
@@ -88,6 +92,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ChronometerService(sl()));
   sl.registerLazySingleton(() => RecordService(sl()));
   sl.registerLazySingleton(() => ReportServices(sl()));
+  sl.registerLazySingleton(() => TaskService(sl()));
 
   // Repository
   sl.registerLazySingleton<ProjectRepositoryAbstract>(
@@ -105,6 +110,7 @@ Future<void> init() async {
   sl.registerLazySingleton<ReportRepositoriesAbstract>(
     () => ReportRepositories(sl()),
   );
+  sl.registerLazySingleton<TaskRepositoryAbstract>(() => TaskRepository(sl()));
 
   // Datasource
   sl.registerLazySingleton(() => ProjectDatasource());
@@ -112,4 +118,5 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ChronometerDatasource());
   sl.registerLazySingleton(() => RecordDatasource());
   sl.registerLazySingleton(() => ReportDatasource());
+  sl.registerLazySingleton(() => TaskDatasource());
 }

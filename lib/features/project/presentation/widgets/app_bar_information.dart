@@ -1,13 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trackbuzz/features/task/presentation/pages/list_task.dart';
 
 class AppBarInformation extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final String img;
   final bool update;
+  final int id;
   const AppBarInformation({
     super.key,
     required this.title,
     required this.update,
+    required this.id,
+    required this.img,
   });
 
   @override
@@ -26,7 +31,7 @@ class AppBarInformation extends StatelessWidget implements PreferredSizeWidget {
         child: Container(
           margin: const EdgeInsets.only(top: 10, bottom: 10),
           alignment: Alignment.center,
-          width: 37,
+          color: Theme.of(context).colorScheme.surface,
           child: Icon(
             CupertinoIcons.left_chevron,
             color: Theme.of(context).colorScheme.secondary,
@@ -36,7 +41,11 @@ class AppBarInformation extends StatelessWidget implements PreferredSizeWidget {
       foregroundColor: Theme.of(context).colorScheme.secondary,
       actions: [
         GestureDetector(
-          onTap: () => Scaffold.of(context).openDrawer(),
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => ListTask(idProject: id, img: img),
+            ),
+          ),
           child: Container(
             margin: const EdgeInsets.only(top: 10, bottom: 10),
             alignment: Alignment.center,
