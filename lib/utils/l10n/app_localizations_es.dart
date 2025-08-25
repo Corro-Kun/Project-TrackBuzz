@@ -49,5 +49,10 @@ class AppLocalizationsEs {
     'total': 'Total:',
     'activity_report': 'Actividad:',
     'percentage_report': 'Porcentaje:',
+    // task
+    'title_task': 'Tareas',
+    'create_task': 'Crear Tarea',
+    'name': 'Nombre',
+    'description': 'Descripción',
   };
 }

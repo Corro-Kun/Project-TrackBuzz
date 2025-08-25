@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:trackbuzz/features/task/presentation/pages/create_task.dart';
 import 'package:trackbuzz/features/task/presentation/widgets/app_bar_task.dart';
+import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class ListTask extends StatelessWidget {
   final int idProject;
@@ -16,10 +18,20 @@ class ListTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBarTask(img: img),
+      appBar: AppBarTask(
+        img: img,
+        title: loc?.translate('title_task') ?? 'Tasks',
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {},
+        onPressed: () async {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => CreateTask(id: idProject, img: img),
+            ),
+          );
+        },
         child: Icon(
           CupertinoIcons.rectangle_stack_fill_badge_plus,
           color: Theme.of(context).colorScheme.secondary,

@@ -5,7 +5,8 @@ import 'package:flutter/widgets.dart';
 
 class AppBarTask extends StatelessWidget implements PreferredSizeWidget {
   final String img;
-  const AppBarTask({super.key, required this.img});
+  final String title;
+  const AppBarTask({super.key, required this.title, required this.img});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -14,7 +15,7 @@ class AppBarTask extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(
-        'Tareas',
+        title,
         style: TextStyle(color: Theme.of(context).colorScheme.secondary),
       ),
       elevation: 0.0,
