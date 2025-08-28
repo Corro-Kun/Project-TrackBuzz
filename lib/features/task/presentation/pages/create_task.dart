@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/features/task/domain/usecase/create_task_use_case.dart';
 import 'package:trackbuzz/features/task/presentation/widgets/app_bar_task.dart';
+import 'package:trackbuzz/shared/functions/message.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class CreateTask extends StatefulWidget {
@@ -30,7 +31,11 @@ class _CreateTaskState extends State<CreateTask> {
     });
   }
 
-  Future<void> _create() async {
+  Future<void> _create(String error) async {
+    if (_nameController.text.isEmpty || _descriptionController.text.isEmpty) {
+      message(context, error);
+      return;
+    }
     _load(true);
     CreateTaskUseCase(
       sl(),
@@ -49,7 +54,7 @@ class _CreateTaskState extends State<CreateTask> {
       floatingActionButton: !loading
           ? FloatingActionButton(
               onPressed: () async {
-                await _create();
+                await _create(loc?.translate('error_field') ?? 'Error');
               },
               child: Icon(
                 Icons.send,

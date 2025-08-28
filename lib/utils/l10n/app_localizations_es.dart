@@ -54,5 +54,7 @@ class AppLocalizationsEs {
     'create_task': 'Crear Tarea',
     'name': 'Nombre',
     'description': 'Descripción',
+    //error
+    'error_field': 'Error: llena todos los campos, por favor',
   };
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/features/project/domain/usecase/create_project_use_case.dart';
+import 'package:trackbuzz/shared/functions/message.dart';
 import 'package:trackbuzz/shared/functions/save_image.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
@@ -53,7 +54,11 @@ class _CreateProjectState extends State<CreateProject> {
     });
   }
 
-  Future<void> _create() async {
+  Future<void> _create(String error) async {
+    if (_titleController.text.isEmpty || _imagePath.isEmpty) {
+      message(context, error);
+      return;
+    }
     _load(true);
     CreateProjectUseCase(
       sl(),
@@ -73,17 +78,17 @@ class _CreateProjectState extends State<CreateProject> {
         elevation: 0.0,
         foregroundColor: Theme.of(context).colorScheme.secondary,
       ),
-      floatingActionButton:
-          loading == false
-              ? FloatingActionButton(
-                onPressed: () => _create(),
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                child: Icon(
-                  CupertinoIcons.arrow_right,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              )
-              : null,
+      floatingActionButton: loading == false
+          ? FloatingActionButton(
+              onPressed: () =>
+                  _create(loc?.translate('error_field') ?? 'Error'),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: Icon(
+                CupertinoIcons.arrow_right,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            )
+          : null,
       body: Column(
         children: [
           SizedBox(height: 20),

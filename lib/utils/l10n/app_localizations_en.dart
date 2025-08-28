@@ -54,5 +54,7 @@ class AppLocalizationsEn {
     'create_task': 'Create Task',
     'name': 'Name',
     'description': 'Description',
+    //error
+    'error_field': 'Error: please fill in all the fields',
   };
 }
