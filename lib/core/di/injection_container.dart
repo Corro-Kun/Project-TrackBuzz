@@ -33,6 +33,7 @@ import 'package:trackbuzz/features/task/data/repositories/task_repository.dart';
 import 'package:trackbuzz/features/task/data/services/task_service.dart';
 import 'package:trackbuzz/features/task/domain/repositories/task_repository_abstract.dart';
 import 'package:trackbuzz/features/task/domain/usecase/create_task_use_case.dart';
+import 'package:trackbuzz/features/task/domain/usecase/delete_task_use_case.dart';
 import 'package:trackbuzz/features/task/domain/usecase/get_list_task_use_case.dart';
 import 'package:trackbuzz/features/task/presentation/bloc/Task/task_bloc.dart';
 import 'package:trackbuzz/features/track/data/datasource/chronometer_datasource.dart';
@@ -73,7 +74,9 @@ Future<void> init() async {
   );
   sl.registerFactory(() => RecordBloc(getRecordOfProjectUseCase: sl()));
   sl.registerFactory(() => ReportBloc(getReportUseCase: sl()));
-  sl.registerFactory(() => TaskBloc(getListTaskUseCase: sl()));
+  sl.registerFactory(
+    () => TaskBloc(getListTaskUseCase: sl(), deleteTaskUseCase: sl()),
+  );
 
   // User cases
   sl.registerLazySingleton(() => GetListProjectUserCase(sl()));
@@ -90,6 +93,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetReportUseCase(sl()));
   sl.registerLazySingleton(() => CreateTaskUseCase(sl()));
   sl.registerLazySingleton(() => GetListTaskUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteTaskUseCase(sl()));
 
   // Services
   sl.registerLazySingleton(() => ProjectService(sl()));

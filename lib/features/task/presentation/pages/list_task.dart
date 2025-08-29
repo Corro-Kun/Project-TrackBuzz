@@ -117,6 +117,11 @@ class ListTask extends StatelessWidget {
                                     ),
                                   ),
                                   GestureDetector(
+                                    onTap: () async {
+                                      context.read<TaskBloc>().add(
+                                        DeleteTask(index: i),
+                                      );
+                                    },
                                     child: Icon(
                                       CupertinoIcons.trash,
                                       color: Theme.of(

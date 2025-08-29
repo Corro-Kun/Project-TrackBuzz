@@ -5,3 +5,9 @@ class GetTasks extends TaskEvent {
 
   GetTasks({required this.id});
 }
+
+class DeleteTask extends TaskEvent {
+  final int index;
+
+  DeleteTask({required this.index});
+}

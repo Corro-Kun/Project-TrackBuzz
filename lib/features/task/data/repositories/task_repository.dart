@@ -19,4 +19,9 @@ class TaskRepository extends TaskRepositoryAbstract {
   Future createTask(String name, String description, int id) async {
     await datasource.createTask(name, description, id);
   }
+
+  @override
+  Future deleteTask(int id) async {
+    await datasource.deleteTask(id);
+  }
 }
