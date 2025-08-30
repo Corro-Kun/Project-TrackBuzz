@@ -14,6 +14,10 @@ class TaskService {
     await repository.createTask(name, description, id);
   }
 
+  Future<dynamic> updateTask(String name, String description, int id) async {
+    await repository.updateTask(name, description, id);
+  }
+
   Future<dynamic> deleteTask(int id) async {
     await repository.deleteTask(id);
   }

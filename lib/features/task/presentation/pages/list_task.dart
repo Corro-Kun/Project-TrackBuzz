@@ -7,6 +7,8 @@ import 'package:trackbuzz/features/task/presentation/bloc/Task/task_bloc.dart';
 import 'package:trackbuzz/features/task/presentation/bloc/Task/task_event.dart';
 import 'package:trackbuzz/features/task/presentation/bloc/Task/task_state.dart';
 import 'package:trackbuzz/features/task/presentation/pages/create_task.dart';
+import 'package:trackbuzz/features/task/presentation/pages/update_task.dart';
+import 'package:trackbuzz/features/task/presentation/widgets/ClipRRectTask.dart';
 import 'package:trackbuzz/features/task/presentation/widgets/app_bar_task.dart';
 import 'package:trackbuzz/shared/widgets/pre_loader.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
@@ -65,76 +67,27 @@ class ListTask extends StatelessWidget {
                 children: List.generate(state.tasks.length, (i) {
                   return Padding(
                     padding: EdgeInsets.only(top: 20, right: 20, left: 20),
-                    child: ClipRRect(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: BoxBorder.all(
-                            width: 1,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                        clipBehavior: Clip.antiAlias,
-                        child: ExpansionTile(
-                          title: Text(
-                            state.tasks[i].name,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.secondary,
+                    child: ClipRRectTask(
+                      name: state.tasks[i].name,
+                      description: state.tasks[i].description,
+                      update: () async {
+                        final result = await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => UpdateTask(
+                              id: state.tasks[i].id,
+                              img: img,
+                              name: state.tasks[i].name,
+                              description: state.tasks[i].description,
                             ),
                           ),
-                          //trailing: SizedBox.shrink(),
-                          iconColor: Theme.of(context).colorScheme.secondary,
-                          collapsedIconColor: Theme.of(
-                            context,
-                          ).colorScheme.primary,
-                          children: [
-                            Padding(
-                              padding: EdgeInsetsGeometry.all(10),
-                              child: Text(
-                                state.tasks[i].description,
-                                style: TextStyle(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.secondary,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsGeometry.all(10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  GestureDetector(
-                                    child: Icon(
-                                      CupertinoIcons.settings,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      context.read<TaskBloc>().add(
-                                        DeleteTask(index: i),
-                                      );
-                                    },
-                                    child: Icon(
-                                      CupertinoIcons.trash,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                        );
+                        if (result == true) {
+                          context.read<TaskBloc>().add(GetTasks(id: idProject));
+                        }
+                      },
+                      delete: () async {
+                        context.read<TaskBloc>().add(DeleteTask(index: i));
+                      },
                     ),
                   );
                 }),

@@ -52,6 +52,7 @@ class AppLocalizationsEn {
     // task
     'title_task': 'Tasks',
     'create_task': 'Create Task',
+    'update_task': 'Update Task',
     'name': 'Name',
     'description': 'Description',
     //error
