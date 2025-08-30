@@ -16,11 +16,16 @@ class ProjectDatasource {
     return data[0];
   }
 
-  Future<dynamic> CreateProject(String title, String path) async {
+  Future<dynamic> createProject(
+    String title,
+    String? description,
+    String path,
+  ) async {
     final db = await DataBase().OpenDB();
 
     int id = await db.insert('project', {
       'title': title,
+      'description': description,
       'image': path,
     }, conflictAlgorithm: ConflictAlgorithm.replace);
 
@@ -29,14 +34,21 @@ class ProjectDatasource {
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<dynamic> updateProject(int id, String title, String path) async {
+  Future<dynamic> updateProject(
+    int id,
+    String title,
+    String? description,
+    String path,
+  ) async {
     final db = await DataBase().OpenDB();
 
     await db.update(
       'project',
-      {'title': title, 'image': path},
+      {'title': title, 'description': description, 'image': path},
       where: 'id = ?',
       whereArgs: [id],
     );
   }
+
+  Future<dynamic> deleteProject(int id) async {}
 }

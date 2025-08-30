@@ -18,11 +18,18 @@ class UpdateTextProject extends ProjectEvent {
   UpdateTextProject({required this.title});
 }
 
+class UpdateDescriptionProject extends ProjectEvent {
+  final String description;
+
+  UpdateDescriptionProject({required this.description});
+}
+
 class UpdateProject extends ProjectEvent {
   final String title;
+  final String? description;
   final String img;
 
-  UpdateProject({required this.title, required this.img});
+  UpdateProject({required this.title, this.description, required this.img});
 }
 
 class UpdateBool extends ProjectEvent {

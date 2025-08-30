@@ -14,8 +14,12 @@ class ProjectService {
     return await repository.getProject(id);
   }
 
-  Future<dynamic> createProject(String title, String path) async {
-    return await repository.createProject(title, path);
+  Future<dynamic> createProject(
+    String title,
+    String? description,
+    String path,
+  ) async {
+    return await repository.createProject(title, description, path);
   }
 
   Future<dynamic> updateProject(ProjectModel data) async {

@@ -9,6 +9,7 @@ import 'package:trackbuzz/features/project/presentation/bloc/Project/project_blo
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_event.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_state.dart';
 import 'package:trackbuzz/shared/functions/save_image.dart';
+import 'package:trackbuzz/shared/widgets/TextFieldDescription.dart';
 import 'package:trackbuzz/shared/widgets/pre_loader.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
@@ -27,6 +28,7 @@ class ProjectUpdate extends StatefulWidget {
 class _ProjectUpdateState extends State<ProjectUpdate> {
   final ImagePicker _picker = ImagePicker();
   final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   late ProjectBloc _projectBloc;
   bool loading = false;
 
@@ -48,6 +50,7 @@ class _ProjectUpdateState extends State<ProjectUpdate> {
     _projectBloc.add(
       UpdateProject(
         title: _titleController.text,
+        description: _descriptionController.text,
         img: await saveImage(image.image.toString().split('"')[1]),
       ),
     );
@@ -75,17 +78,16 @@ class _ProjectUpdateState extends State<ProjectUpdate> {
           elevation: 0.0,
           foregroundColor: Theme.of(context).colorScheme.secondary,
         ),
-        floatingActionButton:
-            loading == false
-                ? FloatingActionButton(
-                  onPressed: () => _update(),
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  child: Icon(
-                    CupertinoIcons.upload_circle_fill,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                )
-                : null,
+        floatingActionButton: loading == false
+            ? FloatingActionButton(
+                onPressed: () => _update(),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                child: Icon(
+                  CupertinoIcons.upload_circle_fill,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              )
+            : null,
         body: Column(
           children: [
             SizedBox(height: 20),
@@ -180,6 +182,45 @@ class _ProjectUpdateState extends State<ProjectUpdate> {
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                       ),
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(
+                right: 20,
+                left: 20,
+                top: 20,
+                bottom: 10,
+              ),
+              width: MediaQuery.of(context).size.width * 1,
+              child: Text(
+                loc?.translate('description_input') ?? 'Description (optional)',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 20, left: 20),
+              child: BlocBuilder<ProjectBloc, ProjectState>(
+                builder: (contextBloc, state) {
+                  if (state is ProjectLoading) {
+                    return PreLoader();
+                  } else if (state is ProjectLoaded) {
+                    _descriptionController.text =
+                        state.project.description ?? '';
+                    return TextFieldDescription(
+                      controller: _descriptionController,
+                      onChange: (value) {
+                        contextBloc.read<ProjectBloc>().add(
+                          UpdateDescriptionProject(description: value),
+                        );
+                      },
                     );
                   } else {
                     return SizedBox.shrink();

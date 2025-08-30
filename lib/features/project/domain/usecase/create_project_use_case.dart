@@ -5,7 +5,11 @@ class CreateProjectUseCase {
 
   CreateProjectUseCase(this.service);
 
-  Future<dynamic> execute(String title, String path) async {
-    await service.createProject(title, path);
+  Future<dynamic> execute(
+    String title,
+    String? description,
+    String path,
+  ) async {
+    await service.createProject(title, description, path);
   }
 }

@@ -3,10 +3,13 @@ class AppLocalizationsEn {
     'projects': 'Projects',
     'chronometer': 'Chronometer',
     'reports': 'Reports',
+    // project
     'create_project': 'Create Project',
-    'title_input': 'Title:',
+    'title_input': 'Title',
+    'description_input': 'Description (optional)',
     'search': 'Search',
     'see_information': 'See Information',
+    // -
     'settings': 'Settings',
     'language': 'Language',
     'personalize': 'Personalize',
@@ -33,6 +36,7 @@ class AppLocalizationsEn {
     'billing': 'Billing:',
     'days': 'Days:',
     'tasks': 'Tasks:',
+    'description_info': 'Description:',
     'update_project': 'Update Project',
     'no_activity': 'No activity on',
     'activity': 'activity',

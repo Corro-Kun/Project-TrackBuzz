@@ -3,6 +3,8 @@ import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/features/task/domain/usecase/create_task_use_case.dart';
 import 'package:trackbuzz/features/task/presentation/widgets/app_bar_task.dart';
 import 'package:trackbuzz/shared/functions/message.dart';
+import 'package:trackbuzz/shared/widgets/TextFieldCustom.dart';
+import 'package:trackbuzz/shared/widgets/TextFieldDescription.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class CreateTask extends StatefulWidget {
@@ -82,27 +84,7 @@ class _CreateTaskState extends State<CreateTask> {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 20, left: 20),
-            child: TextField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(15),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.secondary,
-                    width: 1,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.secondary,
-                    width: 1,
-                  ),
-                ),
-              ),
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-            ),
+            child: TextFieldCustom(controller: _nameController),
           ),
           Container(
             padding: const EdgeInsets.only(
@@ -122,28 +104,7 @@ class _CreateTaskState extends State<CreateTask> {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 20, left: 20),
-            child: TextField(
-              controller: _descriptionController,
-              maxLines: 4,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(15),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.secondary,
-                    width: 1,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.secondary,
-                    width: 1,
-                  ),
-                ),
-              ),
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-            ),
+            child: TextFieldDescription(controller: _descriptionController),
           ),
         ],
       ),

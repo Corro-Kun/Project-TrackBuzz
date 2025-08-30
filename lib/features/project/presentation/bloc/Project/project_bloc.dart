@@ -16,6 +16,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     on<GetProject>(_onGetProject);
     on<UpdateImage>(_onUpdateImage);
     on<UpdateTextProject>(_onUpdateTextProject);
+    on<UpdateDescriptionProject>(_onUpdateDescriptionProject);
     on<UpdateProject>(_onUpdateProject);
     on<UpdateBool>(_onUpdateBool);
   }
@@ -44,6 +45,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
           project: ProjectModel(
             id: currentState.project.id,
             title: currentState.project.title,
+            description: currentState.project.description,
             image: event.path,
             state: currentState.project.state,
           ),
@@ -66,6 +68,30 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
           project: ProjectModel(
             id: currentState.project.id,
             title: event.title,
+            description: currentState.project.description,
+            image: currentState.project.image,
+            state: currentState.project.state,
+          ),
+          update: false,
+        ),
+      );
+    } catch (e) {
+      emit(ProjectError(message: e.toString()));
+    }
+  }
+
+  Future<void> _onUpdateDescriptionProject(
+    UpdateDescriptionProject event,
+    Emitter<ProjectState> emit,
+  ) async {
+    final currentState = state as ProjectLoaded;
+    try {
+      emit(
+        ProjectLoaded(
+          project: ProjectModel(
+            id: currentState.project.id,
+            title: currentState.project.title,
+            description: event.description,
             image: currentState.project.image,
             state: currentState.project.state,
           ),
@@ -87,6 +113,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
         ProjectModel(
           id: currentState.project.id,
           title: event.title,
+          description: event.description,
           image: event.img,
           state: currentState.project.state,
         ),

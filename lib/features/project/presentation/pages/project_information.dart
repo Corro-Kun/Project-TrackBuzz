@@ -258,6 +258,45 @@ class _ProjectInformationState extends State<ProjectInformation>
   ListView listViewGeneral(BuildContext context, AppLocalizations? loc) {
     return ListView(
       children: [
+        BlocBuilder<ProjectBloc, ProjectState>(
+          builder: (context, state) {
+            if (state is ProjectLoading) {
+              return PreLoader();
+            } else if (state is ProjectLoaded) {
+              return state.project.description != null
+                  ? Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.all(20),
+                          child: AdjustmentsAnnounced(
+                            icon: CupertinoIcons.text_aligncenter,
+                            text:
+                                loc?.translate('description_info') ??
+                                'Description:',
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          child: Center(
+                            child: Text(
+                              state.project.description ?? '',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : SizedBox.shrink();
+            } else {
+              return SizedBox.shrink();
+            }
+          },
+        ),
         BlocBuilder<RecordBloc, RecordState>(
           builder: (context, stateRecord) {
             if (stateRecord is RecordLoading) {

@@ -23,12 +23,21 @@ class ProjectRepository extends ProjectRepositoryAbstract {
   }
 
   @override
-  Future<dynamic> createProject(String title, String path) async {
-    return await datasource.CreateProject(title, path);
+  Future<dynamic> createProject(
+    String title,
+    String? description,
+    String path,
+  ) async {
+    return await datasource.createProject(title, description, path);
   }
 
   @override
   Future updateProject(ProjectModel data) async {
-    await datasource.updateProject(data.id, data.title, data.image);
+    await datasource.updateProject(
+      data.id,
+      data.title,
+      data.description,
+      data.image,
+    );
   }
 }

@@ -7,6 +7,8 @@ import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/features/project/domain/usecase/create_project_use_case.dart';
 import 'package:trackbuzz/shared/functions/message.dart';
 import 'package:trackbuzz/shared/functions/save_image.dart';
+import 'package:trackbuzz/shared/widgets/TextFieldCustom.dart';
+import 'package:trackbuzz/shared/widgets/TextFieldDescription.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class CreateProject extends StatefulWidget {
@@ -24,6 +26,7 @@ class _CreateProjectState extends State<CreateProject> {
   final ImagePicker _picker = ImagePicker();
   String _imagePath = '';
   final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   bool loading = false;
 
   DecorationImage image = const DecorationImage(
@@ -60,9 +63,13 @@ class _CreateProjectState extends State<CreateProject> {
       return;
     }
     _load(true);
-    CreateProjectUseCase(
-      sl(),
-    ).execute(_titleController.text, await saveImage(_imagePath));
+    CreateProjectUseCase(sl()).execute(
+      _titleController.text,
+      _descriptionController.text.isNotEmpty
+          ? _descriptionController.text
+          : null,
+      await saveImage(_imagePath),
+    );
     Navigator.pop(context, true);
   }
 
@@ -126,27 +133,27 @@ class _CreateProjectState extends State<CreateProject> {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 20, left: 20),
-            child: TextField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(15),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.secondary,
-                    width: 1,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.secondary,
-                    width: 1,
-                  ),
-                ),
-              ),
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            child: TextFieldCustom(controller: _titleController),
+          ),
+          Container(
+            padding: const EdgeInsets.only(
+              right: 20,
+              left: 20,
+              top: 20,
+              bottom: 10,
             ),
+            width: MediaQuery.of(context).size.width * 1,
+            child: Text(
+              loc?.translate('description_input') ?? 'Description (optional)',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 20, left: 20),
+            child: TextFieldDescription(controller: _descriptionController),
           ),
         ],
       ),
