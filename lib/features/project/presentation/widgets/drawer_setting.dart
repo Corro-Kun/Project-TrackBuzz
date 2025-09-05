@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
+import 'package:trackbuzz/features/project/domain/usecase/delete_project_use_case.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_event.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_bloc.dart';
@@ -358,6 +360,55 @@ class DrawerSetting extends StatelessWidget {
                       ),
                       SizedBox(width: 20),
                       GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text(
+                                  loc?.translate('delete_title') ??
+                                      'are you sure?',
+                                ),
+                                content: Text(
+                                  loc?.translate('delete_description') ?? '',
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      textStyle: Theme.of(
+                                        context,
+                                      ).textTheme.labelLarge,
+                                    ),
+                                    child: Text(
+                                      loc?.translate('cancel') ?? 'Cancel',
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      textStyle: Theme.of(
+                                        context,
+                                      ).textTheme.labelLarge,
+                                    ),
+                                    child: Text(
+                                      loc?.translate('accept') ?? 'Accept',
+                                    ),
+                                    onPressed: () async {
+                                      await DeleteProjectUseCase(
+                                        sl(),
+                                      ).execute(idProject);
+                                      Navigator.of(context).pop();
+                                      Navigator.pop(context);
+                                      Navigator.pop(context, true);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                         child: Container(
                           height: 50,
                           width: 50,

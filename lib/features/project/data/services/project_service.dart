@@ -25,4 +25,8 @@ class ProjectService {
   Future<dynamic> updateProject(ProjectModel data) async {
     await repository.updateProject(data);
   }
+
+  Future<dynamic> deleteProject(int id) async {
+    await repository.deleteProject(id);
+  }
 }

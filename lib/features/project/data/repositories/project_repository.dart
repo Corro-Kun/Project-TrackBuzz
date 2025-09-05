@@ -40,4 +40,9 @@ class ProjectRepository extends ProjectRepositoryAbstract {
       data.image,
     );
   }
+
+  @override
+  Future deleteProject(int id) async {
+    await datasource.deleteProject(id);
+  }
 }

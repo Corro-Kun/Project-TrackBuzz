@@ -5,4 +5,5 @@ abstract class ProjectRepositoryAbstract {
   Future<ProjectModel> getProject(int id);
   Future<dynamic> createProject(String title, String? description, String path);
   Future<dynamic> updateProject(ProjectModel data);
+  Future<dynamic> deleteProject(int id);
 }

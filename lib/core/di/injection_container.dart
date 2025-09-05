@@ -12,6 +12,7 @@ import 'package:trackbuzz/features/project/domain/repositories/project_repositor
 import 'package:trackbuzz/features/project/domain/repositories/record_repository_abstract.dart';
 import 'package:trackbuzz/features/project/domain/repositories/setting_repository_abstract.dart';
 import 'package:trackbuzz/features/project/domain/usecase/create_project_use_case.dart';
+import 'package:trackbuzz/features/project/domain/usecase/delete_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_list_project_user_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_record_of_project_use_case.dart';
@@ -96,6 +97,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetListTaskUseCase(sl()));
   sl.registerLazySingleton(() => DeleteTaskUseCase(sl()));
   sl.registerLazySingleton(() => UpdateTaskUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteProjectUseCase(sl()));
 
   // Services
   sl.registerLazySingleton(() => ProjectService(sl()));

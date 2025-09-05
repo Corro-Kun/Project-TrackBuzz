@@ -50,5 +50,16 @@ class ProjectDatasource {
     );
   }
 
-  Future<dynamic> deleteProject(int id) async {}
+  Future<dynamic> deleteProject(int id) async {
+    final db = await DataBase().OpenDB();
+
+    await db.delete('record', where: 'id_project = ?', whereArgs: [id]);
+    await db.delete('task', where: 'id_project = ?', whereArgs: [id]);
+    await db.delete(
+      'project_settings',
+      where: 'id_project = ?',
+      whereArgs: [id],
+    );
+    await db.delete('project', where: 'id = ?', whereArgs: [id]);
+  }
 }

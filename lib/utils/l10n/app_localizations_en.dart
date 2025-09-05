@@ -9,6 +9,9 @@ class AppLocalizationsEn {
     'description_input': 'Description (optional)',
     'search': 'Search',
     'see_information': 'See Information',
+    'delete_title': 'are you sure?',
+    'delete_description':
+        'This action cannot be undone, you will lose all tasks and data for this project.',
     // -
     'settings': 'Settings',
     'language': 'Language',
