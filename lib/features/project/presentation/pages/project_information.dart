@@ -370,12 +370,52 @@ class _ProjectInformationState extends State<ProjectInformation>
             }
           },
         ),
-        Container(
-          margin: EdgeInsets.all(20),
-          child: AdjustmentsAnnounced(
-            icon: CupertinoIcons.rectangle_paperclip,
-            text: loc?.translate('tasks') ?? 'Tasks:',
-          ),
+        BlocBuilder<RecordBloc, RecordState>(
+          builder: (context, state) {
+            if (state is RecordLoading) {
+              return PreLoader();
+            } else if (state is RecordLoaded) {
+              final timeMap = <String, int>{};
+              final nameList = [];
+              for (var data in state.records) {
+                if (data.idTask != null) {
+                  timeMap[data.taskName!] =
+                      (timeMap[data.taskName!] ?? 0) +
+                      DateTime.parse(
+                        data.finish!,
+                      ).difference(DateTime.parse(data.start)).inSeconds;
+                  if (nameList.indexOf(data.taskName!) == -1) {
+                    nameList.add(data.taskName!);
+                  }
+                }
+              }
+              if (nameList.isNotEmpty) {
+                return Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.all(20),
+                      child: AdjustmentsAnnounced(
+                        icon: CupertinoIcons.rectangle_paperclip,
+                        text: loc?.translate('tasks') ?? 'Tasks:',
+                      ),
+                    ),
+                    Column(
+                      children: List.generate(nameList.length, (index) {
+                        return TimeWidget(
+                          name: nameList[index],
+                          time: timeFormatRecord(timeMap[nameList[index]]!),
+                        );
+                      }),
+                    ),
+                  ],
+                );
+              } else {
+                return SizedBox.shrink();
+              }
+            } else {
+              return SizedBox.shrink();
+            }
+          },
         ),
       ],
     );
