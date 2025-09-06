@@ -226,7 +226,9 @@ class _ProjectInformationState extends State<ProjectInformation>
                                   total: totals[countTotals],
                                 ),
                                 TimeWidget(
-                                  name: 'General',
+                                  name: state.records[i].taskName == null
+                                      ? 'General'
+                                      : state.records[i].taskName.toString(),
                                   time: timeFormatRecord(seconds),
                                 ),
                               ],
@@ -235,7 +237,9 @@ class _ProjectInformationState extends State<ProjectInformation>
                             return widget;
                           } else {
                             return TimeWidget(
-                              name: 'General',
+                              name: state.records[i].taskName == null
+                                  ? 'General'
+                                  : state.records[i].taskName.toString(),
                               time: timeFormatRecord(seconds),
                             );
                           }

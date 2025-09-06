@@ -4,11 +4,15 @@ class RecordDatasource {
   Future<List<Map<String, dynamic>>> getRecord(int id) async {
     final db = await DataBase().OpenDB();
 
-    final data = await db.query(
-      'record',
-      where: 'id_project = ? AND active = ?',
-      whereArgs: [id, 0],
-      orderBy: 'start DESC',
+    final data = await db.rawQuery(
+      '''
+  SELECT r.*, t.name as task_name 
+  FROM record r 
+  LEFT JOIN task t ON r.id_task = t.id 
+  WHERE r.id_project = ? AND r.active = ? 
+  ORDER BY r.start DESC
+''',
+      [id, 0],
     );
 
     return data;

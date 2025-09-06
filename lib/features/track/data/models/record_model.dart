@@ -5,6 +5,7 @@ class RecordModel {
   int active;
   int? idTask;
   int idProject;
+  String? taskName;
 
   RecordModel({
     required this.id,
@@ -13,6 +14,7 @@ class RecordModel {
     required this.active,
     required this.idProject,
     required this.idTask,
+    this.taskName,
   });
 
   factory RecordModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class RecordModel {
       active: json['active'],
       idProject: json['id_project'],
       idTask: json['id_task'],
+      taskName: json['task_name'],
     );
   }
 
@@ -34,6 +37,7 @@ class RecordModel {
       'active': active,
       'id_task': idTask,
       'id_project': idProject,
+      'task_name': taskName,
     };
   }
 }
