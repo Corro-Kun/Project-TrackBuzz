@@ -9,6 +9,7 @@ class AppLocalizationsEs {
     'description_input': 'Descripción (opcional)',
     'search': 'Buscar',
     'see_information': 'Ver Información',
+    'there_are_no_projects': 'No hay Proyectos',
     'delete_title': '¿Estás seguro?',
     'delete_description':
         'Esta acción no se puede deshacer, perderá todas las tareas y datos de este proyecto.',

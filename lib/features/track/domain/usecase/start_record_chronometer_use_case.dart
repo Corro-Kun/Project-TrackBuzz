@@ -5,7 +5,7 @@ class StartRecordChronometerUseCase {
 
   StartRecordChronometerUseCase(this.service);
 
-  Future<dynamic> execute(String start, int idProject) async {
-    return await service.startRecord(start, idProject);
+  Future<dynamic> execute(String start, int idProject, int? idTask) async {
+    return await service.startRecord(start, idProject, idTask);
   }
 }

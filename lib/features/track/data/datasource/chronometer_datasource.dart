@@ -10,12 +10,13 @@ class ChronometerDatasource {
     return data;
   }
 
-  Future<dynamic> startRecord(String start, int idProject) async {
+  Future<dynamic> startRecord(String start, int idProject, int? idTask) async {
     final db = await DataBase().OpenDB();
 
     await db.insert('record', {
       'start': start,
       'id_project': idProject,
+      'id_task': idTask,
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 

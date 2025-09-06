@@ -99,11 +99,15 @@ class _TimeTrackingState extends State<TimeTracking> {
     );
   }
 
-  void _startCounter(int id) {
+  void _startCounter(int id, int? idTask) {
     setState(() => _isRunning = true);
     _initTimer();
     _chronometerBloc.add(
-      StartRecord(start: DateTime.now().toIso8601String(), id: id),
+      StartRecord(
+        start: DateTime.now().toIso8601String(),
+        id: id,
+        idTask: idTask,
+      ),
     );
   }
 
@@ -173,11 +177,22 @@ class _TimeTrackingState extends State<TimeTracking> {
                   >(
                     builder: (context, state) {
                       if (chronometerState.record != null && !_hasCalculated) {
-                        context.read<ProjectChronometerBloc>().add(
-                          SelectProject(
-                            id: chronometerState.record?.idProject ?? 0,
-                          ),
-                        );
+                        if (chronometerState.record?.idTask != null) {
+                          context.read<ProjectChronometerBloc>().add(
+                            InitProjectAndTask(
+                              idProject:
+                                  chronometerState.record?.idProject ?? 0,
+                              idTask: chronometerState.record?.idTask ?? 0,
+                            ),
+                          );
+                        } else {
+                          context.read<ProjectChronometerBloc>().add(
+                            SelectProject(
+                              id: chronometerState.record?.idProject ?? 0,
+                            ),
+                          );
+                        }
+
                         final lastSaved = DateTime.parse(
                           chronometerState.record?.start ?? '',
                         );
@@ -204,6 +219,9 @@ class _TimeTrackingState extends State<TimeTracking> {
                                 if (!_isRunning) {
                                   _startCounter(
                                     state.projects[state.index ?? 0].id,
+                                    state.indexTask != null
+                                        ? state.tasks![state.indexTask ?? 0].id
+                                        : null,
                                   );
                                 } else {
                                   _stopCounter(
@@ -402,26 +420,198 @@ class _TimeTrackingState extends State<TimeTracking> {
               },
             ),
             SizedBox(height: 20),
-            TitleChronometer(
-              icon: CupertinoIcons.rectangle_paperclip,
-              title: loc?.translate('task_optional') ?? 'Task (optional):',
-            ),
-            Container(
-              height: 70,
-              margin: EdgeInsets.only(right: 20, left: 20, top: 5, bottom: 5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: BoxBorder.all(
-                  width: 1,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              ),
-              child: Center(
-                child: Icon(
-                  CupertinoIcons.add,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
+            BlocBuilder<ProjectChronometerBloc, ProjectChronometerState>(
+              builder: (context, state) {
+                if (state is ProjectChronometerLoading) {
+                  return PreLoader();
+                } else if (state is ProjectChronometerLoaded) {
+                  if (state.indexTask != null) {
+                    return Column(
+                      children: [
+                        TitleChronometer(
+                          icon: CupertinoIcons.rectangle_paperclip,
+                          title:
+                              loc?.translate('task_optional') ??
+                              'Task (optional):',
+                        ),
+                        Container(
+                          height: 70,
+                          margin: EdgeInsets.only(
+                            right: 20,
+                            left: 20,
+                            top: 5,
+                            bottom: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: BoxBorder.all(
+                              width: 1,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  SizedBox(width: 10),
+                                  Text(
+                                    state.tasks![state.indexTask ?? 0].name,
+                                    style: TextStyle(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.secondary,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  !_isRunning
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            context
+                                                .read<ProjectChronometerBloc>()
+                                                .add(DeleteTask());
+                                          },
+                                          child: Icon(
+                                            CupertinoIcons.trash,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
+                                          ),
+                                        )
+                                      : const SizedBox.shrink(),
+                                  SizedBox(width: 10),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  } else if (state.index != null && !_isRunning) {
+                    return Column(
+                      children: [
+                        TitleChronometer(
+                          icon: CupertinoIcons.rectangle_paperclip,
+                          title:
+                              loc?.translate('task_optional') ??
+                              'Task (optional):',
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (contextDialog) {
+                                return StatefulBuilder(
+                                  builder: (contextDialog, setState) {
+                                    return AlertDialog(
+                                      title: Center(
+                                        child: Text(
+                                          loc?.translate('title_task') ??
+                                              'Tasks',
+                                          style: TextStyle(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.secondary,
+                                          ),
+                                        ),
+                                      ),
+                                      content: Container(
+                                        width: double.maxFinite,
+                                        height: 300,
+                                        child: ListView(
+                                          children: List.generate(
+                                            state.tasks!.length,
+                                            (i) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  context
+                                                      .read<
+                                                        ProjectChronometerBloc
+                                                      >()
+                                                      .add(
+                                                        SelectTask(
+                                                          id: state
+                                                              .tasks![i]
+                                                              .id,
+                                                        ),
+                                                      );
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.all(10),
+                                                  padding: EdgeInsets.all(5),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          5,
+                                                        ),
+                                                    border: BoxBorder.all(
+                                                      width: 1,
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).colorScheme.secondary,
+                                                    ),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      state.tasks![i].name,
+                                                      style: TextStyle(
+                                                        color: Theme.of(
+                                                          context,
+                                                        ).colorScheme.secondary,
+                                                        fontSize: 16,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            height: 70,
+                            margin: EdgeInsets.only(
+                              right: 20,
+                              left: 20,
+                              top: 5,
+                              bottom: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: BoxBorder.all(
+                                width: 1,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                CupertinoIcons.add,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
             ),
           ],
         ),

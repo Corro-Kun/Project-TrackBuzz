@@ -16,8 +16,8 @@ class ChronometerRepository extends ChronometerRepositoriesAbstract {
   }
 
   @override
-  Future<dynamic> startRecord(String start, int idProject) async {
-    return await datasource.startRecord(start, idProject);
+  Future<dynamic> startRecord(String start, int idProject, int? idTask) async {
+    return await datasource.startRecord(start, idProject, idTask);
   }
 
   @override

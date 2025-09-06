@@ -65,7 +65,10 @@ Future<void> init() async {
     ),
   );
   sl.registerFactory(
-    () => ProjectChronometerBloc(getListProjectChronometerUseCase: sl()),
+    () => ProjectChronometerBloc(
+      getListProjectChronometerUseCase: sl(),
+      getListTaskUseCase: sl(),
+    ),
   );
   sl.registerFactory(
     () => ChronometerBloc(

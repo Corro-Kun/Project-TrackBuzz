@@ -10,8 +10,8 @@ class ChronometerService {
     return await repository.getCurrentRecord();
   }
 
-  Future<dynamic> startRecord(String start, int idProject) async {
-    return await repository.startRecord(start, idProject);
+  Future<dynamic> startRecord(String start, int idProject, int? idTask) async {
+    return await repository.startRecord(start, idProject, idTask);
   }
 
   Future<dynamic> stopRecord(int id, String finish) async {

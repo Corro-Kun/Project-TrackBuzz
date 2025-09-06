@@ -9,3 +9,18 @@ class SelectProject extends ProjectChronometerEvent {
 }
 
 class DeleteSelectProject extends ProjectChronometerEvent {}
+
+class SelectTask extends ProjectChronometerEvent {
+  final int id;
+
+  SelectTask({required this.id});
+}
+
+class DeleteTask extends ProjectChronometerEvent {}
+
+class InitProjectAndTask extends ProjectChronometerEvent {
+  final int idProject;
+  final int idTask;
+
+  InitProjectAndTask({required this.idProject, required this.idTask});
+}

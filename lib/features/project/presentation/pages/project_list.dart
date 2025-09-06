@@ -59,7 +59,8 @@ class ProjectList extends StatelessWidget {
                       child: Text(
                         state.projects.isNotEmpty
                             ? state.projects[state.index].title
-                            : 'No hay Proyectos',
+                            : loc?.translate('there_are_no_projects') ??
+                                  'There are no projects',
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
@@ -80,10 +81,10 @@ class ProjectList extends StatelessWidget {
                   } else if (state is ListProjectLoaded) {
                     return state.projects.isNotEmpty
                         ? Center(
-                          child: MainCard(
-                            img: state.projects[state.index].image,
-                          ),
-                        )
+                            child: MainCard(
+                              img: state.projects[state.index].image,
+                            ),
+                          )
                         : const SizedBox(height: 200);
                   } else {
                     return const SizedBox.shrink();
@@ -98,37 +99,38 @@ class ProjectList extends StatelessWidget {
                   } else if (state is ListProjectLoaded) {
                     return state.projects.isNotEmpty
                         ? Center(
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              final result = await Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder:
-                                      (_) => ProjectInformation(
-                                        id: state.projects[state.index].id,
-                                      ),
-                                ),
-                              );
-                              if (result == true) {
-                                context.read<ListProjectBloc>().add(
-                                  GetListProject(),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                final result = await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => ProjectInformation(
+                                      id: state.projects[state.index].id,
+                                    ),
+                                  ),
                                 );
-                              }
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: WidgetStateProperty.all(
-                                Theme.of(context).colorScheme.primary,
+                                if (result == true) {
+                                  context.read<ListProjectBloc>().add(
+                                    GetListProject(),
+                                  );
+                                }
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: WidgetStateProperty.all(
+                                  Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              child: Text(
+                                loc?.translate('see_information') ??
+                                    'See Information',
+                                style: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.secondary,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
-                            child: Text(
-                              loc?.translate('see_information') ??
-                                  'See Information',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        )
+                          )
                         : const SizedBox.shrink();
                   } else {
                     return const SizedBox.shrink();
@@ -148,12 +150,11 @@ class ProjectList extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         children: List.generate(state.projects.length, (i) {
                           return CircleCard(
-                            function:
-                                () => {
-                                  context.read<ListProjectBloc>().add(
-                                    SelectProject(index: i),
-                                  ),
-                                },
+                            function: () => {
+                              context.read<ListProjectBloc>().add(
+                                SelectProject(index: i),
+                              ),
+                            },
                             active: state.index == i ? true : false,
                             img: state.projects[i].image,
                           );
