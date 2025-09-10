@@ -8,6 +8,7 @@ import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_event.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_state.dart';
+import 'package:trackbuzz/shared/functions/message.dart';
 import 'package:trackbuzz/shared/functions/save_image.dart';
 import 'package:trackbuzz/shared/widgets/TextFieldDescription.dart';
 import 'package:trackbuzz/shared/widgets/pre_loader.dart';
@@ -32,6 +33,8 @@ class _ProjectUpdateState extends State<ProjectUpdate> {
   late ProjectBloc _projectBloc;
   bool loading = false;
 
+  String path = 'lib/assets/img/example';
+
   DecorationImage image = const DecorationImage(
     image: AssetImage('lib/assets/img/example'),
     fit: BoxFit.cover,
@@ -49,8 +52,8 @@ class _ProjectUpdateState extends State<ProjectUpdate> {
       UpdateProject(
         title: _titleController.text,
         description: _descriptionController.text,
-        img: !image.image.toString().contains('lib/assets/img/example')
-            ? await saveImage(image.image.toString().split('"')[1])
+        img: !path.contains('lib/assets/img/example')
+            ? await saveImage(path)
             : 'lib/assets/img/example',
       ),
     );
@@ -198,6 +201,7 @@ class _ProjectUpdateState extends State<ProjectUpdate> {
                       image: FileImage(File(state.project.image)),
                       fit: BoxFit.cover,
                     );
+                    path = state.project.image;
                   }
                   return GestureDetector(
                     onTap: () async {

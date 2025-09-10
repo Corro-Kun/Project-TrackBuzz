@@ -349,46 +349,55 @@ class _TimeTrackingState extends State<TimeTracking> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              SizedBox(width: 10),
-                              Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: DecorationImage(
-                                    image:
-                                        !state.projects[state.index ?? 0].image
-                                            .contains('lib/assets/img/example')
-                                        ? FileImage(
-                                            File(
+                          Expanded(
+                            child: Row(
+                              children: [
+                                SizedBox(width: 10),
+                                Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(
+                                      image:
+                                          !state
+                                              .projects[state.index ?? 0]
+                                              .image
+                                              .contains(
+                                                'lib/assets/img/example',
+                                              )
+                                          ? FileImage(
+                                              File(
+                                                state
+                                                    .projects[state.index ?? 0]
+                                                    .image,
+                                              ),
+                                            )
+                                          : AssetImage(
                                               state
                                                   .projects[state.index ?? 0]
                                                   .image,
                                             ),
-                                          )
-                                        : AssetImage(
-                                            state
-                                                .projects[state.index ?? 0]
-                                                .image,
-                                          ),
-                                    fit: BoxFit.cover,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                state.projects[state.index ?? 0].title,
-                                style: TextStyle(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.secondary,
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    state.projects[state.index ?? 0].title,
+                                    style: TextStyle(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.secondary,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
                                 ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ],
+                                SizedBox(width: 10),
+                              ],
+                            ),
                           ),
                           Row(
                             children: [
@@ -452,20 +461,25 @@ class _TimeTrackingState extends State<TimeTracking> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  SizedBox(width: 10),
-                                  Text(
-                                    state.tasks![state.indexTask ?? 0].name,
-                                    style: TextStyle(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.secondary,
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text(
+                                        state.tasks![state.indexTask ?? 0].name,
+                                        style: TextStyle(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.secondary,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
                                     ),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                ],
+                                    SizedBox(width: 10),
+                                  ],
+                                ),
                               ),
                               Row(
                                 children: [

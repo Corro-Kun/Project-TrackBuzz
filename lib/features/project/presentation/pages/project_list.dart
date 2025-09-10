@@ -55,16 +55,21 @@ class ProjectList extends StatelessWidget {
                   if (state is ListProjectLoading) {
                     return PreLoader();
                   } else if (state is ListProjectLoaded) {
-                    return Center(
-                      child: Text(
-                        state.projects.isNotEmpty
-                            ? state.projects[state.index].title
-                            : loc?.translate('there_are_no_projects') ??
-                                  'There are no projects',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.secondary,
+                    return Container(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child: Center(
+                        child: Text(
+                          state.projects.isNotEmpty
+                              ? state.projects[state.index].title
+                              : loc?.translate('there_are_no_projects') ??
+                                    'There are no projects',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                         ),
                       ),
                     );

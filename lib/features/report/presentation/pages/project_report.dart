@@ -156,41 +156,50 @@ class ProjectReport extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    SizedBox(width: 10),
-                                    Container(
-                                      height: 50,
-                                      width: 50,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        image: DecorationImage(
-                                          image:
-                                              !imageProjects[ids[i]]!.contains(
-                                                'lib/assets/img/example',
-                                              )
-                                              ? FileImage(
-                                                  File(imageProjects[ids[i]]!),
-                                                )
-                                              : AssetImage(
-                                                  imageProjects[ids[i]]!,
-                                                ),
-                                          fit: BoxFit.cover,
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: 10),
+                                      Container(
+                                        height: 50,
+                                        width: 50,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          image: DecorationImage(
+                                            image:
+                                                !imageProjects[ids[i]]!
+                                                    .contains(
+                                                      'lib/assets/img/example',
+                                                    )
+                                                ? FileImage(
+                                                    File(
+                                                      imageProjects[ids[i]]!,
+                                                    ),
+                                                  )
+                                                : AssetImage(
+                                                    imageProjects[ids[i]]!,
+                                                  ),
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      titleProjects[ids[i]]!,
-                                      style: TextStyle(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.secondary,
+                                      SizedBox(width: 10),
+                                      Expanded(
+                                        child: Text(
+                                          titleProjects[ids[i]]!,
+                                          style: TextStyle(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.secondary,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
                                       ),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                                 Row(
                                   children: [
