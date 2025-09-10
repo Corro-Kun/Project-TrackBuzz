@@ -30,9 +30,7 @@ class _CreateProjectState extends State<CreateProject> {
   bool loading = false;
 
   DecorationImage image = const DecorationImage(
-    image: NetworkImage(
-      'https://static.wikia.nocookie.net/rezero/images/e/ea/Rem_motivando_a_Subaru.gif/revision/latest?cb=20170809212028&path-prefix=es',
-    ),
+    image: AssetImage('lib/assets/img/example'),
     fit: BoxFit.cover,
   );
 
@@ -58,7 +56,7 @@ class _CreateProjectState extends State<CreateProject> {
   }
 
   Future<void> _create(String error) async {
-    if (_titleController.text.isEmpty || _imagePath.isEmpty) {
+    if (_titleController.text.isEmpty) {
       message(context, error);
       return;
     }
@@ -68,7 +66,9 @@ class _CreateProjectState extends State<CreateProject> {
       _descriptionController.text.isNotEmpty
           ? _descriptionController.text
           : null,
-      await saveImage(_imagePath),
+      _imagePath.isNotEmpty
+          ? await saveImage(_imagePath)
+          : 'lib/assets/img/example',
     );
     Navigator.pop(context, true);
   }
@@ -98,23 +98,6 @@ class _CreateProjectState extends State<CreateProject> {
           : null,
       body: Column(
         children: [
-          SizedBox(height: 20),
-          GestureDetector(
-            onTap: () => _pickImage(),
-            child: Container(
-              height: 200,
-              width: 250,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                border: BoxBorder.all(
-                  width: 1,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                image: image,
-              ),
-              clipBehavior: Clip.hardEdge,
-            ),
-          ),
           Container(
             padding: const EdgeInsets.only(
               right: 20,
@@ -154,6 +137,23 @@ class _CreateProjectState extends State<CreateProject> {
           Padding(
             padding: const EdgeInsets.only(right: 20, left: 20),
             child: TextFieldDescription(controller: _descriptionController),
+          ),
+          SizedBox(height: 20),
+          GestureDetector(
+            onTap: () => _pickImage(),
+            child: Container(
+              height: 200,
+              width: 250,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                border: BoxBorder.all(
+                  width: 1,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                image: image,
+              ),
+              clipBehavior: Clip.hardEdge,
+            ),
           ),
         ],
       ),

@@ -360,7 +360,7 @@ class _TimeTrackingState extends State<TimeTracking> {
                                   image: DecorationImage(
                                     image:
                                         !state.projects[state.index ?? 0].image
-                                            .contains('https:')
+                                            .contains('lib/assets/img/example')
                                         ? FileImage(
                                             File(
                                               state
@@ -368,7 +368,7 @@ class _TimeTrackingState extends State<TimeTracking> {
                                                   .image,
                                             ),
                                           )
-                                        : NetworkImage(
+                                        : AssetImage(
                                             state
                                                 .projects[state.index ?? 0]
                                                 .image,

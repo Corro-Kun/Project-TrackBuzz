@@ -41,10 +41,9 @@ class MainCard extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 image: DecorationImage(
-                  image:
-                      !img.contains('https:')
-                          ? FileImage(File(img))
-                          : NetworkImage(img),
+                  image: !img.contains('lib/assets/img/example')
+                      ? FileImage(File(img))
+                      : AssetImage(img),
                   fit: BoxFit.cover,
                 ),
               ),

@@ -33,9 +33,7 @@ class _ProjectUpdateState extends State<ProjectUpdate> {
   bool loading = false;
 
   DecorationImage image = const DecorationImage(
-    image: NetworkImage(
-      'https://static.wikia.nocookie.net/rezero/images/e/ea/Rem_motivando_a_Subaru.gif/revision/latest?cb=20170809212028&path-prefix=es',
-    ),
+    image: AssetImage('lib/assets/img/example'),
     fit: BoxFit.cover,
   );
 
@@ -51,7 +49,9 @@ class _ProjectUpdateState extends State<ProjectUpdate> {
       UpdateProject(
         title: _titleController.text,
         description: _descriptionController.text,
-        img: await saveImage(image.image.toString().split('"')[1]),
+        img: !image.image.toString().contains('lib/assets/img/example')
+            ? await saveImage(image.image.toString().split('"')[1])
+            : 'lib/assets/img/example',
       ),
     );
     Navigator.pop(context, true);
@@ -90,47 +90,6 @@ class _ProjectUpdateState extends State<ProjectUpdate> {
             : null,
         body: Column(
           children: [
-            SizedBox(height: 20),
-            BlocBuilder<ProjectBloc, ProjectState>(
-              builder: (contextBloc, state) {
-                if (state is ProjectLoading) {
-                  return PreLoader();
-                } else if (state is ProjectLoaded) {
-                  image = DecorationImage(
-                    image: FileImage(File(state.project.image)),
-                    fit: BoxFit.cover,
-                  );
-                  return GestureDetector(
-                    onTap: () async {
-                      final pickedFile = await _picker.pickImage(
-                        source: ImageSource.gallery,
-                      );
-                      if (pickedFile == null) {
-                        return;
-                      }
-                      contextBloc.read<ProjectBloc>().add(
-                        UpdateImage(path: pickedFile.path),
-                      );
-                    },
-                    child: Container(
-                      height: 200,
-                      width: 250,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        border: BoxBorder.all(
-                          width: 1,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        image: image,
-                      ),
-                      clipBehavior: Clip.hardEdge,
-                    ),
-                  );
-                } else {
-                  return SizedBox.shrink();
-                }
-              },
-            ),
             Container(
               padding: const EdgeInsets.only(
                 right: 20,
@@ -227,6 +186,49 @@ class _ProjectUpdateState extends State<ProjectUpdate> {
                   }
                 },
               ),
+            ),
+            SizedBox(height: 20),
+            BlocBuilder<ProjectBloc, ProjectState>(
+              builder: (contextBloc, state) {
+                if (state is ProjectLoading) {
+                  return PreLoader();
+                } else if (state is ProjectLoaded) {
+                  if (!state.project.image.contains('lib/assets/img/example')) {
+                    image = DecorationImage(
+                      image: FileImage(File(state.project.image)),
+                      fit: BoxFit.cover,
+                    );
+                  }
+                  return GestureDetector(
+                    onTap: () async {
+                      final pickedFile = await _picker.pickImage(
+                        source: ImageSource.gallery,
+                      );
+                      if (pickedFile == null) {
+                        return;
+                      }
+                      contextBloc.read<ProjectBloc>().add(
+                        UpdateImage(path: pickedFile.path),
+                      );
+                    },
+                    child: Container(
+                      height: 200,
+                      width: 250,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        border: BoxBorder.all(
+                          width: 1,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        image: image,
+                      ),
+                      clipBehavior: Clip.hardEdge,
+                    ),
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
             ),
           ],
         ),

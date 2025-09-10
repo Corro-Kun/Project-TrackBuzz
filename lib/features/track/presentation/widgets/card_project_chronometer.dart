@@ -41,9 +41,9 @@ class CardProjectChronometer extends StatelessWidget {
                   ),
                 ],
                 image: DecorationImage(
-                  image: !img.contains('https:')
+                  image: !img.contains('lib/assets/img/example')
                       ? FileImage(File(img))
-                      : NetworkImage(img),
+                      : AssetImage(img),
                   fit: BoxFit.cover,
                 ),
               ),

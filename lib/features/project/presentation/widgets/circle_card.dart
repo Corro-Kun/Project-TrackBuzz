@@ -23,22 +23,20 @@ class CircleCard extends StatelessWidget {
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          boxShadow:
-              active
-                  ? [
-                    BoxShadow(
-                      color: Theme.of(context).colorScheme.primary,
-                      blurRadius: 5,
-                      spreadRadius: 0.0,
-                    ),
-                  ]
-                  : [],
+          boxShadow: active
+              ? [
+                  BoxShadow(
+                    color: Theme.of(context).colorScheme.primary,
+                    blurRadius: 5,
+                    spreadRadius: 0.0,
+                  ),
+                ]
+              : [],
         ),
         clipBehavior: Clip.hardEdge,
-        child:
-            !img.contains('https:')
-                ? Image.file(File(img))
-                : Image.network(img),
+        child: !img.contains('lib/assets/img/example')
+            ? Image.file(File(img))
+            : Image.asset(img),
       ),
     );
   }

@@ -27,9 +27,9 @@ class AppBarTask extends StatelessWidget implements PreferredSizeWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             image: DecorationImage(
-              image: !img.contains('https:')
+              image: !img.contains('lib/assets/img/example')
                   ? FileImage(File(img))
-                  : NetworkImage(img),
+                  : AssetImage(img),
               fit: BoxFit.cover,
             ),
           ),

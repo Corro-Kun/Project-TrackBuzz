@@ -95,13 +95,6 @@ class ProjectReport extends StatelessWidget {
                 },
               ),
             ),
-            Container(
-              margin: const EdgeInsets.all(20),
-              child: AdjustmentsAnnounced(
-                icon: CupertinoIcons.circle_grid_hex_fill,
-                text: loc?.translate('percentage_report') ?? 'Percentage:',
-              ),
-            ),
             BlocBuilder<ReportBloc, ReportState>(
               builder: (context, state) {
                 if (state is ReportLoading) {
@@ -131,80 +124,95 @@ class ProjectReport extends StatelessWidget {
                   }
 
                   return Column(
-                    children: List.generate(ids.length, (i) {
-                      return Container(
-                        height: 70,
-                        margin: EdgeInsets.only(
-                          right: 20,
-                          left: 20,
-                          top: 5,
-                          bottom: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: BoxBorder.all(
-                            width: 1,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
+                    children: [
+                      ids.isNotEmpty
+                          ? Container(
+                              margin: const EdgeInsets.all(20),
+                              child: AdjustmentsAnnounced(
+                                icon: CupertinoIcons.circle_grid_hex_fill,
+                                text:
+                                    loc?.translate('percentage_report') ??
+                                    'Percentage:',
+                              ),
+                            )
+                          : SizedBox.shrink(),
+                      Column(
+                        children: List.generate(ids.length, (i) {
+                          return Container(
+                            height: 70,
+                            margin: EdgeInsets.only(
+                              right: 20,
+                              left: 20,
+                              top: 5,
+                              bottom: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: BoxBorder.all(
+                                width: 1,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(width: 10),
-                                Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(
-                                      image:
-                                          !imageProjects[ids[i]]!.contains(
-                                            'https:',
-                                          )
-                                          ? FileImage(
-                                              File(imageProjects[ids[i]]!),
-                                            )
-                                          : NetworkImage(
-                                              imageProjects[ids[i]]!,
-                                            ),
-                                      fit: BoxFit.cover,
+                                Row(
+                                  children: [
+                                    SizedBox(width: 10),
+                                    Container(
+                                      height: 50,
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        image: DecorationImage(
+                                          image:
+                                              !imageProjects[ids[i]]!.contains(
+                                                'lib/assets/img/example',
+                                              )
+                                              ? FileImage(
+                                                  File(imageProjects[ids[i]]!),
+                                                )
+                                              : AssetImage(
+                                                  imageProjects[ids[i]]!,
+                                                ),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      titleProjects[ids[i]]!,
+                                      style: TextStyle(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.secondary,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(width: 10),
-                                Text(
-                                  titleProjects[ids[i]]!,
-                                  style: TextStyle(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.secondary,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
+                                Row(
+                                  children: [
+                                    Text(
+                                      '${((seconds[ids[i]]! / state.seconds) * 100).toStringAsFixed(1)}%',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                  ],
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                Text(
-                                  '${((seconds[ids[i]]! / state.seconds) * 100).toStringAsFixed(1)}%',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(width: 10),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
+                          );
+                        }),
+                      ),
+                    ],
                   );
                 } else {
                   return const SizedBox.shrink();

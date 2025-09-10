@@ -19,8 +19,7 @@ class DataBase {
         );
         db.insert('project', {
           'title': 'do nothing',
-          'image':
-              'https://static.wikia.nocookie.net/rezero/images/e/ea/Rem_motivando_a_Subaru.gif/revision/latest?cb=20170809212028&path-prefix=es',
+          'image': 'lib/assets/img/example',
         });
         db.insert('project_settings', {'id_project': 1});
       },
