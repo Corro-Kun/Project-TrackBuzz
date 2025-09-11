@@ -29,7 +29,8 @@ class TimeTracking extends StatefulWidget {
   State<TimeTracking> createState() => _TimeTrackingState();
 }
 
-class _TimeTrackingState extends State<TimeTracking> {
+class _TimeTrackingState extends State<TimeTracking>
+    with WidgetsBindingObserver {
   int _seconds = 0;
   bool _isRunning = false;
   Timer? _timer;
@@ -39,6 +40,7 @@ class _TimeTrackingState extends State<TimeTracking> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _chronometerBloc = sl<ChronometerBloc>();
     //_startBackgroundService();
   }
@@ -130,8 +132,21 @@ class _TimeTrackingState extends State<TimeTracking> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _timer?.cancel();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      _timer?.cancel();
+      _chronometerBloc.add(GetCurrent());
+      setState(() {
+        _hasCalculated = false;
+      });
+    }
   }
 
   @override
