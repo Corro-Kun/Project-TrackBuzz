@@ -191,42 +191,43 @@ class _TimeTrackingState extends State<TimeTracking>
                     ProjectChronometerState
                   >(
                     builder: (context, state) {
-                      if (chronometerState.record != null && !_hasCalculated) {
-                        if (chronometerState.record?.idTask != null) {
-                          context.read<ProjectChronometerBloc>().add(
-                            InitProjectAndTask(
-                              idProject:
-                                  chronometerState.record?.idProject ?? 0,
-                              idTask: chronometerState.record?.idTask ?? 0,
-                            ),
-                          );
-                        } else {
-                          context.read<ProjectChronometerBloc>().add(
-                            SelectProject(
-                              id: chronometerState.record?.idProject ?? 0,
-                            ),
-                          );
-                        }
-
-                        final lastSaved = DateTime.parse(
-                          chronometerState.record?.start ?? '',
-                        );
-                        final now = DateTime.now();
-
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (mounted) {
-                            setState(() {
-                              _seconds = now.difference(lastSaved).inSeconds;
-                              _isRunning = true;
-                            });
-                            _initTimer();
-                          }
-                        });
-                      }
-                      _hasCalculated = true;
                       if (state is ProjectChronometerLoading) {
                         return PreLoader();
                       } else if (state is ProjectChronometerLoaded) {
+                        if (chronometerState.record != null &&
+                            !_hasCalculated) {
+                          if (chronometerState.record?.idTask != null) {
+                            context.read<ProjectChronometerBloc>().add(
+                              InitProjectAndTask(
+                                idProject:
+                                    chronometerState.record?.idProject ?? 0,
+                                idTask: chronometerState.record?.idTask ?? 0,
+                              ),
+                            );
+                          } else {
+                            context.read<ProjectChronometerBloc>().add(
+                              SelectProject(
+                                id: chronometerState.record?.idProject ?? 0,
+                              ),
+                            );
+                          }
+
+                          final lastSaved = DateTime.parse(
+                            chronometerState.record?.start ?? '',
+                          );
+                          final now = DateTime.now();
+
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            if (mounted) {
+                              setState(() {
+                                _seconds = now.difference(lastSaved).inSeconds;
+                                _isRunning = true;
+                              });
+                              _initTimer();
+                            }
+                          });
+                        }
+                        _hasCalculated = true;
                         return Center(
                           child: GestureDetector(
                             onTap: () {

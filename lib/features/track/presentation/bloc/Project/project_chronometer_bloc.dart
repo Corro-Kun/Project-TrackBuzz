@@ -133,6 +133,13 @@ class ProjectChronometerBloc
         }
       }
 
+      emit(
+        ProjectChronometerLoaded(
+          projects: currentState.projects,
+          index: indexProject,
+        ),
+      );
+
       final tasks = await getListTaskUseCase.execute(event.idProject);
 
       int? indexTask;
