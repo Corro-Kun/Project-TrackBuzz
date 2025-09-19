@@ -14,7 +14,7 @@ class AdjustmentsAnnounced extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, color: Theme.of(context).colorScheme.secondary),
-        SizedBox(width: 5),
+        const SizedBox(width: 5),
         Text(
           text,
           style: TextStyle(

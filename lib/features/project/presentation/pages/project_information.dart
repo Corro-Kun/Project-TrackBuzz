@@ -105,11 +105,11 @@ class _ProjectInformationState extends State<ProjectInformation>
                     BlocBuilder<ProjectBloc, ProjectState>(
                       builder: (context, state) {
                         if (state is ProjectLoading) {
-                          return PreLoader();
+                          return const PreLoader();
                         } else if (state is ProjectLoaded) {
                           return PictureProject(img: state.project.image);
                         } else {
-                          return SizedBox.shrink();
+                          return const SizedBox.shrink();
                         }
                       },
                     ),
@@ -117,7 +117,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                     BlocBuilder<RecordBloc, RecordState>(
                       builder: (context, state) {
                         if (state is RecordLoading) {
-                          return PreLoader();
+                          return const PreLoader();
                         } else if (state is RecordLoaded) {
                           return Text(
                             timeFormatRecord(state.seconds),
@@ -128,7 +128,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                             ),
                           );
                         } else {
-                          return SizedBox.shrink();
+                          return const SizedBox.shrink();
                         }
                       },
                     ),
@@ -155,7 +155,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                   BlocBuilder<RecordBloc, RecordState>(
                     builder: (context, state) {
                       if (state is RecordLoading) {
-                        return PreLoader();
+                        return const PreLoader();
                       } else if (state is RecordLoaded) {
                         List<String> totals = [];
                         int secondsTemp = 0;
@@ -246,7 +246,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                         });
                         return ListView(children: data);
                       } else {
-                        return SizedBox.shrink();
+                        return const SizedBox.shrink();
                       }
                     },
                   ),
@@ -271,7 +271,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                   ? Column(
                       children: [
                         Container(
-                          margin: EdgeInsets.all(20),
+                          margin: const EdgeInsets.all(20),
                           child: AdjustmentsAnnounced(
                             icon: CupertinoIcons.text_aligncenter,
                             text:
@@ -280,7 +280,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 20, right: 20),
+                          margin: const EdgeInsets.only(left: 20, right: 20),
                           child: Center(
                             child: Text(
                               state.project.description ?? '',
@@ -295,7 +295,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                         ),
                       ],
                     )
-                  : SizedBox.shrink();
+                  : const SizedBox.shrink();
             } else {
               return SizedBox.shrink();
             }
@@ -309,7 +309,7 @@ class _ProjectInformationState extends State<ProjectInformation>
               return BlocBuilder<SettingProjectBloc, SettingProjectState>(
                 builder: (contextBloc, state) {
                   if (state is SettingProjectLoading) {
-                    return PreLoader();
+                    return const PreLoader();
                   } else if (state is SettingProjectLoaded) {
                     if (state.setting.bill == 1) {
                       final total =
@@ -320,7 +320,7 @@ class _ProjectInformationState extends State<ProjectInformation>
 
                       final List<Widget> list = [
                         Container(
-                          margin: EdgeInsets.all(20),
+                          margin: const EdgeInsets.all(20),
                           child: AdjustmentsAnnounced(
                             icon: CupertinoIcons.money_dollar_circle,
                             text: loc?.translate('billing') ?? 'Billing:',
@@ -332,15 +332,15 @@ class _ProjectInformationState extends State<ProjectInformation>
                       ];
                       return Column(children: list);
                     } else {
-                      return SizedBox.shrink();
+                      return const SizedBox.shrink();
                     }
                   } else {
-                    return SizedBox.shrink();
+                    return const SizedBox.shrink();
                   }
                 },
               );
             } else {
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             }
           },
         ),
@@ -354,10 +354,10 @@ class _ProjectInformationState extends State<ProjectInformation>
         BlocBuilder<RecordBloc, RecordState>(
           builder: (context, state) {
             if (state is RecordLoading) {
-              return PreLoader();
+              return const PreLoader();
             } else if (state is RecordLoaded) {
               return Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   right: 20,
                   left: 20,
                   top: 5,
@@ -366,14 +366,14 @@ class _ProjectInformationState extends State<ProjectInformation>
                 child: Activity(dateList: state.records),
               );
             } else {
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             }
           },
         ),
         BlocBuilder<RecordBloc, RecordState>(
           builder: (context, state) {
             if (state is RecordLoading) {
-              return PreLoader();
+              return const PreLoader();
             } else if (state is RecordLoaded) {
               final timeMap = <String, int>{};
               final nameList = [];
@@ -393,7 +393,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                 return Column(
                   children: [
                     Container(
-                      margin: EdgeInsets.all(20),
+                      margin: const EdgeInsets.all(20),
                       child: AdjustmentsAnnounced(
                         icon: CupertinoIcons.rectangle_paperclip,
                         text: loc?.translate('tasks') ?? 'Tasks:',
@@ -410,10 +410,10 @@ class _ProjectInformationState extends State<ProjectInformation>
                   ],
                 );
               } else {
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               }
             } else {
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             }
           },
         ),

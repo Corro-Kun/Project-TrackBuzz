@@ -138,7 +138,7 @@ class _CreateProjectState extends State<CreateProject> {
             padding: const EdgeInsets.only(right: 20, left: 20),
             child: TextFieldDescription(controller: _descriptionController),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           GestureDetector(
             onTap: () => _pickImage(),
             child: Container(

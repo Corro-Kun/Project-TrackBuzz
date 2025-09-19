@@ -44,7 +44,7 @@ class TimeWidget extends StatelessWidget {
                       maxLines: 2,
                     ),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                 ],
               ),
             ),

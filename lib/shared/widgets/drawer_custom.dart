@@ -6,6 +6,7 @@ import 'package:trackbuzz/core/setting/locale_notifier.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
 import 'package:trackbuzz/shared/widgets/adjustments_announced.dart';
 import 'package:trackbuzz/shared/widgets/change_color.dart';
+import 'package:trackbuzz/shared/widgets/switch_custom.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class DrawerCustom extends StatelessWidget {
@@ -20,7 +21,7 @@ class DrawerCustom extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Center(
               child: Icon(
                 CupertinoIcons.settings,
@@ -28,7 +29,7 @@ class DrawerCustom extends StatelessWidget {
                 color: Theme.of(context).colorScheme.secondary,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Center(
               child: Text(
                 loc?.translate('settings') ?? 'Settings',
@@ -97,6 +98,31 @@ class DrawerCustom extends StatelessWidget {
                     ).setLocale(Locale(value));
                   }
                 },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        CupertinoIcons.bell,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        loc?.translate('notifications') ?? 'Notifications',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SwitchCustom(light: false, onChanged: (value) {}),
+                ],
               ),
             ),
             Padding(
@@ -286,6 +312,7 @@ class DrawerCustom extends StatelessWidget {
                 ),
               ),
             ),
+
             Padding(
               padding: const EdgeInsets.all(20),
               child: AdjustmentsAnnounced(

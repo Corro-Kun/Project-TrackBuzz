@@ -16,6 +16,7 @@ class AppLocalizationsEs {
     // -
     'settings': 'Ajustes',
     'language': 'Idioma',
+    'notifications': 'Notificaciones',
     'personalize': 'Personalizar',
     'main_color': 'Color Principal',
     'text_color': 'Color Texto',

@@ -4,6 +4,8 @@ class RecordDatasource {
   Future<List<Map<String, dynamic>>> getRecord(int id) async {
     final db = await DataBase().OpenDB();
 
+    //final stopwatch = Stopwatch()..start();
+
     final data = await db.rawQuery(
       '''
   SELECT r.*, t.name as task_name 
@@ -14,6 +16,9 @@ class RecordDatasource {
 ''',
       [id, 0],
     );
+
+    //print('Consulta tomó: ${stopwatch.elapsedMilliseconds}ms');
+    //print('Resultados: ${data.length}');
 
     return data;
   }

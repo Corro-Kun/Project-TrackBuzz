@@ -53,7 +53,7 @@ class ProjectList extends StatelessWidget {
               BlocBuilder<ListProjectBloc, ListProjectState>(
                 builder: (context, state) {
                   if (state is ListProjectLoading) {
-                    return PreLoader();
+                    return const PreLoader();
                   } else if (state is ListProjectLoaded) {
                     return Container(
                       padding: EdgeInsets.only(left: 20, right: 20),
@@ -82,7 +82,7 @@ class ProjectList extends StatelessWidget {
               BlocBuilder<ListProjectBloc, ListProjectState>(
                 builder: (context, state) {
                   if (state is ListProjectLoading) {
-                    return PreLoader();
+                    return const PreLoader();
                   } else if (state is ListProjectLoaded) {
                     return state.projects.isNotEmpty
                         ? Center(
@@ -100,7 +100,7 @@ class ProjectList extends StatelessWidget {
               BlocBuilder<ListProjectBloc, ListProjectState>(
                 builder: (context, state) {
                   if (state is ListProjectLoading) {
-                    return PreLoader();
+                    return const PreLoader();
                   } else if (state is ListProjectLoaded) {
                     return state.projects.isNotEmpty
                         ? Center(
@@ -146,14 +146,15 @@ class ProjectList extends StatelessWidget {
               BlocBuilder<ListProjectBloc, ListProjectState>(
                 builder: (context, state) {
                   if (state is ListProjectLoading) {
-                    return PreLoader();
+                    return const PreLoader();
                   } else if (state is ListProjectLoaded) {
                     return Container(
                       margin: const EdgeInsets.only(bottom: 40),
                       height: 65,
-                      child: ListView(
+                      child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        children: List.generate(state.projects.length, (i) {
+                        itemCount: state.projects.length,
+                        itemBuilder: (context, i) {
                           return CircleCard(
                             function: () => {
                               context.read<ListProjectBloc>().add(
@@ -163,7 +164,9 @@ class ProjectList extends StatelessWidget {
                             active: state.index == i ? true : false,
                             img: state.projects[i].image,
                           );
-                        }),
+                        },
+                        cacheExtent: 1000,
+                        addAutomaticKeepAlives: true,
                       ),
                     );
                   } else {
