@@ -18,6 +18,8 @@ class ChronometerDatasource {
       'id_project': idProject,
       'id_task': idTask,
     }, conflictAlgorithm: ConflictAlgorithm.replace);
+
+    final now = DateTime.now();
   }
 
   Future<dynamic> stopRecord(int id, String finish) async {

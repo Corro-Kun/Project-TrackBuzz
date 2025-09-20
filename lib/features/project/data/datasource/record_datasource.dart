@@ -22,4 +22,29 @@ class RecordDatasource {
 
     return data;
   }
+
+  Future<int> getSeconds(int id) async {
+    final db = await DataBase().OpenDB();
+
+    //final stopwatch = Stopwatch()..start();
+
+    final result = await db.rawQuery(
+      '''
+      SELECT COALESCE(SUM(
+      CASE 
+        WHEN finish IS NOT NULL AND active = 1 THEN 
+          (strftime('%s', finish) - strftime('%s', start))
+        ELSE 0 
+      END
+    ), 0) as total_seconds
+    FROM record 
+    WHERE id_project = ?
+      ''',
+      [id],
+    );
+
+    //print('Consulta tomó: ${stopwatch.elapsedMilliseconds}ms');
+
+    return result.first['total_seconds'] as int? ?? 0;
+  }
 }

@@ -14,4 +14,9 @@ class RecordRepository extends RecordRepositoryAbstract {
       return RecordModel.fromJson(data[i]);
     });
   }
+
+  @override
+  Future<int> getSeconds(int id) async {
+    return await datasource.getSeconds(id);
+  }
 }

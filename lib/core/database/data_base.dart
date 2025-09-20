@@ -17,11 +17,25 @@ class DataBase {
         db.execute(
           'CREATE TABLE record(id INTEGER PRIMARY KEY, start TEXT, finish TEXT DEFAULT NULL, active INTEGER DEFAULT 1, id_task INTEGER DEFAULT NULL, id_project INTEGER, FOREIGN KEY(id_task) REFERENCES task(id), FOREIGN KEY(id_project) REFERENCES project(id))',
         );
+        db.execute(
+          'CREATE TABLE total(id INTEGER PRIMARY KEY, second INTEGER, activity INTEGER, id_project INTEGER, FOREIGN KEY(id_project) REFERENCES project(id))',
+        );
+        db.execute(
+          'CREATE TABLE activity(id INTEGER PRIMARY KEY, date TEXT, activity INTEGER, second INTEGER, id_project INTEGER, FOREIGN KEY(id_project) REFERENCES project(id))',
+        );
+        db.execute(
+          'CREATE INDEX idx_record_project_active ON record(id_project, active)',
+        );
+        db.execute('CREATE INDEX idx_record_start ON record(start)');
+        db.execute(
+          'CREATE INDEX idx_record_project_task ON record(id_project, id_task)',
+        );
         db.insert('project', {
           'title': 'do nothing',
           'image': 'lib/assets/img/example',
         });
         db.insert('project_settings', {'id_project': 1});
+        db.insert('total', {'second': 0, 'activity': 0, 'id_project': 1});
       },
 
       version: 1,

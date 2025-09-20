@@ -32,6 +32,12 @@ class ProjectDatasource {
     await db.insert('project_settings', {
       'id_project': id,
     }, conflictAlgorithm: ConflictAlgorithm.replace);
+
+    await db.insert('total', {
+      'second': 0,
+      'activity': 0,
+      'id_project': id,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<dynamic> updateProject(
@@ -60,6 +66,7 @@ class ProjectDatasource {
       where: 'id_project = ?',
       whereArgs: [id],
     );
+    await db.delete('total', where: 'id_project = ?', whereArgs: [id]);
     await db.delete('project', where: 'id = ?', whereArgs: [id]);
   }
 }
