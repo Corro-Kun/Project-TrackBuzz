@@ -5,7 +5,12 @@ class StopRecordChronometerUseCase {
 
   StopRecordChronometerUseCase(this.service);
 
-  Future<dynamic> execute(int id, String finish) async {
-    return await service.stopRecord(id, finish);
+  Future<dynamic> execute(
+    int id,
+    String finish,
+    String start,
+    int idProject,
+  ) async {
+    return await service.stopRecord(id, finish, start, idProject);
   }
 }

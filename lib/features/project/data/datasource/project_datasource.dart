@@ -5,13 +5,25 @@ class ProjectDatasource {
   Future<List<Map<String, dynamic>>> getProjects() async {
     final db = await DataBase().OpenDB();
 
-    return await db.query('project');
+    return await db.rawQuery("""
+        SELECT p.*, t.second, t.activity
+        FROM project p
+        JOIN total t ON t.id_project = p.id
+      """);
   }
 
   Future<Map<String, dynamic>> getProject(int id) async {
     final db = await DataBase().OpenDB();
 
-    final data = await db.query('project', where: 'id = ?', whereArgs: [id]);
+    final data = await db.rawQuery(
+      """
+        SELECT p.*, t.second, t.activity
+        FROM project p
+        JOIN total t ON t.id_project = p.id
+        WHERE p.id = ?
+      """,
+      [id],
+    );
 
     return data[0];
   }

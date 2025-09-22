@@ -7,10 +7,9 @@ class RecordInitial extends RecordState {}
 class RecordLoading extends RecordState {}
 
 class RecordLoaded extends RecordState {
-  final int seconds;
   final List<RecordModel> records;
 
-  RecordLoaded({required this.records, required this.seconds});
+  RecordLoaded({required this.records});
 }
 
 class RecordError extends RecordState {

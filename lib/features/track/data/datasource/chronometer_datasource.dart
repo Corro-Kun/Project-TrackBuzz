@@ -18,11 +18,14 @@ class ChronometerDatasource {
       'id_project': idProject,
       'id_task': idTask,
     }, conflictAlgorithm: ConflictAlgorithm.replace);
-
-    final now = DateTime.now();
   }
 
-  Future<dynamic> stopRecord(int id, String finish) async {
+  Future<dynamic> stopRecord(
+    int id,
+    String finish,
+    String start,
+    int idProject,
+  ) async {
     final db = await DataBase().OpenDB();
 
     await db.update(
@@ -30,6 +33,53 @@ class ChronometerDatasource {
       {'finish': finish, 'active': 0},
       where: 'id = ?',
       whereArgs: [id],
+    );
+
+    final date = finish.substring(0, finish.indexOf('T'));
+
+    final second = DateTime.parse(
+      finish,
+    ).difference(DateTime.parse(start)).inSeconds;
+
+    final data = await db.query(
+      'activity',
+      where: 'date = ?',
+      whereArgs: [date],
+    );
+
+    if (data.isEmpty) {
+      await db.insert('activity', {
+        'activity': 1,
+        'date': date,
+        'second': second,
+        'id_project': idProject,
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+    } else {
+      final activity = data.first['activity'] as int;
+      final activitySecond = data.first['activity'] as int;
+
+      await db.update(
+        'activity',
+        {'activity': activity + 1, 'second': activitySecond + second},
+        where: 'date = ?',
+        whereArgs: [date],
+      );
+    }
+
+    final dataTotal = await db.query(
+      'total',
+      where: 'id_project = ?',
+      whereArgs: [idProject],
+    );
+
+    final totalSecond = dataTotal.first['second'] as int;
+    final totalActivity = dataTotal.first['activity'] as int;
+
+    await db.update(
+      'total',
+      {'second': totalSecond + second, 'activity': totalActivity + 1},
+      where: 'id_project = ?',
+      whereArgs: [idProject],
     );
   }
 }

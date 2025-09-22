@@ -1,29 +1,23 @@
-class ProjectModel {
+class TotalReportModel {
   int id;
   String title;
-  String? description;
   String image;
-  int state;
   int second;
   int activity;
 
-  ProjectModel({
+  TotalReportModel({
     required this.id,
     required this.title,
-    this.description,
     required this.image,
-    required this.state,
     required this.second,
     required this.activity,
   });
 
-  factory ProjectModel.fromJson(Map<String, dynamic> json) {
-    return ProjectModel(
+  factory TotalReportModel.fromJson(Map<String, dynamic> json) {
+    return TotalReportModel(
       id: json['id'],
       title: json['title'],
-      description: json['description'],
       image: json['image'],
-      state: json['state'],
       second: json['second'],
       activity: json['activity'],
     );
@@ -33,9 +27,7 @@ class ProjectModel {
     return {
       'id': id,
       'title': title,
-      'description': description,
       'image': image,
-      'state': state,
       'second': second,
       'activity': activity,
     };

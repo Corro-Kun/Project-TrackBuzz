@@ -19,15 +19,7 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
     emit(RecordLoading());
     try {
       final records = await getRecordOfProjectUseCase.execute(event.id);
-      //final seconds = await getSecondsUseCase.execute(event.id);
-      int seconds = 0;
-      for (var i = 0; i < records.length; i++) {
-        final finishSaved = DateTime.parse(records[i].finish ?? '');
-        seconds += finishSaved
-            .difference(DateTime.parse(records[i].start))
-            .inSeconds;
-      }
-      emit(RecordLoaded(records: records, seconds: seconds));
+      emit(RecordLoaded(records: records));
     } catch (e) {
       emit(RecordError(message: e.toString()));
     }

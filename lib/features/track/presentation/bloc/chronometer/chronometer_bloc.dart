@@ -54,8 +54,14 @@ class ChronometerBloc extends Bloc<ChronometerEvent, ChronometerState> {
     StopRecord event,
     Emitter<ChronometerState> emit,
   ) async {
+    final currentState = state as ChronometerLoaded;
     try {
-      await stopRecordChronometerUseCase.execute(event.id, event.finish);
+      await stopRecordChronometerUseCase.execute(
+        event.id,
+        event.finish,
+        event.start,
+        currentState.record!.idProject,
+      );
       emit(ChronometerLoaded(record: null));
     } catch (e) {
       emit(ChronometerError(message: e.toString()));

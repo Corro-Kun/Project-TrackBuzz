@@ -119,14 +119,18 @@ class _TimeTrackingState extends State<TimeTracking>
     });
   }
 
-  void _stopCounter(int id) {
+  void _stopCounter(int id, String start) {
     _timer?.cancel();
     setState(() {
       _isRunning = false;
       _seconds = 0;
     });
     _chronometerBloc.add(
-      StopRecord(id: id, finish: DateTime.now().toIso8601String()),
+      StopRecord(
+        id: id,
+        finish: DateTime.now().toIso8601String(),
+        start: start,
+      ),
     );
   }
 
@@ -242,6 +246,7 @@ class _TimeTrackingState extends State<TimeTracking>
                                 } else {
                                   _stopCounter(
                                     chronometerState.record?.id ?? 0,
+                                    chronometerState.record?.start ?? '',
                                   );
                                 }
                               }

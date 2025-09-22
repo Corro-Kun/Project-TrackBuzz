@@ -107,25 +107,21 @@ class _ProjectInformationState extends State<ProjectInformation>
                         if (state is ProjectLoading) {
                           return const PreLoader();
                         } else if (state is ProjectLoaded) {
-                          return PictureProject(img: state.project.image);
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      },
-                    ),
-                    SizedBox(height: 25),
-                    BlocBuilder<RecordBloc, RecordState>(
-                      builder: (context, state) {
-                        if (state is RecordLoading) {
-                          return const PreLoader();
-                        } else if (state is RecordLoaded) {
-                          return Text(
-                            timeFormatRecord(state.seconds),
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
+                          return Column(
+                            children: [
+                              PictureProject(img: state.project.image),
+                              const SizedBox(height: 25),
+                              Text(
+                                timeFormatRecord(state.project.second),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.secondary,
+                                ),
+                              ),
+                            ],
                           );
                         } else {
                           return const SizedBox.shrink();
@@ -301,11 +297,11 @@ class _ProjectInformationState extends State<ProjectInformation>
             }
           },
         ),
-        BlocBuilder<RecordBloc, RecordState>(
-          builder: (context, stateRecord) {
-            if (stateRecord is RecordLoading) {
+        BlocBuilder<ProjectBloc, ProjectState>(
+          builder: (context, stateProject) {
+            if (stateProject is ProjectLoading) {
               return PreLoader();
-            } else if (stateRecord is RecordLoaded) {
+            } else if (stateProject is ProjectLoaded) {
               return BlocBuilder<SettingProjectBloc, SettingProjectState>(
                 builder: (contextBloc, state) {
                   if (state is SettingProjectLoading) {
@@ -313,7 +309,8 @@ class _ProjectInformationState extends State<ProjectInformation>
                   } else if (state is SettingProjectLoaded) {
                     if (state.setting.bill == 1) {
                       final total =
-                          (stateRecord.seconds / 3600) * state.setting.price;
+                          (stateProject.project.second / 3600) *
+                          state.setting.price;
                       final formatTotal = NumberFormat.decimalPattern(
                         loc?.locale.languageCode == 'en' ? 'en_US' : 'es_ES',
                       ).format(total.toInt());

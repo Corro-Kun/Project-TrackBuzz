@@ -1,12 +1,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:trackbuzz/features/report/domain/usecase/get_report_use_case.dart';
+import 'package:trackbuzz/features/report/domain/usecase/get_total_report_use_case.dart';
 import 'package:trackbuzz/features/report/presentation/bloc/report/report_event.dart';
 import 'package:trackbuzz/features/report/presentation/bloc/report/report_state.dart';
 
 class ReportBloc extends Bloc<ReportEvent, ReportState> {
   final GetReportUseCase getReportUseCase;
+  final GetTotalReportUseCase getTotalReportUseCase;
 
-  ReportBloc({required this.getReportUseCase}) : super(ReportInitial()) {
+  ReportBloc({
+    required this.getReportUseCase,
+    required this.getTotalReportUseCase,
+  }) : super(ReportInitial()) {
     on<GetReports>(_onGetReports);
   }
 

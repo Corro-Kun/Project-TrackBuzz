@@ -21,7 +21,7 @@ class ChronometerRepository extends ChronometerRepositoriesAbstract {
   }
 
   @override
-  Future stopRecord(int id, String finish) async {
-    return await datasource.stopRecord(id, finish);
+  Future stopRecord(int id, String finish, String start, int idProject) async {
+    return await datasource.stopRecord(id, finish, start, idProject);
   }
 }

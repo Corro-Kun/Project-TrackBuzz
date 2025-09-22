@@ -13,6 +13,7 @@ class StartRecord extends ChronometerEvent {
 class StopRecord extends ChronometerEvent {
   final int id;
   final String finish;
+  final String start;
 
-  StopRecord({required this.id, required this.finish});
+  StopRecord({required this.id, required this.finish, required this.start});
 }

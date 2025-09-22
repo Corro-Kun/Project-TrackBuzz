@@ -11,6 +11,7 @@ import 'package:trackbuzz/features/project/presentation/pages/project_informatio
 import 'package:trackbuzz/features/project/presentation/widgets/circle_card.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/main_card.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/searcher.dart';
+import 'package:trackbuzz/shared/functions/time_format_record.dart';
 import 'package:trackbuzz/shared/widgets/app_bar_main.dart';
 import 'package:trackbuzz/shared/widgets/drawer_custom.dart';
 import 'package:trackbuzz/shared/widgets/pre_loader.dart';
@@ -55,23 +56,46 @@ class ProjectList extends StatelessWidget {
                   if (state is ListProjectLoading) {
                     return const PreLoader();
                   } else if (state is ListProjectLoaded) {
-                    return Container(
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      child: Center(
-                        child: Text(
-                          state.projects.isNotEmpty
-                              ? state.projects[state.index].title
-                              : loc?.translate('there_are_no_projects') ??
-                                    'There are no projects',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.secondary,
+                    return Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: 20, right: 20),
+                          child: Center(
+                            child: Text(
+                              state.projects.isNotEmpty
+                                  ? state.projects[state.index].title
+                                  : loc?.translate('there_are_no_projects') ??
+                                        'There are no projects',
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
                           ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
                         ),
-                      ),
+                        Container(
+                          padding: EdgeInsets.only(left: 20, right: 20),
+                          child: Center(
+                            child: Text(
+                              state.projects.isNotEmpty
+                                  ? timeFormatRecord(
+                                      state.projects[state.index].second,
+                                    )
+                                  : '',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
+                        ),
+                      ],
                     );
                   } else {
                     return const SizedBox.shrink();
