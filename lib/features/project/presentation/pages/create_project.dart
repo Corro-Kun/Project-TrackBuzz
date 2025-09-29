@@ -61,7 +61,7 @@ class _CreateProjectState extends State<CreateProject> {
       return;
     }
     _load(true);
-    CreateProjectUseCase(sl()).execute(
+    await CreateProjectUseCase(sl()).execute(
       _titleController.text,
       _descriptionController.text.isNotEmpty
           ? _descriptionController.text

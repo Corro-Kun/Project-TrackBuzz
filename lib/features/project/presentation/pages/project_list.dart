@@ -50,7 +50,7 @@ class ProjectList extends StatelessWidget {
                   },
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
               BlocBuilder<ListProjectBloc, ListProjectState>(
                 builder: (context, state) {
                   if (state is ListProjectLoading) {
@@ -166,7 +166,7 @@ class ProjectList extends StatelessWidget {
                   }
                 },
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               BlocBuilder<ListProjectBloc, ListProjectState>(
                 builder: (context, state) {
                   if (state is ListProjectLoading) {

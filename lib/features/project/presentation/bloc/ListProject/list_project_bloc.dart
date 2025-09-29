@@ -46,14 +46,13 @@ class ListProjectBloc extends Bloc<ListProjectEvent, ListProjectState> {
   ) async {
     final currentState = state as ListProjectLoaded;
     try {
-      final list =
-          currentState.projects
-              .where(
-                (element) => element.title.toLowerCase().contains(
-                  event.filter.toLowerCase(),
-                ),
-              )
-              .toList();
+      final list = currentState.projects
+          .where(
+            (element) => element.title.toLowerCase().contains(
+              event.filter.toLowerCase(),
+            ),
+          )
+          .toList();
       emit(ListProjectLoaded(projects: list, index: 0));
     } catch (e) {
       emit(ListProjectError(message: e.toString()));

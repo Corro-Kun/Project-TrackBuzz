@@ -22,14 +22,13 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
     emit(ReportLoading());
     try {
       int seconds = 0;
+
       final reports = await getReportUseCase.execute();
-      for (var i = 0; i < reports.length; i++) {
-        final finishSaved = DateTime.parse(reports[i].finish);
-        seconds += finishSaved
-            .difference(DateTime.parse(reports[i].start))
-            .inSeconds;
+      final total = await getTotalReportUseCase.execute();
+      for (var i = 0; i < total.length; i++) {
+        seconds += total[i].second;
       }
-      emit(ReportLoaded(reports: reports, seconds: seconds));
+      emit(ReportLoaded(reports: reports, totals: total, seconds: seconds));
     } catch (e) {
       emit(ReportError(message: e.toString()));
     }

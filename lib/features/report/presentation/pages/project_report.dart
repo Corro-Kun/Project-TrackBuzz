@@ -100,129 +100,113 @@ class ProjectReport extends StatelessWidget {
                 if (state is ReportLoading) {
                   return PreLoader();
                 } else if (state is ReportLoaded) {
-                  final seconds = <int, int>{};
-                  final titleProjects = <int, String>{};
-                  final imageProjects = <int, String>{};
-                  final ids = [];
-                  for (var i = 0; i < state.reports.length; i++) {
-                    final start = DateTime.parse(state.reports[i].start);
-                    final finish = DateTime.parse(state.reports[i].finish);
-
-                    seconds[state.reports[i].idProject] =
-                        (seconds[state.reports[i].idProject] ?? 0) +
-                        finish.difference(start).inSeconds;
-
-                    titleProjects[state.reports[i].idProject] =
-                        state.reports[i].title;
-
-                    imageProjects[state.reports[i].idProject] =
-                        state.reports[i].image;
-
-                    if (!ids.contains(state.reports[i].idProject)) {
-                      ids.add(state.reports[i].idProject);
-                    }
-                  }
-
-                  return Column(
-                    children: [
-                      ids.isNotEmpty
-                          ? Container(
-                              margin: const EdgeInsets.all(20),
-                              child: AdjustmentsAnnounced(
-                                icon: CupertinoIcons.circle_grid_hex_fill,
-                                text:
-                                    loc?.translate('percentage_report') ??
-                                    'Percentage:',
+                  if (state.seconds != 0) {
+                    return Column(
+                      children: [
+                        state.totals.isNotEmpty
+                            ? Container(
+                                margin: const EdgeInsets.all(20),
+                                child: AdjustmentsAnnounced(
+                                  icon: CupertinoIcons.circle_grid_hex_fill,
+                                  text:
+                                      loc?.translate('percentage_report') ??
+                                      'Percentage:',
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                        Column(
+                          children: List.generate(state.totals.length, (i) {
+                            return Container(
+                              height: 70,
+                              margin: EdgeInsets.only(
+                                right: 20,
+                                left: 20,
+                                top: 5,
+                                bottom: 5,
                               ),
-                            )
-                          : SizedBox.shrink(),
-                      Column(
-                        children: List.generate(ids.length, (i) {
-                          return Container(
-                            height: 70,
-                            margin: EdgeInsets.only(
-                              right: 20,
-                              left: 20,
-                              top: 5,
-                              bottom: 5,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: BoxBorder.all(
-                                width: 1,
-                                color: Theme.of(context).colorScheme.secondary,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: BoxBorder.all(
+                                  width: 1,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.secondary,
+                                ),
                               ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      SizedBox(width: 10),
-                                      Container(
-                                        height: 50,
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ),
-                                          image: DecorationImage(
-                                            image:
-                                                !imageProjects[ids[i]]!
-                                                    .contains(
-                                                      'lib/assets/img/example',
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        SizedBox(width: 10),
+                                        Container(
+                                          height: 50,
+                                          width: 50,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            image: DecorationImage(
+                                              image:
+                                                  !state.totals[i].image
+                                                      .contains(
+                                                        'lib/assets/img/example',
+                                                      )
+                                                  ? FileImage(
+                                                      File(
+                                                        state.totals[i].image,
+                                                      ),
                                                     )
-                                                ? FileImage(
-                                                    File(
-                                                      imageProjects[ids[i]]!,
+                                                  : AssetImage(
+                                                      state.totals[i].image,
                                                     ),
-                                                  )
-                                                : AssetImage(
-                                                    imageProjects[ids[i]]!,
-                                                  ),
-                                            fit: BoxFit.cover,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
+                                        ),
+                                        SizedBox(width: 10),
+                                        Expanded(
+                                          child: Text(
+                                            state.totals[i].title,
+                                            style: TextStyle(
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.secondary,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${((state.totals[i].second / state.seconds) * 100).toStringAsFixed(1)}%',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       SizedBox(width: 10),
-                                      Expanded(
-                                        child: Text(
-                                          titleProjects[ids[i]]!,
-                                          style: TextStyle(
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.secondary,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                        ),
-                                      ),
                                     ],
                                   ),
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${((seconds[ids[i]]! / state.seconds) * 100).toStringAsFixed(1)}%',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.primary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
-                      ),
-                    ],
-                  );
+                                ],
+                              ),
+                            );
+                          }),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
                 } else {
                   return const SizedBox.shrink();
                 }

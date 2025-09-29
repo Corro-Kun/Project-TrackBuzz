@@ -43,8 +43,8 @@ class ChronometerDatasource {
 
     final data = await db.query(
       'activity',
-      where: 'date = ?',
-      whereArgs: [date],
+      where: 'date = ?, id_project = ?',
+      whereArgs: [date, idProject],
     );
 
     if (data.isEmpty) {
@@ -61,8 +61,8 @@ class ChronometerDatasource {
       await db.update(
         'activity',
         {'activity': activity + 1, 'second': activitySecond + second},
-        where: 'date = ?',
-        whereArgs: [date],
+        where: 'date = ?, id_project = ?',
+        whereArgs: [date, idProject],
       );
     }
 
