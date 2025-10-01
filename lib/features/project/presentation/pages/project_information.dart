@@ -41,16 +41,29 @@ class ProjectInformation extends StatefulWidget {
 class _ProjectInformationState extends State<ProjectInformation>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late RecordBloc _recordBloc;
+  final ScrollController _scrollController = ScrollController();
+
+  _scrollListener() {
+    if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent &&
+        _scrollController.position.maxScrollExtent > 0) {
+      _recordBloc.add(GetRecordByPage(id: widget.id));
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    _recordBloc = sl<RecordBloc>();
     _tabController = TabController(length: 2, vsync: this);
+    _scrollController.addListener(_scrollListener);
   }
 
   @override
   dispose() {
     _tabController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -68,7 +81,7 @@ class _ProjectInformationState extends State<ProjectInformation>
               sl<SettingProjectBloc>()..add(GetSetting(id: widget.id)),
         ),
         BlocProvider<RecordBloc>(
-          create: (context) => sl<RecordBloc>()..add(GetRecord(id: widget.id)),
+          create: (context) => _recordBloc..add(GetRecord(id: widget.id)),
         ),
       ],
       child: Scaffold(
@@ -240,7 +253,13 @@ class _ProjectInformationState extends State<ProjectInformation>
                             );
                           }
                         });
-                        return ListView(children: data);
+                        return ListView.builder(
+                          controller: _scrollController,
+                          itemCount: data.length,
+                          itemBuilder: (context, index) {
+                            return data[index];
+                          },
+                        );
                       } else {
                         return const SizedBox.shrink();
                       }

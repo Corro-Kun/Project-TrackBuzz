@@ -6,7 +6,7 @@ class GetRecordOfProjectUseCase {
 
   GetRecordOfProjectUseCase(this.service);
 
-  Future<List<RecordModel>> execute(int id) async {
-    return await service.getRecord(id);
+  Future<List<RecordModel>> execute(int id, int page) async {
+    return await service.getRecord(id, page);
   }
 }

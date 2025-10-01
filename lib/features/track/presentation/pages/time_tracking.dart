@@ -181,14 +181,14 @@ class _TimeTrackingState extends State<TimeTracking>
         appBar: AppBarMain(
           title: loc?.translate('chronometer') ?? 'Chronometer',
         ),
-        drawer: DrawerCustom(),
+        drawer: const DrawerCustom(),
         body: ListView(
           children: [
             ClockCustom(hours: hours, minutes: minutes, seconds: seconds),
             BlocBuilder<ChronometerBloc, ChronometerState>(
               builder: (context, chronometerState) {
                 if (chronometerState is ChronometerLoading) {
-                  return PreLoader();
+                  return const PreLoader();
                 } else if (chronometerState is ChronometerLoaded) {
                   return BlocBuilder<
                     ProjectChronometerBloc,
@@ -267,7 +267,7 @@ class _TimeTrackingState extends State<TimeTracking>
                 }
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TitleChronometer(
               icon: CupertinoIcons.app,
               title: loc?.translate('project') ?? 'Project:',
@@ -275,7 +275,7 @@ class _TimeTrackingState extends State<TimeTracking>
             BlocBuilder<ProjectChronometerBloc, ProjectChronometerState>(
               builder: (context, state) {
                 if (state is ProjectChronometerLoading) {
-                  return PreLoader();
+                  return const PreLoader();
                 } else if (state is ProjectChronometerLoaded) {
                   if (state.index == null) {
                     return GestureDetector(
@@ -296,7 +296,7 @@ class _TimeTrackingState extends State<TimeTracking>
                                       ),
                                     ),
                                   ),
-                                  content: Container(
+                                  content: SizedBox(
                                     width: double.maxFinite,
                                     height: 300,
                                     child: ListView(
@@ -330,7 +330,7 @@ class _TimeTrackingState extends State<TimeTracking>
                       },
                       child: Container(
                         height: 70,
-                        margin: EdgeInsets.only(
+                        margin: const EdgeInsets.only(
                           right: 20,
                           left: 20,
                           top: 5,
@@ -354,7 +354,7 @@ class _TimeTrackingState extends State<TimeTracking>
                   } else {
                     return Container(
                       height: 70,
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                         right: 20,
                         left: 20,
                         top: 5,
@@ -373,7 +373,7 @@ class _TimeTrackingState extends State<TimeTracking>
                           Expanded(
                             child: Row(
                               children: [
-                                SizedBox(width: 10),
+                                const SizedBox(width: 10),
                                 Container(
                                   height: 50,
                                   width: 50,
@@ -403,7 +403,7 @@ class _TimeTrackingState extends State<TimeTracking>
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 10),
+                                const SizedBox(width: 10),
                                 Expanded(
                                   child: Text(
                                     state.projects[state.index ?? 0].title,
@@ -416,7 +416,7 @@ class _TimeTrackingState extends State<TimeTracking>
                                     maxLines: 1,
                                   ),
                                 ),
-                                SizedBox(width: 10),
+                                const SizedBox(width: 10),
                               ],
                             ),
                           ),
@@ -437,7 +437,7 @@ class _TimeTrackingState extends State<TimeTracking>
                                       ),
                                     )
                                   : const SizedBox.shrink(),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                             ],
                           ),
                         ],
@@ -449,11 +449,11 @@ class _TimeTrackingState extends State<TimeTracking>
                 }
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             BlocBuilder<ProjectChronometerBloc, ProjectChronometerState>(
               builder: (context, state) {
                 if (state is ProjectChronometerLoading) {
-                  return PreLoader();
+                  return const PreLoader();
                 } else if (state is ProjectChronometerLoaded) {
                   if (state.indexTask != null) {
                     return Column(
@@ -466,7 +466,7 @@ class _TimeTrackingState extends State<TimeTracking>
                         ),
                         Container(
                           height: 70,
-                          margin: EdgeInsets.only(
+                          margin: const EdgeInsets.only(
                             right: 20,
                             left: 20,
                             top: 5,
@@ -498,7 +498,7 @@ class _TimeTrackingState extends State<TimeTracking>
                                         maxLines: 1,
                                       ),
                                     ),
-                                    SizedBox(width: 10),
+                                    const SizedBox(width: 10),
                                   ],
                                 ),
                               ),
@@ -519,7 +519,7 @@ class _TimeTrackingState extends State<TimeTracking>
                                           ),
                                         )
                                       : const SizedBox.shrink(),
-                                  SizedBox(width: 10),
+                                  const SizedBox(width: 10),
                                 ],
                               ),
                             ],
@@ -578,8 +578,12 @@ class _TimeTrackingState extends State<TimeTracking>
                                                   Navigator.pop(context);
                                                 },
                                                 child: Container(
-                                                  margin: EdgeInsets.all(10),
-                                                  padding: EdgeInsets.all(5),
+                                                  margin: const EdgeInsets.all(
+                                                    10,
+                                                  ),
+                                                  padding: const EdgeInsets.all(
+                                                    5,
+                                                  ),
                                                   decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -617,7 +621,7 @@ class _TimeTrackingState extends State<TimeTracking>
                           },
                           child: Container(
                             height: 70,
-                            margin: EdgeInsets.only(
+                            margin: const EdgeInsets.only(
                               right: 20,
                               left: 20,
                               top: 5,
@@ -641,10 +645,10 @@ class _TimeTrackingState extends State<TimeTracking>
                       ],
                     );
                   } else {
-                    return SizedBox.shrink();
+                    return const SizedBox.shrink();
                   }
                 } else {
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 }
               },
             ),

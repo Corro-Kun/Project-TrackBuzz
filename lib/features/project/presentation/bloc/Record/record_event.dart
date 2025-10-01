@@ -5,3 +5,9 @@ class GetRecord extends RecordEvent {
 
   GetRecord({required this.id});
 }
+
+class GetRecordByPage extends RecordEvent {
+  final int id;
+
+  GetRecordByPage({required this.id});
+}

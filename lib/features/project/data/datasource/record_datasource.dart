@@ -1,7 +1,7 @@
 import 'package:trackbuzz/core/database/data_base.dart';
 
 class RecordDatasource {
-  Future<List<Map<String, dynamic>>> getRecord(int id) async {
+  Future<List<Map<String, dynamic>>> getRecord(int id, int page) async {
     final db = await DataBase().OpenDB();
 
     //final stopwatch = Stopwatch()..start();
@@ -13,10 +13,10 @@ class RecordDatasource {
   LEFT JOIN task t ON r.id_task = t.id 
   WHERE r.id_project = ? AND r.active = ? 
   ORDER BY r.start DESC
+  LIMIT ? OFFSET ?
 ''',
-      [id, 0],
+      [id, 0, 20, page * 20],
     );
-
     //print('Consulta tomó: ${stopwatch.elapsedMilliseconds}ms');
     //print('Resultados: ${data.length}');
 

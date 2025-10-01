@@ -8,8 +8,9 @@ class RecordLoading extends RecordState {}
 
 class RecordLoaded extends RecordState {
   final List<RecordModel> records;
+  final int page;
 
-  RecordLoaded({required this.records});
+  RecordLoaded({required this.records, required this.page});
 }
 
 class RecordError extends RecordState {

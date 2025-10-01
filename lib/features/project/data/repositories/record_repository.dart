@@ -8,8 +8,8 @@ class RecordRepository extends RecordRepositoryAbstract {
   RecordRepository(this.datasource);
 
   @override
-  Future<List<RecordModel>> getProject(int id) async {
-    final data = await datasource.getRecord(id);
+  Future<List<RecordModel>> getProject(int id, int page) async {
+    final data = await datasource.getRecord(id, page);
     return List.generate(data.length, (i) {
       return RecordModel.fromJson(data[i]);
     });

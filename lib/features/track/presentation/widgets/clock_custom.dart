@@ -16,8 +16,8 @@ class ClockCustom extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-      margin: EdgeInsets.all(20),
-      padding: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Theme.of(context).colorScheme.primary,
