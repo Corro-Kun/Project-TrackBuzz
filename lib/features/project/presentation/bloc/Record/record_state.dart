@@ -1,3 +1,4 @@
+import 'package:trackbuzz/features/project/data/models/activity_model.dart';
 import 'package:trackbuzz/features/track/data/models/record_model.dart';
 
 abstract class RecordState {}
@@ -8,9 +9,14 @@ class RecordLoading extends RecordState {}
 
 class RecordLoaded extends RecordState {
   final List<RecordModel> records;
+  final List<ActivityModel> activity;
   final int page;
 
-  RecordLoaded({required this.records, required this.page});
+  RecordLoaded({
+    required this.records,
+    required this.activity,
+    required this.page,
+  });
 }
 
 class RecordError extends RecordState {

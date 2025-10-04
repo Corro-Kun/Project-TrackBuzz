@@ -1,18 +1,23 @@
 import 'package:get_it/get_it.dart';
+import 'package:trackbuzz/features/project/data/datasource/activity_datasource.dart';
 import 'package:trackbuzz/features/project/data/datasource/project_datasource.dart';
 import 'package:trackbuzz/features/project/data/datasource/record_datasource.dart';
 import 'package:trackbuzz/features/project/data/datasource/setting_datasource.dart';
+import 'package:trackbuzz/features/project/data/repositories/activity_repository.dart';
 import 'package:trackbuzz/features/project/data/repositories/project_repository.dart';
 import 'package:trackbuzz/features/project/data/repositories/record_repository.dart';
 import 'package:trackbuzz/features/project/data/repositories/setting_repository.dart';
+import 'package:trackbuzz/features/project/data/services/activity_service.dart';
 import 'package:trackbuzz/features/project/data/services/project_service.dart';
 import 'package:trackbuzz/features/project/data/services/record_service.dart';
 import 'package:trackbuzz/features/project/data/services/setting_service.dart';
+import 'package:trackbuzz/features/project/domain/repositories/activity_repository_abstract.dart';
 import 'package:trackbuzz/features/project/domain/repositories/project_repository_abstract.dart';
 import 'package:trackbuzz/features/project/domain/repositories/record_repository_abstract.dart';
 import 'package:trackbuzz/features/project/domain/repositories/setting_repository_abstract.dart';
 import 'package:trackbuzz/features/project/domain/usecase/create_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/delete_project_use_case.dart';
+import 'package:trackbuzz/features/project/domain/usecase/get_activity_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_list_project_user_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_record_of_project_use_case.dart';
@@ -80,7 +85,11 @@ Future<void> init() async {
     ),
   );
   sl.registerFactory(
-    () => RecordBloc(getRecordOfProjectUseCase: sl(), getSecondsUseCase: sl()),
+    () => RecordBloc(
+      getRecordOfProjectUseCase: sl(),
+      getSecondsUseCase: sl(),
+      getActivityUseCase: sl(),
+    ),
   );
   sl.registerFactory(
     () => ReportBloc(getReportUseCase: sl(), getTotalReportUseCase: sl()),
@@ -109,6 +118,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => DeleteTaskUseCase(sl()));
   sl.registerLazySingleton(() => UpdateTaskUseCase(sl()));
   sl.registerLazySingleton(() => DeleteProjectUseCase(sl()));
+  sl.registerLazySingleton(() => GetActivityUseCase(sl()));
 
   // Services
   sl.registerLazySingleton(() => ProjectService(sl()));
@@ -118,6 +128,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => RecordService(sl()));
   sl.registerLazySingleton(() => ReportServices(sl()));
   sl.registerLazySingleton(() => TaskService(sl()));
+  sl.registerLazySingleton(() => ActivityService(sl()));
 
   // Repository
   sl.registerLazySingleton<ProjectRepositoryAbstract>(
@@ -136,6 +147,9 @@ Future<void> init() async {
     () => ReportRepositories(sl()),
   );
   sl.registerLazySingleton<TaskRepositoryAbstract>(() => TaskRepository(sl()));
+  sl.registerLazySingleton<ActivityRepositoryAbstract>(
+    () => ActivityRepository(sl()),
+  );
 
   // Datasource
   sl.registerLazySingleton(() => ProjectDatasource());
@@ -144,4 +158,5 @@ Future<void> init() async {
   sl.registerLazySingleton(() => RecordDatasource());
   sl.registerLazySingleton(() => ReportDatasource());
   sl.registerLazySingleton(() => TaskDatasource());
+  sl.registerLazySingleton(() => ActivityDatasource());
 }
