@@ -63,7 +63,7 @@ class ChangeColor extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);

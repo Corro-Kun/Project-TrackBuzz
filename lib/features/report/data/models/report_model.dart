@@ -1,20 +1,18 @@
 class ReportModel {
   int id;
-  String start;
-  String finish;
-  int active;
-  int? idTask;
+  String date;
+  int activity;
+  int second;
   int idProject;
   String title;
   String image;
 
   ReportModel({
     required this.id,
-    required this.start,
-    required this.finish,
-    required this.active,
+    required this.date,
+    required this.activity,
+    required this.second,
     required this.idProject,
-    required this.idTask,
     required this.title,
     required this.image,
   });
@@ -22,11 +20,10 @@ class ReportModel {
   factory ReportModel.fromJson(Map<String, dynamic> json) {
     return ReportModel(
       id: json['id'],
-      start: json['start'],
-      finish: json['finish'],
-      active: json['active'],
+      date: json['date'],
+      activity: json['activity'],
+      second: json['second'],
       idProject: json['id_project'],
-      idTask: json['id_task'],
       title: json['title'],
       image: json['image'],
     );
@@ -35,10 +32,9 @@ class ReportModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'start': start,
-      'finish': finish,
-      'active': active,
-      'id_task': idTask,
+      'date': date,
+      'activity': activity,
+      'second': second,
       'id_project': idProject,
       'title': title,
       'image': image,

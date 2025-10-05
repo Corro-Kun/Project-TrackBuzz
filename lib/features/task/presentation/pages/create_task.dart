@@ -63,7 +63,7 @@ class _CreateTaskState extends State<CreateTask> {
                 color: Theme.of(context).colorScheme.secondary,
               ),
             )
-          : SizedBox.shrink(),
+          : const SizedBox.shrink(),
       body: Column(
         children: [
           Container(

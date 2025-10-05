@@ -21,7 +21,7 @@ class CardProjectChronometer extends StatelessWidget {
         Navigator.pop(context);
       },
       child: Container(
-        margin: EdgeInsets.only(top: 10, bottom: 10),
+        margin: const EdgeInsets.only(top: 10, bottom: 10),
         height: 185,
         width: 180,
         child: Column(

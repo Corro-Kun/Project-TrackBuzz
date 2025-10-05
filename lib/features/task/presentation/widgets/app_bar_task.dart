@@ -35,7 +35,7 @@ class AppBarTask extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
 
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
       ],
     );
   }

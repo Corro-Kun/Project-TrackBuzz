@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trackbuzz/core/di/injection_container.dart';
+import 'package:trackbuzz/features/project/data/models/activity_model.dart';
 import 'package:trackbuzz/features/report/presentation/bloc/report/report_bloc.dart';
 import 'package:trackbuzz/features/report/presentation/bloc/report/report_event.dart';
 import 'package:trackbuzz/features/report/presentation/bloc/report/report_state.dart';
@@ -26,7 +27,7 @@ class ProjectReport extends StatelessWidget {
       create: (context) => sl<ReportBloc>()..add(GetReports()),
       child: Scaffold(
         appBar: AppBarMain(title: loc?.translate('reports') ?? 'Reports'),
-        drawer: DrawerCustom(),
+        drawer: const DrawerCustom(),
         body: ListView(
           children: [
             Container(
@@ -47,7 +48,7 @@ class ProjectReport extends StatelessWidget {
                 child: BlocBuilder<ReportBloc, ReportState>(
                   builder: (context, state) {
                     if (state is ReportLoading) {
-                      return PreLoader();
+                      return const PreLoader();
                     } else if (state is ReportLoaded) {
                       return Text(
                         timeFormatRecord(state.seconds),
@@ -76,19 +77,18 @@ class ProjectReport extends StatelessWidget {
               child: BlocBuilder<ReportBloc, ReportState>(
                 builder: (context, state) {
                   if (state is ReportLoading) {
-                    return PreLoader();
+                    return const PreLoader();
                   } else if (state is ReportLoaded) {
-                    final data = List.generate(state.reports.length, (i) {
-                      return RecordModel(
+                    final date = List.generate(state.reports.length, (i) {
+                      return ActivityModel(
                         id: state.reports[i].id,
-                        start: state.reports[i].start,
-                        finish: state.reports[i].finish,
-                        active: state.reports[i].active,
+                        activity: state.reports[i].activity,
+                        date: state.reports[i].date,
+                        second: state.reports[i].second,
                         idProject: state.reports[i].idProject,
-                        idTask: state.reports[i].idTask,
                       );
                     });
-                    return Activity(dateList: data);
+                    return Activity(dateList: date);
                   } else {
                     return const SizedBox.shrink();
                   }
@@ -98,7 +98,7 @@ class ProjectReport extends StatelessWidget {
             BlocBuilder<ReportBloc, ReportState>(
               builder: (context, state) {
                 if (state is ReportLoading) {
-                  return PreLoader();
+                  return const PreLoader();
                 } else if (state is ReportLoaded) {
                   if (state.seconds != 0) {
                     return Column(
@@ -118,7 +118,7 @@ class ProjectReport extends StatelessWidget {
                           children: List.generate(state.totals.length, (i) {
                             return Container(
                               height: 70,
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                 right: 20,
                                 left: 20,
                                 top: 5,
@@ -140,7 +140,7 @@ class ProjectReport extends StatelessWidget {
                                   Expanded(
                                     child: Row(
                                       children: [
-                                        SizedBox(width: 10),
+                                        const SizedBox(width: 10),
                                         Container(
                                           height: 50,
                                           width: 50,
@@ -166,7 +166,7 @@ class ProjectReport extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(width: 10),
+                                        const SizedBox(width: 10),
                                         Expanded(
                                           child: Text(
                                             state.totals[i].title,
@@ -194,7 +194,7 @@ class ProjectReport extends StatelessWidget {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      SizedBox(width: 10),
+                                      const SizedBox(width: 10),
                                     ],
                                   ),
                                 ],

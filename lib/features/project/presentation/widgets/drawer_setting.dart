@@ -64,7 +64,7 @@ class DrawerSetting extends StatelessWidget {
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Center(
                   child: Text(
                     loc?.translate('settings') ?? 'Settings',
@@ -87,7 +87,7 @@ class DrawerSetting extends StatelessWidget {
                       BlocBuilder<SettingProjectBloc, SettingProjectState>(
                         builder: (contextBloc, state) {
                           if (state is SettingProjectLoading) {
-                            return PreLoader();
+                            return const PreLoader();
                           } else if (state is SettingProjectLoaded) {
                             return SwitchCustom(
                               light: state.setting.bill == 1 ? true : false,
@@ -98,7 +98,7 @@ class DrawerSetting extends StatelessWidget {
                               },
                             );
                           } else {
-                            return SizedBox.shrink();
+                            return const SizedBox.shrink();
                           }
                         },
                       ),
@@ -117,7 +117,7 @@ class DrawerSetting extends StatelessWidget {
                   child: BlocBuilder<SettingProjectBloc, SettingProjectState>(
                     builder: (contextBloc, state) {
                       if (state is SettingProjectLoading) {
-                        return PreLoader();
+                        return const PreLoader();
                       } else if (state is SettingProjectLoaded) {
                         return GestureDetector(
                           onTap: () => state.setting.bill == 1
@@ -194,7 +194,7 @@ class DrawerSetting extends StatelessWidget {
                           ),
                         );
                       } else {
-                        return SizedBox.shrink();
+                        return const SizedBox.shrink();
                       }
                     },
                   ),
@@ -211,7 +211,7 @@ class DrawerSetting extends StatelessWidget {
                   child: BlocBuilder<SettingProjectBloc, SettingProjectState>(
                     builder: (contextBloc, state) {
                       if (state is SettingProjectLoading) {
-                        return PreLoader();
+                        return const PreLoader();
                       } else if (state is SettingProjectLoaded) {
                         return GestureDetector(
                           onTap: () => state.setting.bill == 1
@@ -274,16 +274,16 @@ class DrawerSetting extends StatelessWidget {
                           ),
                         );
                       } else {
-                        return SizedBox.shrink();
+                        return const SizedBox.shrink();
                       }
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 BlocBuilder<SettingProjectBloc, SettingProjectState>(
                   builder: (context, state) {
                     if (state is SettingProjectLoading) {
-                      return PreLoader();
+                      return const PreLoader();
                     } else if (state is SettingProjectLoaded) {
                       return state.update
                           ? Padding(
@@ -319,9 +319,9 @@ class DrawerSetting extends StatelessWidget {
                                 ),
                               ),
                             )
-                          : SizedBox.shrink();
+                          : const SizedBox.shrink();
                     } else {
-                      return SizedBox.shrink();
+                      return const SizedBox.shrink();
                     }
                   },
                 ),
@@ -358,7 +358,7 @@ class DrawerSetting extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       GestureDetector(
                         onTap: () {
                           showDialog(

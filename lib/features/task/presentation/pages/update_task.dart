@@ -85,7 +85,7 @@ class _UpdateTaskState extends State<UpdateTask> {
                 color: Theme.of(context).colorScheme.secondary,
               ),
             )
-          : SizedBox.shrink(),
+          : const SizedBox.shrink(),
       body: Column(
         children: [
           Container(

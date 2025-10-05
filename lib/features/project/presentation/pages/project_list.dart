@@ -27,7 +27,7 @@ class ProjectList extends StatelessWidget {
       create: (context) => sl<ListProjectBloc>()..add(GetListProject()),
       child: Scaffold(
         appBar: AppBarMain(title: loc?.translate('projects') ?? 'Projects'),
-        drawer: DrawerCustom(),
+        drawer: const DrawerCustom(),
         body: Center(
           child: ListView(
             children: [
@@ -77,7 +77,7 @@ class ProjectList extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.only(left: 20, right: 20),
+                          padding: const EdgeInsets.only(left: 20, right: 20),
                           child: Center(
                             child: Text(
                               state.projects.isNotEmpty

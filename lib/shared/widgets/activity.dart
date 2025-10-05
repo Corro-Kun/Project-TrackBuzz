@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:trackbuzz/features/track/data/models/record_model.dart';
+import 'package:trackbuzz/features/project/data/models/activity_model.dart';
 import 'package:trackbuzz/shared/functions/time_format_record.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class Activity extends StatelessWidget {
-  final List<RecordModel> dateList;
+  final List<ActivityModel> dateList;
 
   const Activity({super.key, required this.dateList});
 
@@ -16,12 +16,11 @@ class Activity extends StatelessWidget {
     final activityMap = <DateTime, int>{};
     final timeMap = <DateTime, int>{};
     for (var i = 0; i < dateList.length; i++) {
-      final date = DateTime.parse(dateList[i].start);
-      final normalizedDate = DateTime(date.year, date.month, date.day);
-      activityMap[normalizedDate] = (activityMap[normalizedDate] ?? 0) + 1;
+      final normalizedDate = DateTime.parse(dateList[i].date);
+      activityMap[normalizedDate] =
+          (activityMap[normalizedDate] ?? 0) + dateList[i].activity;
       timeMap[normalizedDate] =
-          (timeMap[normalizedDate] ?? 0) +
-          DateTime.parse(dateList[i].finish ?? '').difference(date).inSeconds;
+          (timeMap[normalizedDate] ?? 0) + dateList[i].second;
     }
 
     final now = DateTime.now();

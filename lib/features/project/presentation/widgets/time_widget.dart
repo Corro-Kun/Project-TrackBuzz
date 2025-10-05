@@ -9,7 +9,7 @@ class TimeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 70,
-      margin: EdgeInsets.only(right: 20, left: 20, top: 5, bottom: 5),
+      margin: const EdgeInsets.only(right: 20, left: 20, top: 5, bottom: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: BoxBorder.all(

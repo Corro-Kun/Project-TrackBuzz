@@ -54,19 +54,23 @@ class ListTask extends StatelessWidget {
                 ),
               );
             } else {
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             }
           },
         ),
         body: BlocBuilder<TaskBloc, TaskState>(
           builder: (context, state) {
             if (state is TaskLoading) {
-              return PreLoader();
+              return const PreLoader();
             } else if (state is TaskLoaded) {
               return ListView(
                 children: List.generate(state.tasks.length, (i) {
                   return Padding(
-                    padding: EdgeInsets.only(top: 20, right: 20, left: 20),
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                      right: 20,
+                      left: 20,
+                    ),
                     child: ClipRRectTask(
                       name: state.tasks[i].name,
                       description: state.tasks[i].description,

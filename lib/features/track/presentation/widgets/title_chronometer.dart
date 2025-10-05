@@ -8,11 +8,11 @@ class TitleChronometer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       child: Row(
         children: [
           Icon(icon, color: Theme.of(context).colorScheme.secondary),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           Text(
             title,
             style: TextStyle(

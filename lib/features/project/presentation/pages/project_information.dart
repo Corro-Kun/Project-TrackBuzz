@@ -280,7 +280,7 @@ class _ProjectInformationState extends State<ProjectInformation>
         BlocBuilder<ProjectBloc, ProjectState>(
           builder: (context, state) {
             if (state is ProjectLoading) {
-              return PreLoader();
+              return const PreLoader();
             } else if (state is ProjectLoaded) {
               return state.project.description != null
                   ? Column(
@@ -379,7 +379,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                   top: 5,
                   bottom: 5,
                 ),
-                child: Activity(dateList: state.records),
+                child: Activity(dateList: state.activity),
               );
             } else {
               return const SizedBox.shrink();
