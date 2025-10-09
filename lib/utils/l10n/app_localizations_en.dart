@@ -66,5 +66,7 @@ class AppLocalizationsEn {
     'description': 'Description',
     //error
     'error_field': 'Error: please fill in all the fields',
+    // track
+    'track': 'The counter is active',
   };
 }

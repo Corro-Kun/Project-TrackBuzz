@@ -66,5 +66,6 @@ class AppLocalizationsEs {
     'description': 'Descripción',
     //error
     'error_field': 'Error: llena todos los campos, por favor',
+    'track': 'El contador esta activo',
   };
 }

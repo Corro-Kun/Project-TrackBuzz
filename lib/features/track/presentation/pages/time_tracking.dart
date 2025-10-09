@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/features/track/presentation/bloc/Project/project_chronometer_bloc.dart';
 import 'package:trackbuzz/features/track/presentation/bloc/Project/project_chronometer_event.dart';
@@ -19,7 +18,6 @@ import 'package:trackbuzz/features/track/presentation/widgets/title_chronometer.
 import 'package:trackbuzz/shared/widgets/app_bar_main.dart';
 import 'package:trackbuzz/shared/widgets/drawer_custom.dart';
 import 'package:trackbuzz/shared/widgets/pre_loader.dart';
-import 'package:trackbuzz/utils/constants.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class TimeTracking extends StatefulWidget {
@@ -35,6 +33,8 @@ class _TimeTrackingState extends State<TimeTracking>
   bool _isRunning = false;
   Timer? _timer;
   late ChronometerBloc _chronometerBloc;
+  late ProjectChronometerBloc _projectChronometerBloc;
+  var loc;
   bool _hasCalculated = false;
 
   @override
@@ -42,6 +42,7 @@ class _TimeTrackingState extends State<TimeTracking>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _chronometerBloc = sl<ChronometerBloc>();
+    _projectChronometerBloc = sl<ProjectChronometerBloc>();
     //_startBackgroundService();
   }
 
@@ -49,40 +50,41 @@ class _TimeTrackingState extends State<TimeTracking>
   Future<void> _startBackgroundService() async {
     await FlutterBackgroundService().configure(
       androidConfiguration: AndroidConfiguration(
-        onStart: (service) {
-          _onBackgroundServiceStart();
-        },
+        onStart: _onBackgroundServiceStart,
         autoStart: true,
         isForegroundMode: true,
+        foregroundServiceNotificationId: 1,
+        initialNotificationTitle: 'TrackBuzz',
+        initialNotificationContent: 'Contador activo',
+        notificationChannelId: 'counter',
       ),
       iosConfiguration: IosConfiguration(),
     );
+
+    await FlutterBackgroundService().startService();
   }
 
   @pragma('vm:entry-point')
-  void _onBackgroundServiceStart() {
-    final service = FlutterBackgroundService();
-    int seconds = 0;
+  static void _onBackgroundServiceStart(ServiceInstance service) {
+    int secondsElapsed = 0;
+
     Timer.periodic(Duration(seconds: 1), (timer) async {
-      seconds++;
-      if (seconds % 60 == 0) {
-        _updateNotification();
+      secondsElapsed++;
+
+      if (secondsElapsed % 3600 == 0) {
+        print('hola');
       }
-      service.invoke('update', {'seconds': seconds});
+
+      service.invoke('update', {'secondsElapsed': secondsElapsed});
     });
   }
 
-  */
   Future<void> _updateNotification() async {
-    final hours = (_seconds ~/ 3600).toString().padLeft(2, '0');
-    final minutes = ((_seconds % 3600) ~/ 60).toString().padLeft(2, '0');
-    final seconds = (_seconds % 60).toString().padLeft(2, '0');
-
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
           'counter',
           'text',
-          channelDescription: 'proceso',
+          channelDescription: 'reminder',
           importance: Importance.low,
           priority: Priority.low,
           ongoing: true,
@@ -93,15 +95,21 @@ class _TimeTrackingState extends State<TimeTracking>
       android: androidNotificationDetails,
     );
 
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'test',
-      'tiempo: $hours:$minutes:$seconds',
-      platformChannelSpecifics,
-    );
+    if (_projectChronometerBloc.state is ProjectChronometerLoaded) {
+      final state = _projectChronometerBloc.state as ProjectChronometerLoaded;
+      await flutterLocalNotificationsPlugin.show(
+        0,
+        state.projects[state.index ?? 0].title,
+        loc?.translate('track') ?? 'track',
+        platformChannelSpecifics,
+      );
+    }
   }
 
+  */
+
   void _startCounter(int id, int? idTask) {
+    //_updateNotification();
     setState(() => _isRunning = true);
     _initTimer();
     _chronometerBloc.add(
@@ -169,11 +177,11 @@ class _TimeTrackingState extends State<TimeTracking>
     final minutes = ((_seconds % 3600) ~/ 60).toString().padLeft(2, '0');
     final seconds = (_seconds % 60).toString().padLeft(2, '0');
 
-    final loc = AppLocalizations.of(context);
+    loc = AppLocalizations.of(context);
     return MultiBlocProvider(
       providers: [
         BlocProvider<ProjectChronometerBloc>(
-          create: (context) => sl<ProjectChronometerBloc>()..add(GetProjects()),
+          create: (context) => _projectChronometerBloc..add(GetProjects()),
         ),
         BlocProvider(create: (context) => _chronometerBloc..add(GetCurrent())),
       ],
