@@ -34,6 +34,7 @@ class AppLocalizationsEs {
     'currency': 'Moneda',
     'update_value': 'Actualizar el Valor',
     'change_currency': 'Cambiar Moneda',
+    'download_data': 'Descargar Datos',
     'accept': 'Aceptar',
     'yes': 'Yes',
     'no': 'No',

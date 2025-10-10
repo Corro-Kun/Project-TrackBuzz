@@ -279,6 +279,34 @@ class DrawerSetting extends StatelessWidget {
                     },
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: AdjustmentsAnnounced(
+                    icon: CupertinoIcons.folder,
+                    text: loc?.translate('download_data') ?? 'Download Data',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20, left: 20),
+                  child: GestureDetector(
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'SVG',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 20),
                 BlocBuilder<SettingProjectBloc, SettingProjectState>(
                   builder: (context, state) {
