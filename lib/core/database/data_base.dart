@@ -1,9 +1,15 @@
+import 'dart:io';
+
+import 'package:archive/archive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DataBase {
+  static const String _dbName = 'trackbuzz.db';
+
   Future<Database> OpenDB() async {
     final Future<Database> _dataBase = openDatabase(
-      'trackbuzz.db',
+      _dbName,
       onCreate: (db, version) {
         db.execute(
           'CREATE TABLE project(id INTEGER PRIMARY KEY, title TEXT, description TEXT DEFAULT null, image TEXT, state INTEGER DEFAULT 0)',
@@ -42,5 +48,74 @@ class DataBase {
     );
 
     return _dataBase;
+  }
+
+  Future<String> getDatabasePath() async {
+    final databasesPath = await getDatabasesPath();
+    return '$databasesPath/$_dbName';
+  }
+
+  Future<Directory> getImagesDirectory() async {
+    final Directory? appDocDir = await getExternalStorageDirectory();
+    final String path = appDocDir!.path;
+    final Directory imagesDir = Directory('$path/images');
+    if (!await imagesDir.exists()) {
+      await imagesDir.create(recursive: true);
+    }
+    return imagesDir;
+  }
+
+  Future<File?> getImageFile(String imagePath) async {
+    final file = File(imagePath);
+    if (await file.exists()) {
+      return file;
+    }
+    return null;
+  }
+
+  Future<File> exportToZip() async {
+    try {
+      final archive = Archive();
+
+      final dbPath = await getDatabasePath();
+      final dbFile = File(dbPath);
+      if (await dbFile.exists()) {
+        final dbData = await dbFile.readAsBytes();
+        archive.addFile(ArchiveFile(_dbName, dbData.length, dbData));
+      }
+
+      final imagesDirectory = await getImagesDirectory();
+
+      if (await imagesDirectory.exists()) {
+        final imageFiles = await imagesDirectory
+            .list()
+            .where((entity) => entity is File)
+            .toList();
+
+        for (final entity in imageFiles) {
+          final file = entity as File;
+          final fileData = await file.readAsBytes();
+          final relativePath = 'images';
+          archive.addFile(ArchiveFile(relativePath, fileData.length, fileData));
+        }
+      }
+
+      final zipData = ZipEncoder().encode(archive);
+      if (zipData == null) {
+        throw Exception('Error al crear el archivo ZIP');
+      }
+
+      final directory = await getExternalStorageDirectory();
+      print(directory?.path);
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final zipPath = '${directory?.path}/trackbuzz_backup_$timestamp.zip';
+
+      final zipFile = File(zipPath);
+      await zipFile.writeAsBytes(zipData);
+
+      return zipFile;
+    } catch (e) {
+      throw Exception('Error al exportar ZIP: $e');
+    }
   }
 }

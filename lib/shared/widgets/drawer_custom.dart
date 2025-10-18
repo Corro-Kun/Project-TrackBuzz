@@ -1,7 +1,10 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trackbuzz/core/database/data_base.dart';
 import 'package:trackbuzz/core/setting/locale_notifier.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
 import 'package:trackbuzz/shared/widgets/adjustments_announced.dart';
@@ -19,7 +22,7 @@ class DrawerCustom extends StatelessWidget {
     return Drawer(
       width: MediaQuery.of(context).size.width * 0.75,
       child: SafeArea(
-        child: Column(
+        child: ListView(
           children: [
             const SizedBox(height: 20),
             Center(
@@ -312,14 +315,47 @@ class DrawerCustom extends StatelessWidget {
                 ),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.all(20),
               child: AdjustmentsAnnounced(
                 icon: CupertinoIcons.folder,
-                text: loc?.translate('import_data') ?? 'Import Data',
+                text: loc?.translate('data') ?? 'Data',
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(right: 20, left: 20),
+              child: GestureDetector(
+                onTap: () async {
+                  if (await Permission.storage.request().isGranted) {
+                    await FilePicker.platform.saveFile(
+                      dialogTitle: 'Guardar backup',
+                      fileName:
+                          'trackbuzz_backup_${DateTime.now().millisecondsSinceEpoch}.zip',
+                      type: FileType.custom,
+                      allowedExtensions: ['zip'],
+                    );
+                  }
+                  //final zip = await DataBase().exportToZip();
+                },
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Text(
+                      loc?.translate('download') ?? 'Download',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(right: 20, left: 20),
               child: GestureDetector(
@@ -331,7 +367,7 @@ class DrawerCustom extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'SVG',
+                      loc?.translate('import') ?? 'Import',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.secondary,
@@ -341,6 +377,7 @@ class DrawerCustom extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
