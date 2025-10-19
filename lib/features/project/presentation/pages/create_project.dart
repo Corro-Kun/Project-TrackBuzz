@@ -57,7 +57,7 @@ class _CreateProjectState extends State<CreateProject> {
 
   Future<void> _create(String error) async {
     if (_titleController.text.isEmpty) {
-      message(context, error);
+      message(context, error, 2);
       return;
     }
     _load(true);

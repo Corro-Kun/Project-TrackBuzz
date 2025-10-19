@@ -50,7 +50,7 @@ class _UpdateTaskState extends State<UpdateTask> {
 
   Future<void> _update(String error) async {
     if (_nameController.text.isEmpty || _descriptionController.text.isEmpty) {
-      message(context, error);
+      message(context, error, 2);
       return;
     }
     _load(true);

@@ -106,9 +106,15 @@ class DataBase {
       }
 
       final directory = await getExternalStorageDirectory();
-      print(directory?.path);
+
+      final Directory dir = Directory('${directory!.path}/backup');
+      if (!await dir.exists()) {
+        await dir.create(recursive: true);
+      }
+
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final zipPath = '${directory?.path}/trackbuzz_backup_$timestamp.zip';
+      final zipPath =
+          '${dir.path.substring(0, dir.path.indexOf('Android'))}Download/trackbuzz_backup_$timestamp.zip';
 
       final zipFile = File(zipPath);
       await zipFile.writeAsBytes(zipData);

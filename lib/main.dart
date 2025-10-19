@@ -32,6 +32,7 @@ void main() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   await Permission.notification.request();
+  //await [Permission.notification, Permission.storage].request();
 
   runApp(
     MultiProvider(

@@ -35,7 +35,7 @@ class _CreateTaskState extends State<CreateTask> {
 
   Future<void> _create(String error) async {
     if (_nameController.text.isEmpty || _descriptionController.text.isEmpty) {
-      message(context, error);
+      message(context, error, 2);
       return;
     }
     _load(true);

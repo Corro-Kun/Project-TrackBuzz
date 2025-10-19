@@ -37,6 +37,7 @@ class AppLocalizationsEn {
     'change_currency': 'Change Currency',
     'data': 'Data',
     'download': 'Download',
+    'file_download': 'archivo descargado',
     'accept': 'Accept',
     'yes': 'Si',
     'no': 'No',

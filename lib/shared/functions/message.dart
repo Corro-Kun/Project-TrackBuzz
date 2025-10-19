@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void message(context, String message) {
+void message(context, String message, int duration) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(
@@ -10,7 +10,7 @@ void message(context, String message) {
           fontWeight: FontWeight.bold,
         ),
       ),
-      duration: Duration(seconds: 2),
+      duration: Duration(seconds: duration),
       backgroundColor: Theme.of(context).colorScheme.primary,
       behavior: SnackBarBehavior.floating,
     ),

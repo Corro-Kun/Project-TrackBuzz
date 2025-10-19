@@ -1,19 +1,52 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trackbuzz/core/database/data_base.dart';
 import 'package:trackbuzz/core/setting/locale_notifier.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
+import 'package:trackbuzz/shared/functions/message.dart';
 import 'package:trackbuzz/shared/widgets/adjustments_announced.dart';
 import 'package:trackbuzz/shared/widgets/change_color.dart';
 import 'package:trackbuzz/shared/widgets/switch_custom.dart';
+import 'package:trackbuzz/utils/constants.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
-class DrawerCustom extends StatelessWidget {
+class DrawerCustom extends StatefulWidget {
   const DrawerCustom({super.key});
+
+  @override
+  State<DrawerCustom> createState() => _DrawerCustomState();
+}
+
+class _DrawerCustomState extends State<DrawerCustom> {
+  bool notifications = false;
+
+  Future<void> getNotifications() async {
+    final status = await Permission.notification.status;
+    final prefs = await SharedPreferences.getInstance();
+    final bool data = await prefs.getBool('notifications') ?? status.isGranted;
+    setState(() {
+      notifications = data;
+    });
+  }
+
+  Future<void> setNotifications(value) async {
+    setState(() {
+      notifications = value;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('notifications', value);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getNotifications();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +157,20 @@ class DrawerCustom extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SwitchCustom(light: false, onChanged: (value) {}),
+                  SwitchCustom(
+                    light: notifications,
+                    onChanged: (value) async {
+                      var status = await Permission.notification.status;
+                      if (value == true && !status.isGranted) {
+                        final result = await Permission.notification.request();
+                        if (result.isGranted) {
+                          setNotifications(value);
+                        }
+                      } else {
+                        setNotifications(value);
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
@@ -326,16 +372,56 @@ class DrawerCustom extends StatelessWidget {
               padding: const EdgeInsets.only(right: 20, left: 20),
               child: GestureDetector(
                 onTap: () async {
-                  if (await Permission.storage.request().isGranted) {
-                    await FilePicker.platform.saveFile(
-                      dialogTitle: 'Guardar backup',
-                      fileName:
-                          'trackbuzz_backup_${DateTime.now().millisecondsSinceEpoch}.zip',
-                      type: FileType.custom,
-                      allowedExtensions: ['zip'],
+                  final status = await Permission.storage.status;
+                  if (!status.isGranted) {
+                    await Permission.storage.request();
+                  }
+                  final zip = await DataBase().exportToZip();
+
+                  if (notifications) {
+                    const AndroidNotificationDetails
+                    androidNotificationDetails = AndroidNotificationDetails(
+                      'backup_channel',
+                      'Backup Notifications',
+                      channelDescription: 'download the backup',
+                      importance: Importance.high,
+                      priority: Priority.high,
+                      playSound: true,
+                      enableVibration: true,
+                      autoCancel: true,
+                      actions: [
+                        AndroidNotificationAction(
+                          'open_file',
+                          'Open File',
+                          showsUserInterface: true,
+                        ),
+                        AndroidNotificationAction(
+                          'open_folder',
+                          'Open Folder',
+                          showsUserInterface: true,
+                        ),
+                      ],
+                    );
+
+                    final NotificationDetails platformChannelSpecifics =
+                        NotificationDetails(
+                          android: androidNotificationDetails,
+                        );
+
+                    await flutterLocalNotificationsPlugin.show(
+                      0,
+                      loc?.translate('file_download') ?? 'downloaded file',
+                      zip.path,
+                      platformChannelSpecifics,
+                      payload: zip.path,
+                    );
+                  } else {
+                    message(
+                      context,
+                      '${loc?.translate('file_download') ?? 'downloaded file'}: ${zip.path}',
+                      5,
                     );
                   }
-                  //final zip = await DataBase().exportToZip();
                 },
                 child: Container(
                   height: 50,
@@ -359,6 +445,13 @@ class DrawerCustom extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 20, left: 20),
               child: GestureDetector(
+                onTap: () async {
+                  FilePickerResult? result = await FilePicker.platform
+                      .pickFiles(
+                        type: FileType.custom,
+                        allowedExtensions: ['zip'],
+                      );
+                },
                 child: Container(
                   height: 50,
                   decoration: BoxDecoration(
