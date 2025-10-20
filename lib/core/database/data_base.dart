@@ -95,7 +95,8 @@ class DataBase {
         for (final entity in imageFiles) {
           final file = entity as File;
           final fileData = await file.readAsBytes();
-          final relativePath = 'images';
+          final relativePath =
+              'images/${file.path.substring(file.path.lastIndexOf('/'))}';
           archive.addFile(ArchiveFile(relativePath, fileData.length, fileData));
         }
       }

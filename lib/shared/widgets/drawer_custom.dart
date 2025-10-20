@@ -379,29 +379,30 @@ class _DrawerCustomState extends State<DrawerCustom> {
                     final zip = await DataBase().exportToZip(selectedDirectory);
 
                     if (notifications) {
-                      const AndroidNotificationDetails
-                      androidNotificationDetails = AndroidNotificationDetails(
-                        'backup_channel',
-                        'Backup Notifications',
-                        channelDescription: 'download the backup',
-                        importance: Importance.high,
-                        priority: Priority.high,
-                        playSound: true,
-                        enableVibration: true,
-                        autoCancel: true,
-                        actions: [
-                          AndroidNotificationAction(
-                            'open_file',
-                            'Open File',
-                            showsUserInterface: true,
-                          ),
-                          AndroidNotificationAction(
-                            'open_folder',
-                            'Open Folder',
-                            showsUserInterface: true,
-                          ),
-                        ],
-                      );
+                      AndroidNotificationDetails androidNotificationDetails =
+                          AndroidNotificationDetails(
+                            'backup_channel',
+                            'Backup Notifications',
+                            channelDescription: 'download the backup',
+                            importance: Importance.high,
+                            priority: Priority.high,
+                            playSound: true,
+                            enableVibration: true,
+                            autoCancel: false,
+                            ongoing: true,
+                            actions: [
+                              AndroidNotificationAction(
+                                'open_file',
+                                loc?.translate('open_file') ?? 'Open File',
+                                showsUserInterface: true,
+                              ),
+                              AndroidNotificationAction(
+                                'open_folder',
+                                loc?.translate('open_folder') ?? 'Open Folder',
+                                showsUserInterface: true,
+                              ),
+                            ],
+                          );
 
                       final NotificationDetails platformChannelSpecifics =
                           NotificationDetails(
@@ -458,6 +459,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
                       .pickFiles(
                         type: FileType.custom,
                         allowedExtensions: ['zip'],
+                        allowMultiple: false,
                       );
                 },
                 child: Container(

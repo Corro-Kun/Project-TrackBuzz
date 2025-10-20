@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/core/setting/locale_notifier.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
+import 'package:trackbuzz/core/setting/notification_functions.dart';
 import 'package:trackbuzz/features/project/presentation/pages/project_list.dart';
 import 'package:trackbuzz/features/report/presentation/pages/project_report.dart';
 import 'package:trackbuzz/features/track/presentation/pages/time_tracking.dart';
@@ -29,7 +30,12 @@ void main() async {
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
   );
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse: (NotificationResponse response) {
+      handleNotificationAction(response);
+    },
+  );
 
   await Permission.notification.request();
   //await [Permission.notification, Permission.storage].request();
