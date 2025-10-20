@@ -70,6 +70,7 @@ class AppLocalizationsEs {
     'description': 'Descripción',
     //error
     'error_field': 'Error: llena todos los campos, por favor',
+    'error_save': 'Error: No se seleccionó una carpeta',
     'track': 'El contador esta activo',
   };
 }

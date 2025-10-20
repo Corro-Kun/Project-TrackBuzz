@@ -372,53 +372,61 @@ class _DrawerCustomState extends State<DrawerCustom> {
               padding: const EdgeInsets.only(right: 20, left: 20),
               child: GestureDetector(
                 onTap: () async {
-                  final status = await Permission.storage.status;
-                  if (!status.isGranted) {
-                    await Permission.storage.request();
-                  }
-                  final zip = await DataBase().exportToZip();
+                  String? selectedDirectory = await FilePicker.platform
+                      .getDirectoryPath();
 
-                  if (notifications) {
-                    const AndroidNotificationDetails
-                    androidNotificationDetails = AndroidNotificationDetails(
-                      'backup_channel',
-                      'Backup Notifications',
-                      channelDescription: 'download the backup',
-                      importance: Importance.high,
-                      priority: Priority.high,
-                      playSound: true,
-                      enableVibration: true,
-                      autoCancel: true,
-                      actions: [
-                        AndroidNotificationAction(
-                          'open_file',
-                          'Open File',
-                          showsUserInterface: true,
-                        ),
-                        AndroidNotificationAction(
-                          'open_folder',
-                          'Open Folder',
-                          showsUserInterface: true,
-                        ),
-                      ],
-                    );
+                  if (selectedDirectory != null) {
+                    final zip = await DataBase().exportToZip(selectedDirectory);
 
-                    final NotificationDetails platformChannelSpecifics =
-                        NotificationDetails(
-                          android: androidNotificationDetails,
-                        );
+                    if (notifications) {
+                      const AndroidNotificationDetails
+                      androidNotificationDetails = AndroidNotificationDetails(
+                        'backup_channel',
+                        'Backup Notifications',
+                        channelDescription: 'download the backup',
+                        importance: Importance.high,
+                        priority: Priority.high,
+                        playSound: true,
+                        enableVibration: true,
+                        autoCancel: true,
+                        actions: [
+                          AndroidNotificationAction(
+                            'open_file',
+                            'Open File',
+                            showsUserInterface: true,
+                          ),
+                          AndroidNotificationAction(
+                            'open_folder',
+                            'Open Folder',
+                            showsUserInterface: true,
+                          ),
+                        ],
+                      );
 
-                    await flutterLocalNotificationsPlugin.show(
-                      0,
-                      loc?.translate('file_download') ?? 'downloaded file',
-                      zip.path,
-                      platformChannelSpecifics,
-                      payload: zip.path,
-                    );
+                      final NotificationDetails platformChannelSpecifics =
+                          NotificationDetails(
+                            android: androidNotificationDetails,
+                          );
+
+                      await flutterLocalNotificationsPlugin.show(
+                        0,
+                        loc?.translate('file_download') ?? 'downloaded file',
+                        zip.path,
+                        platformChannelSpecifics,
+                        payload: zip.path,
+                      );
+                    } else {
+                      message(
+                        context,
+                        '${loc?.translate('file_download') ?? 'downloaded file'}: ${zip.path}',
+                        5,
+                      );
+                    }
                   } else {
                     message(
                       context,
-                      '${loc?.translate('file_download') ?? 'downloaded file'}: ${zip.path}',
+                      loc?.translate('error_save') ??
+                          'Error: a folder was not selected',
                       5,
                     );
                   }

@@ -54,7 +54,7 @@ class DrawerSetting extends StatelessWidget {
         child: Drawer(
           width: MediaQuery.of(context).size.width * 0.75,
           child: SafeArea(
-            child: Column(
+            child: ListView(
               children: [
                 SizedBox(height: 20),
                 Center(
@@ -73,6 +73,19 @@ class DrawerSetting extends StatelessWidget {
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AdjustmentsAnnounced(
+                        icon: CupertinoIcons.text_aligncenter,
+                        text: loc?.translate('description') ?? 'Description',
+                      ),
+                      SwitchCustom(light: false, onChanged: (value) {}),
+                    ],
                   ),
                 ),
                 Padding(
@@ -283,7 +296,7 @@ class DrawerSetting extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   child: AdjustmentsAnnounced(
                     icon: CupertinoIcons.folder,
-                    text: loc?.translate('download_data') ?? 'Download Data',
+                    text: loc?.translate('download') ?? 'Download',
                   ),
                 ),
                 Padding(

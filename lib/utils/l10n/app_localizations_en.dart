@@ -70,6 +70,7 @@ class AppLocalizationsEn {
     'description': 'Description',
     //error
     'error_field': 'Error: please fill in all the fields',
+    'error_save': 'Error: a folder was not selected',
     // track
     'track': 'The counter is active',
   };
