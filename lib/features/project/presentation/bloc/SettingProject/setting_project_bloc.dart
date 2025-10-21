@@ -16,6 +16,7 @@ class SettingProjectBloc
   }) : super(SettingProjectInitial()) {
     on<GetSetting>(_onGetSetting);
     on<ChangeBill>(_onChangeBill);
+    on<ChangeDescription>(_onChangeDescription);
     on<ChangePrice>(_onChangePrice);
     on<ChangeCoin>(_onChangeCoin);
     on<UpdateSetting>(_onUpdateSetting);
@@ -43,6 +44,27 @@ class SettingProjectBloc
       final newData = SettingModel(
         id: currentState.setting.id,
         bill: event.bill,
+        description: currentState.setting.description,
+        price: currentState.setting.price,
+        coin: currentState.setting.coin,
+        idProject: currentState.setting.idProject,
+      );
+      emit(SettingProjectLoaded(setting: newData, update: true));
+    } catch (e) {
+      emit(SettingProjectError(message: e.toString()));
+    }
+  }
+
+  void _onChangeDescription(
+    ChangeDescription event,
+    Emitter<SettingProjectState> emit,
+  ) async {
+    final currentState = state as SettingProjectLoaded;
+    try {
+      final newData = SettingModel(
+        id: currentState.setting.id,
+        bill: currentState.setting.bill,
+        description: event.description,
         price: currentState.setting.price,
         coin: currentState.setting.coin,
         idProject: currentState.setting.idProject,
@@ -62,6 +84,7 @@ class SettingProjectBloc
       final newData = SettingModel(
         id: currentState.setting.id,
         bill: currentState.setting.bill,
+        description: currentState.setting.description,
         price: event.price,
         coin: currentState.setting.coin,
         idProject: currentState.setting.idProject,
@@ -81,6 +104,7 @@ class SettingProjectBloc
       final newData = SettingModel(
         id: currentState.setting.id,
         bill: currentState.setting.bill,
+        description: currentState.setting.description,
         price: currentState.setting.price,
         coin: event.coin,
         idProject: currentState.setting.idProject,

@@ -17,7 +17,12 @@ class SettingDatasource {
     final db = await DataBase().OpenDB();
     await db.update(
       'project_settings',
-      {'bill': value['bill'], 'price': value['price'], 'coin': value['coin']},
+      {
+        'bill': value['bill'],
+        'description': value['description'],
+        'price': value['price'],
+        'coin': value['coin'],
+      },
       where: 'id = ?',
       whereArgs: [value['id']],
     );

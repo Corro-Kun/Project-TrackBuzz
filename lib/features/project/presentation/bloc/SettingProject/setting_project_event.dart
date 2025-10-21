@@ -12,6 +12,12 @@ class ChangeBill extends SettingProjectEvent {
   ChangeBill({required this.bill});
 }
 
+class ChangeDescription extends SettingProjectEvent {
+  final int description;
+
+  ChangeDescription({required this.description});
+}
+
 class ChangePrice extends SettingProjectEvent {
   final double price;
 

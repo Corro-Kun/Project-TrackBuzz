@@ -1,6 +1,7 @@
 class SettingModel {
   int id;
   int bill;
+  int description;
   double price;
   String coin;
   int idProject;
@@ -8,6 +9,7 @@ class SettingModel {
   SettingModel({
     required this.id,
     required this.bill,
+    required this.description,
     required this.price,
     required this.coin,
     required this.idProject,
@@ -17,6 +19,7 @@ class SettingModel {
     return SettingModel(
       id: json['id'],
       bill: json['bill'],
+      description: json['description'],
       price: json['price'],
       coin: json['coin'],
       idProject: json['id_project'],
@@ -27,6 +30,7 @@ class SettingModel {
     return {
       'id': id,
       'bill': bill,
+      'description': description,
       'price': price,
       'coin': coin,
       'id_project': idProject,

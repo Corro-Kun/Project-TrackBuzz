@@ -47,8 +47,7 @@ Future<void> _openFolder(String filePath) async {
     final directory = file.parent;
 
     if (await directory.exists()) {
-      final result = await OpenFile.open(directory.path);
-      print(result);
+      await OpenFile.open(directory.path);
     }
   } catch (e) {
     print('Error: $e');

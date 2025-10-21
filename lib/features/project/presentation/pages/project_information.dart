@@ -283,32 +283,51 @@ class _ProjectInformationState extends State<ProjectInformation>
               return const PreLoader();
             } else if (state is ProjectLoaded) {
               return state.project.description != null
-                  ? Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(20),
-                          child: AdjustmentsAnnounced(
-                            icon: CupertinoIcons.text_aligncenter,
-                            text:
-                                loc?.translate('description_info') ??
-                                'Description:',
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 20, right: 20),
-                          child: Center(
-                            child: Text(
-                              state.project.description ?? '',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                      ],
+                  ? BlocBuilder<SettingProjectBloc, SettingProjectState>(
+                      builder: (contextBloc, stateS) {
+                        if (stateS is SettingProjectLoading) {
+                          return const PreLoader();
+                        } else if (stateS is SettingProjectLoaded) {
+                          if (stateS.setting.description == 0) {
+                            return const SizedBox.shrink();
+                          } else {
+                            return Column(
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.all(20),
+                                  child: AdjustmentsAnnounced(
+                                    icon: CupertinoIcons.text_aligncenter,
+                                    text:
+                                        loc?.translate('description_info') ??
+                                        'Description:',
+                                  ),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(
+                                    left: 20,
+                                    right: 20,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      state.project.description ?? '',
+                                      style: TextStyle(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.secondary,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      },
                     )
                   : const SizedBox.shrink();
             } else {

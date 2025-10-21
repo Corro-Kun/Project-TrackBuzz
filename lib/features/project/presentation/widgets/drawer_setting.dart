@@ -84,7 +84,26 @@ class DrawerSetting extends StatelessWidget {
                         icon: CupertinoIcons.text_aligncenter,
                         text: loc?.translate('description') ?? 'Description',
                       ),
-                      SwitchCustom(light: false, onChanged: (value) {}),
+                      BlocBuilder<SettingProjectBloc, SettingProjectState>(
+                        builder: (contextBloc, state) {
+                          if (state is SettingProjectLoading) {
+                            return const PreLoader();
+                          } else if (state is SettingProjectLoaded) {
+                            return SwitchCustom(
+                              light: state.setting.description == 1
+                                  ? true
+                                  : false,
+                              onChanged: (value) {
+                                contextBloc.read<SettingProjectBloc>().add(
+                                  ChangeDescription(description: value ? 1 : 0),
+                                );
+                              },
+                            );
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
