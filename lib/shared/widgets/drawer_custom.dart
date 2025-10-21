@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -461,6 +463,8 @@ class _DrawerCustomState extends State<DrawerCustom> {
                         allowedExtensions: ['zip'],
                         allowMultiple: false,
                       );
+                  final zip = File(result!.files.single.path!);
+                  await DataBase().importFromZip(zip);
                 },
                 child: Container(
                   height: 50,

@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -128,7 +130,37 @@ class DataBase {
 
       return zipFile;
     } catch (e) {
-      throw Exception('Error al exportar ZIP: $e');
+      throw Exception('Error: $e');
+    }
+  }
+
+  Future<void> importFromZip(File zipFile) async {
+    try {
+      final zipData = await zipFile.readAsBytes();
+      final archive = ZipDecoder().decodeBytes(zipData);
+
+      for (final file in archive.files) {
+        if (file.isFile) {
+          final data = file.content as List<int>;
+          final bytes = Uint8List.fromList(data);
+
+          if (file.name == _dbName) {
+            final dbPath = await getDatabasePath();
+            final dbFile = File(dbPath);
+            await dbFile.writeAsBytes(bytes);
+          } else {
+            final imagesDir = await getImagesDirectory();
+            final imagePath =
+                '${imagesDir.path}/${file.name.substring(file.name.lastIndexOf('/'))}';
+            final imageFile = File(imagePath);
+            await imageFile.writeAsBytes(bytes);
+          }
+        }
+      }
+
+      await zipFile.delete();
+    } catch (e) {
+      throw Exception('Error: $e');
     }
   }
 }
