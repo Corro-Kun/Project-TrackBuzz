@@ -24,6 +24,9 @@ class AppLocalizationsEs {
     'reset_color': 'Restablecer Color',
     'import_data': 'Importar Datos',
     'import': 'Importar',
+    'import_description': 'Importar la copia de tus datos.',
+    'delete_data':
+        'Vas a sobrescribir los datos de esta aplicación. Si tienes datos importantes en esta aplicación, haz una copia de seguridad.',
     'choose_color': 'Elige tu Color',
     'save': 'Guardar',
     'cancel': 'Cancelar',
@@ -37,6 +40,7 @@ class AppLocalizationsEs {
     'change_currency': 'Cambiar Moneda',
     'data': 'Datos',
     'download': 'Descargar',
+    'download_description': 'Descargar una copia de tus datos.',
     'file_download': 'archivo descargado',
     'open_file': 'Abrir Archivo',
     'open_folder': 'Abrir Carpeta',

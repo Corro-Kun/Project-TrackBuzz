@@ -1,20 +1,14 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:trackbuzz/core/database/data_base.dart';
 import 'package:trackbuzz/core/setting/locale_notifier.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
-import 'package:trackbuzz/shared/functions/message.dart';
+import 'package:trackbuzz/presentation/pages/settings.dart';
 import 'package:trackbuzz/shared/widgets/adjustments_announced.dart';
 import 'package:trackbuzz/shared/widgets/change_color.dart';
 import 'package:trackbuzz/shared/widgets/switch_custom.dart';
-import 'package:trackbuzz/utils/constants.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class DrawerCustom extends StatefulWidget {
@@ -365,121 +359,24 @@ class _DrawerCustomState extends State<DrawerCustom> {
             ),
             Padding(
               padding: const EdgeInsets.all(20),
-              child: AdjustmentsAnnounced(
-                icon: CupertinoIcons.folder,
-                text: loc?.translate('data') ?? 'Data',
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 20, left: 20),
               child: GestureDetector(
-                onTap: () async {
-                  String? selectedDirectory = await FilePicker.platform
-                      .getDirectoryPath();
-
-                  if (selectedDirectory != null) {
-                    final zip = await DataBase().exportToZip(selectedDirectory);
-
-                    if (notifications) {
-                      AndroidNotificationDetails androidNotificationDetails =
-                          AndroidNotificationDetails(
-                            'backup_channel',
-                            'Backup Notifications',
-                            channelDescription: 'download the backup',
-                            importance: Importance.high,
-                            priority: Priority.high,
-                            playSound: true,
-                            enableVibration: true,
-                            autoCancel: false,
-                            ongoing: true,
-                            actions: [
-                              AndroidNotificationAction(
-                                'open_file',
-                                loc?.translate('open_file') ?? 'Open File',
-                                showsUserInterface: true,
-                              ),
-                              AndroidNotificationAction(
-                                'open_folder',
-                                loc?.translate('open_folder') ?? 'Open Folder',
-                                showsUserInterface: true,
-                              ),
-                            ],
-                          );
-
-                      final NotificationDetails platformChannelSpecifics =
-                          NotificationDetails(
-                            android: androidNotificationDetails,
-                          );
-
-                      await flutterLocalNotificationsPlugin.show(
-                        0,
-                        loc?.translate('file_download') ?? 'downloaded file',
-                        zip.path,
-                        platformChannelSpecifics,
-                        payload: zip.path,
-                      );
-                    } else {
-                      message(
-                        context,
-                        '${loc?.translate('file_download') ?? 'downloaded file'}: ${zip.path}',
-                        5,
-                      );
-                    }
-                  } else {
-                    message(
-                      context,
-                      loc?.translate('error_save') ??
-                          'Error: a folder was not selected',
-                      5,
-                    );
-                  }
+                onTap: () {
+                  Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (_) => const Settings()));
                 },
                 child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
-                    child: Text(
-                      loc?.translate('download') ?? 'Download',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.secondary,
+                  padding: EdgeInsets.only(top: 5, bottom: 5),
+                  color: Theme.of(context).colorScheme.surface,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AdjustmentsAnnounced(
+                        icon: CupertinoIcons.folder,
+                        text: loc?.translate('data') ?? 'Data',
                       ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.only(right: 20, left: 20),
-              child: GestureDetector(
-                onTap: () async {
-                  FilePickerResult? result = await FilePicker.platform
-                      .pickFiles(
-                        type: FileType.custom,
-                        allowedExtensions: ['zip'],
-                        allowMultiple: false,
-                      );
-                  final zip = File(result!.files.single.path!);
-                  await DataBase().importFromZip(zip);
-                },
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
-                    child: Text(
-                      loc?.translate('import') ?? 'Import',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
+                      Icon(Icons.chevron_right_rounded),
+                    ],
                   ),
                 ),
               ),

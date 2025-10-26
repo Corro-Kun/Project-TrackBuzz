@@ -24,6 +24,9 @@ class AppLocalizationsEn {
     'reset_color': 'Reset Color',
     'import_data': 'Import Data',
     'import': 'Import',
+    'import_description': 'Import the copy of your data.',
+    'delete_data':
+        "You're going to overwrite this app's data. If you have important data in this app, please back it up.",
     'choose_color': 'Choose a Color',
     'save': 'Save',
     'cancel': 'Cancel',
@@ -37,6 +40,7 @@ class AppLocalizationsEn {
     'change_currency': 'Change Currency',
     'data': 'Data',
     'download': 'Download',
+    'download_description': 'Download a copy of your data.',
     'file_download': 'downloaded file',
     'open_file': 'Open File',
     'open_folder': 'Open Folder',
