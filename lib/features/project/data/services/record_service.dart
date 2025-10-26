@@ -10,6 +10,10 @@ class RecordService {
     return await repository.getProject(id, page);
   }
 
+  Future<List<RecordModel>> getRecordWithTask(int id) async {
+    return await repository.getProjectWithTask(id);
+  }
+
   Future<int> getSeconds(int id) async {
     return await repository.getSeconds(id);
   }

@@ -412,16 +412,14 @@ class _ProjectInformationState extends State<ProjectInformation>
             } else if (state is RecordLoaded) {
               final timeMap = <String, int>{};
               final nameList = [];
-              for (var data in state.records) {
-                if (data.idTask != null) {
-                  timeMap[data.taskName!] =
-                      (timeMap[data.taskName!] ?? 0) +
-                      DateTime.parse(
-                        data.finish!,
-                      ).difference(DateTime.parse(data.start)).inSeconds;
-                  if (nameList.indexOf(data.taskName!) == -1) {
-                    nameList.add(data.taskName!);
-                  }
+              for (var data in state.recordTasks) {
+                timeMap[data.taskName!] =
+                    (timeMap[data.taskName!] ?? 0) +
+                    DateTime.parse(
+                      data.finish!,
+                    ).difference(DateTime.parse(data.start)).inSeconds;
+                if (nameList.indexOf(data.taskName!) == -1) {
+                  nameList.add(data.taskName!);
                 }
               }
               if (nameList.isNotEmpty) {

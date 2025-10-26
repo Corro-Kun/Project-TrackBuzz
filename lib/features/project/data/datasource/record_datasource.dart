@@ -23,6 +23,22 @@ class RecordDatasource {
     return data;
   }
 
+  Future<List<Map<String, dynamic>>> getRecordWithTask(int id) async {
+    final db = await DataBase().OpenDB();
+
+    final data = await db.rawQuery(
+      '''
+  SELECT r.*, t.name as task_name 
+  FROM task t
+  LEFT JOIN record r ON r.id_task = t.id 
+  WHERE r.id_project = ? AND r.active = ?
+''',
+      [id, 0],
+    );
+
+    return data;
+  }
+
   Future<int> getSeconds(int id) async {
     final db = await DataBase().OpenDB();
 

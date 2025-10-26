@@ -21,6 +21,7 @@ import 'package:trackbuzz/features/project/domain/usecase/get_activity_use_case.
 import 'package:trackbuzz/features/project/domain/usecase/get_list_project_user_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_record_of_project_use_case.dart';
+import 'package:trackbuzz/features/project/domain/usecase/get_record_with_task_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_seconds_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_setting_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/update_project_use_case.dart';
@@ -89,6 +90,7 @@ Future<void> init() async {
       getRecordOfProjectUseCase: sl(),
       getSecondsUseCase: sl(),
       getActivityUseCase: sl(),
+      getRecordWithTaskUseCase: sl(),
     ),
   );
   sl.registerFactory(
@@ -110,6 +112,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => StartRecordChronometerUseCase(sl()));
   sl.registerLazySingleton(() => StopRecordChronometerUseCase(sl()));
   sl.registerLazySingleton(() => GetRecordOfProjectUseCase(sl()));
+  sl.registerLazySingleton(() => GetRecordWithTaskUseCase(sl()));
   sl.registerLazySingleton(() => GetReportUseCase(sl()));
   sl.registerLazySingleton(() => GetTotalReportUseCase(sl()));
   sl.registerLazySingleton(() => GetSecondsUseCase(sl()));

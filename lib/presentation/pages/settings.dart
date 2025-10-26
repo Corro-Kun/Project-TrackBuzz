@@ -208,10 +208,14 @@ class Settings extends StatelessWidget {
             const SizedBox(height: 50),
             GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: Icon(
-                CupertinoIcons.xmark,
-                size: 30,
-                color: Theme.of(context).colorScheme.secondary,
+              child: Container(
+                padding: EdgeInsets.all(2),
+                color: Theme.of(context).colorScheme.surface,
+                child: Icon(
+                  CupertinoIcons.xmark,
+                  size: 30,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
               ),
             ),
           ],

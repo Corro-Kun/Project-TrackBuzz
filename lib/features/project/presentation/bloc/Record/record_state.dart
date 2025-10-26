@@ -10,11 +10,13 @@ class RecordLoading extends RecordState {}
 class RecordLoaded extends RecordState {
   final List<RecordModel> records;
   final List<ActivityModel> activity;
+  final List<RecordModel> recordTasks;
   final int page;
 
   RecordLoaded({
     required this.records,
     required this.activity,
+    required this.recordTasks,
     required this.page,
   });
 }
