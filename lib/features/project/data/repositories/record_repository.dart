@@ -16,6 +16,14 @@ class RecordRepository extends RecordRepositoryAbstract {
   }
 
   @override
+  Future<List<RecordModel>> getRecordWithoutPage(int id) async {
+    final data = await datasource.getRecordWithoutPage(id);
+    return List.generate(data.length, (i) {
+      return RecordModel.fromJson(data[i]);
+    });
+  }
+
+  @override
   Future<List<RecordModel>> getProjectWithTask(int id) async {
     final data = await datasource.getRecordWithTask(id);
     return List.generate(data.length, (i) {

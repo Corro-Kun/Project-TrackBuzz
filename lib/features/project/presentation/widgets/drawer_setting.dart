@@ -1,11 +1,15 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/core/setting/theme_notifier.dart';
 import 'package:trackbuzz/features/project/domain/usecase/delete_project_use_case.dart';
+import 'package:trackbuzz/features/project/domain/usecase/get_record_without_page_use_case.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_event.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_bloc.dart';
@@ -13,9 +17,13 @@ import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/sett
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_state.dart';
 import 'package:trackbuzz/features/project/presentation/pages/project_update.dart';
 import 'package:trackbuzz/features/project/presentation/widgets/AlerDialogText.dart';
+import 'package:trackbuzz/shared/functions/export_to_csv.dart';
+import 'package:trackbuzz/shared/functions/message.dart';
+import 'package:trackbuzz/shared/functions/time_format_record.dart';
 import 'package:trackbuzz/shared/widgets/adjustments_announced.dart';
 import 'package:trackbuzz/shared/widgets/pre_loader.dart';
 import 'package:trackbuzz/shared/widgets/switch_custom.dart';
+import 'package:trackbuzz/utils/constants.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class DrawerSetting extends StatelessWidget {
@@ -39,7 +47,6 @@ class DrawerSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Provider.of<ThemeNotifier>(context);
     final loc = AppLocalizations.of(context);
 
     return BlocProvider.value(
@@ -321,6 +328,95 @@ class DrawerSetting extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 20, left: 20),
                   child: GestureDetector(
+                    onTap: () async {
+                      String? selectedDirectory = await FilePicker.platform
+                          .getDirectoryPath();
+                      if (selectedDirectory != null) {
+                        final data = await GetRecordWithoutPageUseCase(
+                          sl(),
+                        ).execute(idProject);
+                        List<Map<String, dynamic>> csv = [];
+                        for (var i = 0; i < data.length; i++) {
+                          final time = DateTime.parse(
+                            data[i].finish!,
+                          ).difference(DateTime.parse(data[i].start)).inSeconds;
+                          csv.add({
+                            'N': i + 1,
+                            'date': data[i].start.substring(
+                              0,
+                              data[i].start.indexOf('T'),
+                            ),
+                            'activity': data[i].idTask == null
+                                ? 'General'
+                                : data[i].taskName,
+                            'start': data[i].start.substring(
+                              0,
+                              data[i].start.lastIndexOf('.'),
+                            ),
+                            'finish': data[i].finish!.substring(
+                              0,
+                              data[i].finish!.lastIndexOf('.'),
+                            ),
+                            'time': timeFormatRecord(time),
+                          });
+                        }
+                        final path = await exportToCsv(csv, selectedDirectory);
+                        final preferences =
+                            await SharedPreferences.getInstance();
+                        final bool notifications =
+                            preferences.getBool('notifications') ?? false;
+
+                        if (notifications) {
+                          AndroidNotificationDetails
+                          androidNotificationDetails =
+                              AndroidNotificationDetails(
+                                'backup_channel',
+                                'Backup Notifications',
+                                channelDescription: 'download the file',
+                                importance: Importance.high,
+                                priority: Priority.high,
+                                playSound: true,
+                                enableVibration: true,
+                                autoCancel: false,
+                                ongoing: true,
+                                actions: [
+                                  AndroidNotificationAction(
+                                    'open_file',
+                                    loc?.translate('open_file') ?? 'Open File',
+                                    showsUserInterface: true,
+                                  ),
+                                  AndroidNotificationAction(
+                                    'open_folder',
+                                    loc?.translate('open_folder') ??
+                                        'Open Folder',
+                                    showsUserInterface: true,
+                                  ),
+                                ],
+                              );
+
+                          final NotificationDetails platformChannelSpecifics =
+                              NotificationDetails(
+                                android: androidNotificationDetails,
+                              );
+
+                          await flutterLocalNotificationsPlugin.show(
+                            0,
+                            loc?.translate('file_download') ??
+                                'downloaded file',
+                            path,
+                            platformChannelSpecifics,
+                            payload: path,
+                          );
+                        } else {
+                          message(
+                            context,
+                            '${loc?.translate('file_download') ?? 'downloaded file'}: $path',
+                            5,
+                          );
+                        }
+                        Navigator.of(context).pop();
+                      }
+                    },
                     child: Container(
                       height: 50,
                       decoration: BoxDecoration(
@@ -329,7 +425,7 @@ class DrawerSetting extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          'SVG',
+                          'CSV',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).colorScheme.secondary,

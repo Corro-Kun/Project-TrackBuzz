@@ -3,6 +3,11 @@ import 'dart:io';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:open_file/open_file.dart';
 
+const _files = {
+  'zip': 'application/x-zip-compressed',
+  'csv': 'application/vnd.ms-excel',
+};
+
 void handleNotificationAction(NotificationResponse response) {
   final String? payload = response.payload;
   final String? actionId = response.actionId;
@@ -24,13 +29,11 @@ void handleNotificationAction(NotificationResponse response) {
 
 Future<void> _openFile(String filePath) async {
   try {
+    final type = filePath.substring(filePath.indexOf('.'));
     final file = File(filePath);
 
     if (await file.exists()) {
-      final result = await OpenFile.open(
-        filePath,
-        type: 'application/x-zip-compressed',
-      );
+      final result = await OpenFile.open(filePath, type: _files[type]);
 
       if (result.type == ResultType.noAppToOpen) {
         _openFolder(filePath);
