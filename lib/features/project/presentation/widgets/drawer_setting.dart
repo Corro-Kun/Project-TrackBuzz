@@ -19,6 +19,7 @@ import 'package:trackbuzz/features/project/presentation/pages/project_update.dar
 import 'package:trackbuzz/features/project/presentation/widgets/AlerDialogText.dart';
 import 'package:trackbuzz/shared/functions/export_to_csv.dart';
 import 'package:trackbuzz/shared/functions/message.dart';
+import 'package:trackbuzz/shared/functions/notification_download.dart';
 import 'package:trackbuzz/shared/functions/time_format_record.dart';
 import 'package:trackbuzz/shared/widgets/adjustments_announced.dart';
 import 'package:trackbuzz/shared/widgets/pre_loader.dart';
@@ -80,6 +81,19 @@ class DrawerSetting extends StatelessWidget {
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AdjustmentsAnnounced(
+                        icon: CupertinoIcons.power,
+                        text: 'Activar',
+                      ),
+                      SwitchCustom(light: false, onChanged: (value) {}),
+                    ],
                   ),
                 ),
                 Padding(
@@ -367,46 +381,7 @@ class DrawerSetting extends StatelessWidget {
                             preferences.getBool('notifications') ?? false;
 
                         if (notifications) {
-                          AndroidNotificationDetails
-                          androidNotificationDetails =
-                              AndroidNotificationDetails(
-                                'backup_channel',
-                                'Backup Notifications',
-                                channelDescription: 'download the file',
-                                importance: Importance.high,
-                                priority: Priority.high,
-                                playSound: true,
-                                enableVibration: true,
-                                autoCancel: false,
-                                ongoing: true,
-                                actions: [
-                                  AndroidNotificationAction(
-                                    'open_file',
-                                    loc?.translate('open_file') ?? 'Open File',
-                                    showsUserInterface: true,
-                                  ),
-                                  AndroidNotificationAction(
-                                    'open_folder',
-                                    loc?.translate('open_folder') ??
-                                        'Open Folder',
-                                    showsUserInterface: true,
-                                  ),
-                                ],
-                              );
-
-                          final NotificationDetails platformChannelSpecifics =
-                              NotificationDetails(
-                                android: androidNotificationDetails,
-                              );
-
-                          await flutterLocalNotificationsPlugin.show(
-                            0,
-                            loc?.translate('file_download') ??
-                                'downloaded file',
-                            path,
-                            platformChannelSpecifics,
-                            payload: path,
-                          );
+                          notificationDownload(path, 'download the file', loc);
                         } else {
                           message(
                             context,

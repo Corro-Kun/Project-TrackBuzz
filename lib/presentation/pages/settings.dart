@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trackbuzz/core/database/data_base.dart';
 import 'package:trackbuzz/core/setting/app_reloader.dart';
 import 'package:trackbuzz/shared/functions/message.dart';
+import 'package:trackbuzz/shared/functions/notification_download.dart';
 import 'package:trackbuzz/utils/constants.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
@@ -63,43 +64,7 @@ class Settings extends StatelessWidget {
                       preferences.getBool('notifications') ?? false;
 
                   if (notifications) {
-                    AndroidNotificationDetails androidNotificationDetails =
-                        AndroidNotificationDetails(
-                          'backup_channel',
-                          'Backup Notifications',
-                          channelDescription: 'download the backup',
-                          importance: Importance.high,
-                          priority: Priority.high,
-                          playSound: true,
-                          enableVibration: true,
-                          autoCancel: false,
-                          ongoing: true,
-                          actions: [
-                            AndroidNotificationAction(
-                              'open_file',
-                              loc?.translate('open_file') ?? 'Open File',
-                              showsUserInterface: true,
-                            ),
-                            AndroidNotificationAction(
-                              'open_folder',
-                              loc?.translate('open_folder') ?? 'Open Folder',
-                              showsUserInterface: true,
-                            ),
-                          ],
-                        );
-
-                    final NotificationDetails platformChannelSpecifics =
-                        NotificationDetails(
-                          android: androidNotificationDetails,
-                        );
-
-                    await flutterLocalNotificationsPlugin.show(
-                      0,
-                      loc?.translate('file_download') ?? 'downloaded file',
-                      zip.path,
-                      platformChannelSpecifics,
-                      payload: zip.path,
-                    );
+                    notificationDownload(zip.path, 'download the backup', loc);
                   } else {
                     message(
                       context,

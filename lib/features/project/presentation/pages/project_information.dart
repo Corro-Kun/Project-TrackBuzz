@@ -389,7 +389,7 @@ class _ProjectInformationState extends State<ProjectInformation>
         BlocBuilder<RecordBloc, RecordState>(
           builder: (context, state) {
             if (state is RecordLoading) {
-              return const PreLoader();
+              return const Activity(dateList: []);
             } else if (state is RecordLoaded) {
               return Padding(
                 padding: const EdgeInsets.only(
