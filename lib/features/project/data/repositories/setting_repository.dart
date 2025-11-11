@@ -15,6 +15,12 @@ class SettingRepository extends SettingRepositoryAbstract {
   }
 
   @override
+  Future<int> getStateProject(int id) async {
+    final data = await datasource.getStateProject(id);
+    return data;
+  }
+
+  @override
   Future<dynamic> updateSetting(SettingModel setting) async {
     await datasource.updateSetting(setting.toJson());
   }

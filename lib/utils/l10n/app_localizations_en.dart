@@ -33,6 +33,7 @@ class AppLocalizationsEn {
     'project': 'Project:',
     'task_optional': 'Task (optional):',
     'general': 'General',
+    'state': 'State',
     'bill': 'Bill',
     'value_per_hour': 'Value per Hour',
     'currency': 'Currency',

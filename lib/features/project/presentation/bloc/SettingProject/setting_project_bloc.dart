@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:trackbuzz/features/project/data/models/setting_model.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_setting_project_use_case.dart';
+import 'package:trackbuzz/features/project/domain/usecase/get_state_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/update_setting_use_case.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_event.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/setting_project_state.dart';
@@ -8,10 +9,12 @@ import 'package:trackbuzz/features/project/presentation/bloc/SettingProject/sett
 class SettingProjectBloc
     extends Bloc<SettingProjectEvent, SettingProjectState> {
   final GetSettingProjectUseCase getSettingProjectUseCase;
+  final GetStateProjectUseCase getStateProjectUseCase;
   final UpdateSettingUseCase updateSettingUseCase;
 
   SettingProjectBloc({
     required this.getSettingProjectUseCase,
+    required this.getStateProjectUseCase,
     required this.updateSettingUseCase,
   }) : super(SettingProjectInitial()) {
     on<GetSetting>(_onGetSetting);
@@ -29,7 +32,9 @@ class SettingProjectBloc
     emit(SettingProjectLoading());
     try {
       final setting = await getSettingProjectUseCase.execute(event.id);
-      emit(SettingProjectLoaded(setting: setting, update: false));
+      final state = await getStateProjectUseCase.execute(event.id);
+
+      emit(SettingProjectLoaded(setting: setting, state: state, update: false));
     } catch (e) {
       emit(SettingProjectError(message: e.toString()));
     }
@@ -49,7 +54,13 @@ class SettingProjectBloc
         coin: currentState.setting.coin,
         idProject: currentState.setting.idProject,
       );
-      emit(SettingProjectLoaded(setting: newData, update: true));
+      emit(
+        SettingProjectLoaded(
+          setting: newData,
+          state: currentState.state,
+          update: true,
+        ),
+      );
     } catch (e) {
       emit(SettingProjectError(message: e.toString()));
     }
@@ -69,7 +80,13 @@ class SettingProjectBloc
         coin: currentState.setting.coin,
         idProject: currentState.setting.idProject,
       );
-      emit(SettingProjectLoaded(setting: newData, update: true));
+      emit(
+        SettingProjectLoaded(
+          setting: newData,
+          state: currentState.state,
+          update: true,
+        ),
+      );
     } catch (e) {
       emit(SettingProjectError(message: e.toString()));
     }
@@ -89,7 +106,13 @@ class SettingProjectBloc
         coin: currentState.setting.coin,
         idProject: currentState.setting.idProject,
       );
-      emit(SettingProjectLoaded(setting: newData, update: true));
+      emit(
+        SettingProjectLoaded(
+          setting: newData,
+          state: currentState.state,
+          update: true,
+        ),
+      );
     } catch (e) {
       emit(SettingProjectError(message: e.toString()));
     }
@@ -109,7 +132,13 @@ class SettingProjectBloc
         coin: event.coin,
         idProject: currentState.setting.idProject,
       );
-      emit(SettingProjectLoaded(setting: newData, update: true));
+      emit(
+        SettingProjectLoaded(
+          setting: newData,
+          state: currentState.state,
+          update: true,
+        ),
+      );
     } catch (e) {
       emit(SettingProjectError(message: e.toString()));
     }
@@ -122,7 +151,13 @@ class SettingProjectBloc
     final currentState = state as SettingProjectLoaded;
     try {
       await updateSettingUseCase.execute(currentState.setting);
-      emit(SettingProjectLoaded(setting: currentState.setting, update: false));
+      emit(
+        SettingProjectLoaded(
+          setting: currentState.setting,
+          state: currentState.state,
+          update: false,
+        ),
+      );
     } catch (e) {
       emit(SettingProjectError(message: e.toString()));
     }

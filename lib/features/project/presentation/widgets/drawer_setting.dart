@@ -2,12 +2,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trackbuzz/core/di/injection_container.dart';
-import 'package:trackbuzz/core/setting/theme_notifier.dart';
 import 'package:trackbuzz/features/project/domain/usecase/delete_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_record_without_page_use_case.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
@@ -24,7 +22,6 @@ import 'package:trackbuzz/shared/functions/time_format_record.dart';
 import 'package:trackbuzz/shared/widgets/adjustments_announced.dart';
 import 'package:trackbuzz/shared/widgets/pre_loader.dart';
 import 'package:trackbuzz/shared/widgets/switch_custom.dart';
-import 'package:trackbuzz/utils/constants.dart';
 import 'package:trackbuzz/utils/l10n/app_localizations.dart';
 
 class DrawerSetting extends StatelessWidget {
@@ -90,9 +87,22 @@ class DrawerSetting extends StatelessWidget {
                     children: [
                       AdjustmentsAnnounced(
                         icon: CupertinoIcons.power,
-                        text: 'Activar',
+                        text: loc?.translate('state') ?? 'State',
                       ),
-                      SwitchCustom(light: false, onChanged: (value) {}),
+                      BlocBuilder<SettingProjectBloc, SettingProjectState>(
+                        builder: (contextBloc, state) {
+                          if (state is SettingProjectLoading) {
+                            return const PreLoader();
+                          } else if (state is SettingProjectLoaded) {
+                            return SwitchCustom(
+                              light: state.state == 0 ? true : false,
+                              onChanged: (value) {},
+                            );
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
