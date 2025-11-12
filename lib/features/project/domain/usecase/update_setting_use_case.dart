@@ -6,7 +6,7 @@ class UpdateSettingUseCase {
 
   UpdateSettingUseCase(this.service);
 
-  Future<dynamic> execute(SettingModel setting) async {
-    await service.updateSetting(setting);
+  Future<dynamic> execute(SettingModel setting, int state) async {
+    await service.updateSetting(setting, state);
   }
 }

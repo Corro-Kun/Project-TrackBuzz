@@ -18,6 +18,7 @@ class SettingProjectBloc
     required this.updateSettingUseCase,
   }) : super(SettingProjectInitial()) {
     on<GetSetting>(_onGetSetting);
+    on<ChangeState>(_onChangeState);
     on<ChangeBill>(_onChangeBill);
     on<ChangeDescription>(_onChangeDescription);
     on<ChangePrice>(_onChangePrice);
@@ -35,6 +36,24 @@ class SettingProjectBloc
       final state = await getStateProjectUseCase.execute(event.id);
 
       emit(SettingProjectLoaded(setting: setting, state: state, update: false));
+    } catch (e) {
+      emit(SettingProjectError(message: e.toString()));
+    }
+  }
+
+  void _onChangeState(
+    ChangeState event,
+    Emitter<SettingProjectState> emit,
+  ) async {
+    final currentState = state as SettingProjectLoaded;
+    try {
+      emit(
+        SettingProjectLoaded(
+          setting: currentState.setting,
+          state: event.state,
+          update: true,
+        ),
+      );
     } catch (e) {
       emit(SettingProjectError(message: e.toString()));
     }
@@ -150,7 +169,10 @@ class SettingProjectBloc
   ) async {
     final currentState = state as SettingProjectLoaded;
     try {
-      await updateSettingUseCase.execute(currentState.setting);
+      await updateSettingUseCase.execute(
+        currentState.setting,
+        currentState.state,
+      );
       emit(
         SettingProjectLoaded(
           setting: currentState.setting,

@@ -14,7 +14,7 @@ class SettingService {
     return await repository.getStateProject(id);
   }
 
-  Future<dynamic> updateSetting(SettingModel setting) async {
-    await repository.updateSetting(setting);
+  Future<dynamic> updateSetting(SettingModel setting, int state) async {
+    await repository.updateSetting(setting, state);
   }
 }

@@ -96,7 +96,11 @@ class DrawerSetting extends StatelessWidget {
                           } else if (state is SettingProjectLoaded) {
                             return SwitchCustom(
                               light: state.state == 0 ? true : false,
-                              onChanged: (value) {},
+                              onChanged: (value) {
+                                contextBloc.read<SettingProjectBloc>().add(
+                                  ChangeState(state: value ? 0 : 1),
+                                );
+                              },
                             );
                           } else {
                             return const SizedBox.shrink();

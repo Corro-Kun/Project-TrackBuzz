@@ -6,6 +6,12 @@ class GetSetting extends SettingProjectEvent {
   GetSetting({required this.id});
 }
 
+class ChangeState extends SettingProjectEvent {
+  final int state;
+
+  ChangeState({required this.state});
+}
+
 class ChangeBill extends SettingProjectEvent {
   final int bill;
 
