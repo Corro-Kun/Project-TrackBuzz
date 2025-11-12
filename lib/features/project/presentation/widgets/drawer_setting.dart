@@ -242,6 +242,7 @@ class DrawerSetting extends StatelessWidget {
                             ),
                             child: Center(
                               child: Text(
+                                /*
                                 NumberFormat.decimalPattern(
                                       loc?.locale.languageCode == 'en'
                                           ? 'en_US'
@@ -249,6 +250,8 @@ class DrawerSetting extends StatelessWidget {
                                     )
                                     .format(state.setting.price.toInt())
                                     .toString(),
+                                    */
+                                '${state.setting.price}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: state.setting.bill == 1
