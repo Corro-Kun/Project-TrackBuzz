@@ -8,8 +8,8 @@ class ProjectRepository extends ProjectRepositoryAbstract {
   ProjectRepository(this.datasource);
 
   @override
-  Future<List<ProjectModel>> getProjects() async {
-    final data = await datasource.getProjects();
+  Future<List<ProjectModel>> getProjects({bool? state = false}) async {
+    final data = await datasource.getProjects(state ?? false);
     return List.generate(data.length, (i) {
       return ProjectModel.fromJson(data[i]);
     });

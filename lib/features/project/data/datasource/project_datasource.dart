@@ -2,13 +2,16 @@ import 'package:sqflite/sqlite_api.dart';
 import 'package:trackbuzz/core/database/data_base.dart';
 
 class ProjectDatasource {
-  Future<List<Map<String, dynamic>>> getProjects() async {
+  Future<List<Map<String, dynamic>>> getProjects(bool state) async {
     final db = await DataBase().OpenDB();
+
+    print(state);
 
     return await db.rawQuery("""
         SELECT p.*, t.second, t.activity
         FROM project p
         JOIN total t ON t.id_project = p.id
+        ${state ? 'WHERE p.state = 0' : ''}
       """);
   }
 

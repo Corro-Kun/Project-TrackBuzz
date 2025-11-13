@@ -6,7 +6,7 @@ class GetListProjectChronometerUseCase {
 
   GetListProjectChronometerUseCase(this.service);
 
-  Future<List<ProjectModel>> execute() async {
-    return await service.getProjects();
+  Future<List<ProjectModel>> execute({bool? state = false}) async {
+    return await service.getProjects(state ?? false);
   }
 }

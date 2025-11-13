@@ -13,6 +13,7 @@ class AppLocalizationsEs {
     'delete_title': '¿Estás seguro?',
     'delete_description':
         'Esta acción no se puede deshacer, perderá todas las tareas y datos de este proyecto.',
+    'finished': '(Finalizado)',
     // -
     'settings': 'Ajustes',
     'language': 'Idioma',

@@ -27,7 +27,9 @@ class ProjectChronometerBloc
   ) async {
     emit(ProjectChronometerInitial());
     try {
-      final projects = await getListProjectChronometerUseCase.execute();
+      final projects = await getListProjectChronometerUseCase.execute(
+        state: true,
+      );
       emit(ProjectChronometerLoaded(projects: projects, index: null));
     } catch (e) {
       emit(ProjectChronometerError(message: e.toString()));

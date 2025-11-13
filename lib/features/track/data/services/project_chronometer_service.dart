@@ -6,7 +6,7 @@ class ProjectChronometerService {
 
   ProjectChronometerService(this.repository);
 
-  Future<List<ProjectModel>> getProjects() async {
-    return await repository.getProjects();
+  Future<List<ProjectModel>> getProjects(bool state) async {
+    return await repository.getProjects(state: state);
   }
 }

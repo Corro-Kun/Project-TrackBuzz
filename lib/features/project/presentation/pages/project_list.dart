@@ -63,13 +63,16 @@ class ProjectList extends StatelessWidget {
                           child: Center(
                             child: Text(
                               state.projects.isNotEmpty
-                                  ? state.projects[state.index].title
+                                  ? state.projects[state.index].title +
+                                        ' ${state.projects[state.index].state == 1 ? loc?.translate('finished') ?? '(Finished)' : ''}'
                                   : loc?.translate('there_are_no_projects') ??
                                         'There are no projects',
                               style: TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.secondary,
+                                color: state.projects[state.index].state == 0
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : Theme.of(context).colorScheme.primary,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,

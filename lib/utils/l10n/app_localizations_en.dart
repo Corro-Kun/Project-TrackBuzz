@@ -13,6 +13,7 @@ class AppLocalizationsEn {
     'delete_title': 'are you sure?',
     'delete_description':
         'This action cannot be undone, you will lose all tasks and data for this project.',
+    'finished': '(Finished)',
     // -
     'settings': 'Settings',
     'language': 'Language',
