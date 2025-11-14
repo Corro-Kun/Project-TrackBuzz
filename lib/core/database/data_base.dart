@@ -74,7 +74,7 @@ class DataBase {
     return null;
   }
 
-  Future<File> exportToZip(String directory) async {
+  Future<Uint8List> exportToZip() async {
     try {
       final archive = Archive();
 
@@ -121,6 +121,10 @@ class DataBase {
       
       */
 
+      return Uint8List.fromList(zipData);
+
+      /*
+
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final zipPath = '$directory/trackbuzz_backup_$timestamp.zip';
 
@@ -128,6 +132,8 @@ class DataBase {
       await zipFile.writeAsBytes(zipData);
 
       return zipFile;
+
+      */
     } catch (e) {
       throw Exception('Error: $e');
     }

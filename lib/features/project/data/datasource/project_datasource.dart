@@ -5,8 +5,6 @@ class ProjectDatasource {
   Future<List<Map<String, dynamic>>> getProjects(bool state) async {
     final db = await DataBase().OpenDB();
 
-    print(state);
-
     return await db.rawQuery("""
         SELECT p.*, t.second, t.activity
         FROM project p
