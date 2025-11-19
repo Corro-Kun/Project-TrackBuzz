@@ -70,9 +70,7 @@ class ProjectList extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
-                                color: state.projects[state.index].state == 0
-                                    ? Theme.of(context).colorScheme.secondary
-                                    : Theme.of(context).colorScheme.primary,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,

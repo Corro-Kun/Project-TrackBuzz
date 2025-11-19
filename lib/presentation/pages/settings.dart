@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trackbuzz/core/database/data_base.dart';
 import 'package:trackbuzz/core/setting/app_reloader.dart';
@@ -84,6 +85,8 @@ class _SettingsState extends State<Settings> {
                         fileName: 'trackbuzz_backup_$timestamp.zip',
                       );
 
+                      final dir = await getExternalStorageDirectory();
+
                       _loadDownload(false);
 
                       if (Directory != null) {
@@ -94,7 +97,7 @@ class _SettingsState extends State<Settings> {
 
                         if (notifications) {
                           notificationDownload(
-                            Directory!.substring(Directory.indexOf(':') + 1),
+                            '${dir!.path.substring(0, dir.path.indexOf('Android'))}${Directory!.substring(Directory.indexOf(':') + 1)}',
                             'download the backup',
                             loc,
                           );
