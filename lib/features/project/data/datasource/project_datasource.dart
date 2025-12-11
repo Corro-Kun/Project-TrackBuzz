@@ -73,6 +73,7 @@ class ProjectDatasource {
     final db = await DataBase().OpenDB();
 
     await db.delete('record', where: 'id_project = ?', whereArgs: [id]);
+    await db.delete('activity', where: 'id_project = ?', whereArgs: [id]);
     await db.delete('task', where: 'id_project = ?', whereArgs: [id]);
     await db.delete(
       'project_settings',
