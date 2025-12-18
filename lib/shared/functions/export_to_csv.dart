@@ -1,6 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
-Future<String> exportToCsv(List<Map<String, dynamic>> data, String path) async {
+import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
+
+Future<String> exportToCsv(List<Map<String, dynamic>> data) async {
   final columns = data.first.keys.toList();
 
   final StringBuffer csvContent = StringBuffer();
@@ -21,12 +26,22 @@ Future<String> exportToCsv(List<Map<String, dynamic>> data, String path) async {
     csvContent.write('\n');
   }
 
+  final String stringData = csvContent.toString();
+
+  final List<int> bytes = utf8.encode(stringData);
+
+  final Uint8List uint8list = Uint8List.fromList(bytes);
+
   final timestamp = DateTime.now().millisecondsSinceEpoch;
-  final file = File('$path/export_$timestamp.csv');
 
-  await file.writeAsString(csvContent.toString(), flush: true);
+  String? Directory = await FilePicker.platform.saveFile(
+    bytes: uint8list,
+    fileName: 'export_$timestamp.csv',
+  );
 
-  return file.path;
+  final dir = await getExternalStorageDirectory();
+
+  return '${dir!.path.substring(0, dir.path.indexOf('Android'))}${Directory!.substring(Directory.indexOf(':') + 1)}';
 }
 
 String _escapeCsvValue(String value) {

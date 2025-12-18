@@ -2,7 +2,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trackbuzz/core/di/injection_container.dart';
@@ -360,54 +359,49 @@ class DrawerSetting extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 20, left: 20),
                   child: GestureDetector(
                     onTap: () async {
-                      String? selectedDirectory = await FilePicker.platform
-                          .getDirectoryPath();
-                      if (selectedDirectory != null) {
-                        final data = await GetRecordWithoutPageUseCase(
-                          sl(),
-                        ).execute(idProject);
-                        List<Map<String, dynamic>> csv = [];
-                        for (var i = 0; i < data.length; i++) {
-                          final time = DateTime.parse(
-                            data[i].finish!,
-                          ).difference(DateTime.parse(data[i].start)).inSeconds;
-                          csv.add({
-                            'N': i + 1,
-                            'date': data[i].start.substring(
-                              0,
-                              data[i].start.indexOf('T'),
-                            ),
-                            'activity': data[i].idTask == null
-                                ? 'General'
-                                : data[i].taskName,
-                            'start': data[i].start.substring(
-                              0,
-                              data[i].start.lastIndexOf('.'),
-                            ),
-                            'finish': data[i].finish!.substring(
-                              0,
-                              data[i].finish!.lastIndexOf('.'),
-                            ),
-                            'time': timeFormatRecord(time),
-                          });
-                        }
-                        final path = await exportToCsv(csv, selectedDirectory);
-                        final preferences =
-                            await SharedPreferences.getInstance();
-                        final bool notifications =
-                            preferences.getBool('notifications') ?? false;
-
-                        if (notifications) {
-                          notificationDownload(path, 'download the file', loc);
-                        } else {
-                          message(
-                            context,
-                            '${loc?.translate('file_download') ?? 'downloaded file'}: $path',
-                            5,
-                          );
-                        }
-                        Navigator.of(context).pop();
+                      final data = await GetRecordWithoutPageUseCase(
+                        sl(),
+                      ).execute(idProject);
+                      List<Map<String, dynamic>> csv = [];
+                      for (var i = 0; i < data.length; i++) {
+                        final time = DateTime.parse(
+                          data[i].finish!,
+                        ).difference(DateTime.parse(data[i].start)).inSeconds;
+                        csv.add({
+                          'N': i + 1,
+                          'date': data[i].start.substring(
+                            0,
+                            data[i].start.indexOf('T'),
+                          ),
+                          'activity': data[i].idTask == null
+                              ? 'General'
+                              : data[i].taskName,
+                          'start': data[i].start.substring(
+                            0,
+                            data[i].start.lastIndexOf('.'),
+                          ),
+                          'finish': data[i].finish!.substring(
+                            0,
+                            data[i].finish!.lastIndexOf('.'),
+                          ),
+                          'time': timeFormatRecord(time),
+                        });
                       }
+                      final path = await exportToCsv(csv);
+                      final preferences = await SharedPreferences.getInstance();
+                      final bool notifications =
+                          preferences.getBool('notifications') ?? false;
+
+                      if (notifications) {
+                        notificationDownload(path, 'download the file', loc);
+                      } else {
+                        message(
+                          context,
+                          '${loc?.translate('file_download') ?? 'downloaded file'}: $path',
+                          5,
+                        );
+                      }
+                      Navigator.of(context).pop();
                     },
                     child: Container(
                       height: 50,
