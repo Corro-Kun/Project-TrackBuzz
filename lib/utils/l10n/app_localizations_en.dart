@@ -19,6 +19,11 @@ class AppLocalizationsEn {
     'language': 'Language',
     'notifications': 'Notifications',
     'personalize': 'Personalize',
+    'warning_title_of_notifications': 'Notification permission',
+    'notification_warning':
+        'You have previously rejected the notifications permission. '
+        "To enable them, you must go to the app's settings and enable them manually.",
+    'go_to_settings': 'Go to settings',
     'main_color': 'Main Color',
     'text_color': 'Text Color',
     'background_color': 'Background Color',

@@ -160,11 +160,53 @@ class _DrawerCustomState extends State<DrawerCustom> {
                   SwitchCustom(
                     light: notifications,
                     onChanged: (value) async {
-                      var status = await Permission.notification.status;
-                      if (value == true && !status.isGranted) {
-                        final result = await Permission.notification.request();
-                        if (result.isGranted) {
+                      if (value == true) {
+                        var status = await Permission.notification.status;
+                        if (status.isGranted) {
                           setNotifications(value);
+                        } else if (status.isDenied) {
+                          final result = await Permission.notification
+                              .request();
+                          if (result.isGranted) {
+                            setNotifications(value);
+                          }
+                        } else if (status.isPermanentlyDenied) {
+                          return showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text(
+                                  loc?.translate(
+                                        'warning_title_of_notifications',
+                                      ) ??
+                                      'Notification permission',
+                                ),
+                                content: Text(
+                                  loc?.translate('notification_warning') ??
+                                      '...',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                    child: Text(
+                                      loc?.translate('cancel') ?? 'Cancel',
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      openAppSettings();
+                                    },
+                                    child: Text(
+                                      loc?.translate('go_to_settings') ??
+                                          'Go to settings',
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         }
                       } else {
                         setNotifications(value);

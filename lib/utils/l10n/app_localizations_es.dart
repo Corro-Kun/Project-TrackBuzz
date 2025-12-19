@@ -18,6 +18,11 @@ class AppLocalizationsEs {
     'settings': 'Ajustes',
     'language': 'Idioma',
     'notifications': 'Notificaciones',
+    'warning_title_of_notifications': 'Permiso de notificaciones',
+    'notification_warning':
+        'Has rechazado previamente el permiso de notificaciones. '
+        'Para activarlas, debes ir a la configuración de la app y habilitarlas manualmente.',
+    'go_to_settings': 'Ir a configuración',
     'personalize': 'Personalizar',
     'main_color': 'Color Principal',
     'text_color': 'Color Texto',
