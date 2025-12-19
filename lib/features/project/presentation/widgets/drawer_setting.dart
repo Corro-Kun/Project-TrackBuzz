@@ -1,9 +1,8 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/features/project/domain/usecase/delete_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_record_without_page_use_case.dart';
@@ -388,9 +387,8 @@ class DrawerSetting extends StatelessWidget {
                         });
                       }
                       final path = await exportToCsv(csv);
-                      final preferences = await SharedPreferences.getInstance();
                       final bool notifications =
-                          preferences.getBool('notifications') ?? false;
+                          await Permission.notification.status.isGranted;
 
                       if (notifications) {
                         notificationDownload(path, 'download the file', loc);

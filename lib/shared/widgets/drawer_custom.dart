@@ -24,10 +24,14 @@ class _DrawerCustomState extends State<DrawerCustom> {
   Future<void> getNotifications() async {
     final status = await Permission.notification.status;
     final prefs = await SharedPreferences.getInstance();
-    final bool data = await prefs.getBool('notifications') ?? status.isGranted;
-    setState(() {
-      notifications = data;
-    });
+    final bool? data = await prefs.getBool('notifications');
+    if (data != status.isGranted) {
+      setNotifications(status.isGranted);
+    } else {
+      setState(() {
+        notifications = status.isGranted;
+      });
+    }
   }
 
   Future<void> setNotifications(value) async {
