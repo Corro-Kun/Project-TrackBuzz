@@ -56,7 +56,7 @@ class ChronometerDatasource {
       }, conflictAlgorithm: ConflictAlgorithm.replace);
     } else {
       final activity = data.first['activity'] as int;
-      final activitySecond = data.first['activity'] as int;
+      final activitySecond = data.first['second'] as int;
 
       await db.update(
         'activity',

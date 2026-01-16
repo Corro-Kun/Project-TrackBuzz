@@ -8,7 +8,6 @@ import 'package:trackbuzz/features/project/data/models/activity_model.dart';
 import 'package:trackbuzz/features/report/presentation/bloc/report/report_bloc.dart';
 import 'package:trackbuzz/features/report/presentation/bloc/report/report_event.dart';
 import 'package:trackbuzz/features/report/presentation/bloc/report/report_state.dart';
-import 'package:trackbuzz/features/track/data/models/record_model.dart';
 import 'package:trackbuzz/shared/functions/time_format_record.dart';
 import 'package:trackbuzz/shared/widgets/activity.dart';
 import 'package:trackbuzz/shared/widgets/adjustments_announced.dart';
