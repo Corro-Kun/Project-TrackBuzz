@@ -376,11 +376,11 @@ class DrawerSetting extends StatelessWidget {
                               ? 'General'
                               : data[i].taskName,
                           'start': data[i].start.substring(
-                            0,
+                            data[i].start.indexOf('T') + 1,
                             data[i].start.lastIndexOf('.'),
                           ),
                           'finish': data[i].finish!.substring(
-                            0,
+                            data[i].finish!.indexOf('T') + 1,
                             data[i].finish!.lastIndexOf('.'),
                           ),
                           'time': timeFormatRecord(time),
