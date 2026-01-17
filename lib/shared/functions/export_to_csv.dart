@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
@@ -33,14 +34,14 @@ Future<String> exportToCsv(List<Map<String, dynamic>> data) async {
 
   final timestamp = DateTime.now().millisecondsSinceEpoch;
 
-  String? Directory = await FilePicker.platform.saveFile(
+  String? directorySelect = await FilePicker.platform.saveFile(
     bytes: uint8list,
     fileName: 'export_$timestamp.csv',
   );
 
   final dir = await getExternalStorageDirectory();
 
-  return '${dir!.path.substring(0, dir.path.indexOf('Android'))}${Directory!.substring(Directory.indexOf(':') + 1)}';
+  return '${dir!.path.substring(0, dir.path.indexOf('Android'))}${directorySelect!.substring(directorySelect.indexOf(':') + 1)}';
 }
 
 String _escapeCsvValue(String value) {

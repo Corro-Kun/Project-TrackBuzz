@@ -29,14 +29,14 @@ void handleNotificationAction(NotificationResponse response) {
 
 Future<void> _openFile(String filePath) async {
   try {
-    final type = filePath.substring(filePath.indexOf('.'));
+    final type = filePath.substring(filePath.indexOf('.') + 1);
     final file = File(filePath);
 
     if (await file.exists()) {
       final result = await OpenFile.open(filePath, type: _files[type]);
 
       if (result.type == ResultType.noAppToOpen) {
-        _openFolder(filePath);
+        await _openFolder(filePath);
       }
     }
   } catch (e) {
