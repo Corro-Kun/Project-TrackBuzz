@@ -8,7 +8,6 @@ import 'package:trackbuzz/core/di/injection_container.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_bloc.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_event.dart';
 import 'package:trackbuzz/features/project/presentation/bloc/Project/project_state.dart';
-import 'package:trackbuzz/shared/functions/message.dart';
 import 'package:trackbuzz/shared/functions/save_image.dart';
 import 'package:trackbuzz/shared/widgets/TextFieldDescription.dart';
 import 'package:trackbuzz/shared/widgets/pre_loader.dart';

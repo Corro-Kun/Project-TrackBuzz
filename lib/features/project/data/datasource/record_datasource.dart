@@ -80,4 +80,65 @@ class RecordDatasource {
 
     return result.first['total_seconds'] as int? ?? 0;
   }
+
+  Future deleteRecord(int id, int idProject) async {
+    final db = await DataBase().OpenDB();
+
+    final records = await db.query(
+      'record',
+      where: 'id_project = ?',
+      whereArgs: [idProject],
+    );
+
+    final date = records.first['finish'].toString().substring(
+      0,
+      records.first['finish'].toString().indexOf('T'),
+    );
+
+    final second = DateTime.parse(
+      records.first['finish'].toString(),
+    ).difference(DateTime.parse(records.first['start'].toString())).inSeconds;
+
+    final data = await db.query(
+      'activity',
+      where: 'date = ? AND id_project = ?',
+      whereArgs: [date, idProject],
+    );
+
+    if (int.parse(data.first['activity'].toString()) > 1) {
+      await db.update(
+        'activity',
+        {
+          'activity': int.parse(data.first['activity'].toString()) - 1,
+          'second': int.parse(data.first['second'].toString()) - second,
+        },
+        where: 'date = ? AND id_project = ?',
+        whereArgs: [date, idProject],
+      );
+    } else {
+      await db.delete(
+        'activity',
+        where: 'date = ? AND id_project = ?',
+        whereArgs: [date, idProject],
+      );
+    }
+
+    final dataTotal = await db.query(
+      'total',
+      where: 'id_project = ?',
+      whereArgs: [idProject],
+    );
+
+    await db.update(
+      'total',
+      {
+        'second': int.parse(dataTotal.first['second'].toString()) - second,
+        'activity': int.parse(dataTotal.first['activity'].toString()) - 1,
+      },
+      where: 'id_project = ?',
+      whereArgs: [idProject],
+    );
+
+    await db.delete('record', where: 'id = ?', whereArgs: [id]);
+  }
 }

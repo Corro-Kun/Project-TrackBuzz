@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trackbuzz/features/project/domain/usecase/delete_record_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_activity_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_record_of_project_use_case.dart';
 import 'package:trackbuzz/features/project/domain/usecase/get_record_with_task_use_case.dart';
@@ -11,15 +12,18 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
   final GetSecondsUseCase getSecondsUseCase;
   final GetActivityUseCase getActivityUseCase;
   final GetRecordWithTaskUseCase getRecordWithTaskUseCase;
+  final DeleteRecordUseCase deleteRecordUseCase;
 
   RecordBloc({
     required this.getRecordOfProjectUseCase,
     required this.getSecondsUseCase,
     required this.getActivityUseCase,
     required this.getRecordWithTaskUseCase,
+    required this.deleteRecordUseCase,
   }) : super(RecordInitial()) {
     on<GetRecord>(_onGetRecord);
     on<GetRecordByPage>(_onGetRecordByPage);
+    on<DeleteRecord>(_onDeleteRecord);
   }
 
   Future<void> _onGetRecord(GetRecord event, Emitter<RecordState> emit) async {
@@ -55,6 +59,32 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
       emit(
         RecordLoaded(
           records: [...currentState.records, ...records],
+          activity: currentState.activity,
+          recordTasks: currentState.recordTasks,
+          page: currentState.page + 1,
+        ),
+      );
+    } catch (e) {
+      emit(RecordError(message: e.toString()));
+    }
+  }
+
+  Future<void> _onDeleteRecord(
+    DeleteRecord event,
+    Emitter<RecordState> emit,
+  ) async {
+    final currentState = state as RecordLoaded;
+    try {
+      await deleteRecordUseCase.execute(
+        currentState.records[event.index].id,
+        currentState.records[event.index].idProject,
+      );
+
+      currentState.records.removeAt(event.index);
+
+      emit(
+        RecordLoaded(
+          records: currentState.records,
           activity: currentState.activity,
           recordTasks: currentState.recordTasks,
           page: currentState.page + 1,

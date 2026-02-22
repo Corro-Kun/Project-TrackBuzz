@@ -11,3 +11,8 @@ class GetRecordByPage extends RecordEvent {
 
   GetRecordByPage({required this.id});
 }
+
+class DeleteRecord extends RecordEvent {
+  final int index;
+  DeleteRecord({required this.index});
+}

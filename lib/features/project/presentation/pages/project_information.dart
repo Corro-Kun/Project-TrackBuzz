@@ -162,7 +162,7 @@ class _ProjectInformationState extends State<ProjectInformation>
                 children: [
                   listViewGeneral(context, loc),
                   BlocBuilder<RecordBloc, RecordState>(
-                    builder: (context, state) {
+                    builder: (contextRecord, state) {
                       if (state is RecordLoading) {
                         return const PreLoader();
                       } else if (state is RecordLoaded) {
@@ -239,6 +239,9 @@ class _ProjectInformationState extends State<ProjectInformation>
                                       ? 'General'
                                       : state.records[i].taskName.toString(),
                                   time: timeFormatRecord(seconds),
+                                  delete: () {
+                                    _recordBloc.add(DeleteRecord(index: i));
+                                  },
                                 ),
                               ],
                             );
@@ -250,6 +253,9 @@ class _ProjectInformationState extends State<ProjectInformation>
                                   ? 'General'
                                   : state.records[i].taskName.toString(),
                               time: timeFormatRecord(seconds),
+                              delete: () {
+                                _recordBloc.add(DeleteRecord(index: i));
+                              },
                             );
                           }
                         });

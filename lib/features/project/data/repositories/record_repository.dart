@@ -35,4 +35,9 @@ class RecordRepository extends RecordRepositoryAbstract {
   Future<int> getSeconds(int id) async {
     return await datasource.getSeconds(id);
   }
+
+  @override
+  Future deleteRecord(int id, int idProject) async {
+    await datasource.deleteRecord(id, idProject);
+  }
 }

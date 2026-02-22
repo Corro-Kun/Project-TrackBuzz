@@ -5,4 +5,5 @@ abstract class RecordRepositoryAbstract {
   Future<List<RecordModel>> getRecordWithoutPage(int id);
   Future<List<RecordModel>> getProjectWithTask(int id);
   Future<int> getSeconds(int id);
+  Future deleteRecord(int id, int idProject);
 }

@@ -21,4 +21,8 @@ class RecordService {
   Future<int> getSeconds(int id) async {
     return await repository.getSeconds(id);
   }
+
+  Future deleteRecord(int id, int idProject) async {
+    await repository.deleteRecord(id, idProject);
+  }
 }
