@@ -84,11 +84,7 @@ class RecordDatasource {
   Future deleteRecord(int id, int idProject) async {
     final db = await DataBase().OpenDB();
 
-    final records = await db.query(
-      'record',
-      where: 'id_project = ?',
-      whereArgs: [idProject],
-    );
+    final records = await db.query('record', where: 'id = ?', whereArgs: [id]);
 
     final date = records.first['finish'].toString().substring(
       0,
